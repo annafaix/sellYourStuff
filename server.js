@@ -5,9 +5,13 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 
-const databaseName = 'databaseName';
+const databaseName = 'sellyourstuff';
 const collectionName = 'collectionName';
 const MongoClient = require('mongodb').MongoClient;
+// url här under tillåter CRUD
+const urlLoggedIn = 'mongodb://feu17:Hejhej1234@ds119503.mlab.com:19503/sellyourstuff';
+// url här under tillåter EJ CRUD utan bara läs-funktionaliteten
+const urlNotLoggedIn = 'mongodb://notLoggedIn:Hejhej1234@ds119503.mlab.com:19503/sellyourstuff'
 
 /* next: generateData function
 takes a number parameter to 
@@ -16,15 +20,6 @@ to add to database: */
 
 const generateData = require('./mockData').generateData;
 
-MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
-    if (err) {
-        console.log('Could not connect! Error: ', err);
-        return;
-    }
-//const url = 'mongodb://127.0.0.1:27017';
-const db = client.db(databaseName);
-const catalogue = db.collection(collectionName);
-})
 
 // 
 /* For Uploading Files:
@@ -37,12 +32,46 @@ const upload = multer({
 
 */
 
+const connectToMongo = (req,collection) => {
+    let isLoggedIn = req.params.isLoggedIn;
+    let url;
+    let catalogue;
+    let url = isLoggedIn ? urlLoggedIn : urlNotLoggedIn;
+
+    MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) {
+            console.log('Could not connect! Error: ', err);
+            return;
+        }
+        console.log('Connected to mongo database.')
+
+        var db = client.db(databaseName);
+        catalogue = db.collection(collection);
+    })
+    return catalogue;
+}
+
 server.use((req, res, next) => {
     res.send('Hello, I am a server who has been called: ');
     next()
 })
-server.get('/api', (req, res) => {
-    //
+server.post('/api/:isLoggedIn', (req, res) => {
+
+/*
+
+    let collection = req.query.collection; --> '?collection=user01'
+
+    connectToMongo(req, collection).insertOne(data, (err) => {
+        if (err) {
+            console.log(err);
+            client.close();
+            return;
+        }
+        console.log('Inserted data...');
+        client.close();
+    })
+
+    */
 })
 
 server.get('*', (req, res) => {
