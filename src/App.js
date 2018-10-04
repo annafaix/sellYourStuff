@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Login from './components/Login'
 import firebase from 'firebase'
-
-const config = {
-  apiKey: "AIzaSyCJVOXUyP9bMysoDBpqN5nDbV9yQPLq3i4",
-  authDomain: "sellyourstuff-b27b2.firebaseapp.com",
-  databaseURL: "https://sellyourstuff-b27b2.firebaseio.com",
-  storageBucket: "sellyourstuff-b27b2.appspot.com",
-};
 
 class App extends Component {
   constructor(props){
@@ -17,19 +11,13 @@ class App extends Component {
 
     }
   }
-  componentDidMount(){
-    firebase.initializeApp(config);
-    fetch('http://localhost:3000/api')
-    .then((data) => {
-      return data.json()
-    })
-    .then((json) => {
-      console.log(json)
-    })
-  }
   render() {
     return (
-      <div> Main app</div>
+      <div className="App">
+        <main className="mainView">
+          <Login/>
+        </main>
+      </div>
     );
   }
 }
