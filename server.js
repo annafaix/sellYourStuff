@@ -5,12 +5,9 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 
-const MongoClient = require('mongodb').MongoClient;
-//const url = 'mongodb://127.0.0.1:27017';
 const databaseName = 'databaseName';
 const collectionName = 'collectionName';
-const db = client.db(databaseName);
-const catalogue = db.collection(collectionName);
+const MongoClient = require('mongodb').MongoClient;
 
 /* next: generateData function
 takes a number parameter to 
@@ -19,8 +16,17 @@ to add to database: */
 
 const generateData = require('./mockData').generateData;
 
-// 
+MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+    if (err) {
+        console.log('Could not connect! Error: ', err);
+        return;
+    }
+//const url = 'mongodb://127.0.0.1:27017';
+const db = client.db(databaseName);
+const catalogue = db.collection(collectionName);
+})
 
+// 
 /* For Uploading Files:
 
 const multer = require('multer');
@@ -38,9 +44,6 @@ server.use((req, res, next) => {
 server.get('/api', (req, res) => {
     //
 })
-
-
-
 
 server.get('*', (req, res) => {
     return handle(req, res)
