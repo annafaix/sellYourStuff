@@ -9,6 +9,15 @@ const MongoClient = require('mongodb').MongoClient;
 //const url = 'mongodb://127.0.0.1:27017';
 const databaseName = 'databaseName';
 const collectionName = 'collectionName';
+const db = client.db(databaseName);
+const catalogue = db.collection(collectionName);
+
+/* next: generateData function
+takes a number parameter to 
+specify number of mock products 
+to add to database: */
+
+const generateData = require('./mockData').generateData;
 
 // 
 
