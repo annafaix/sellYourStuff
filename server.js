@@ -34,7 +34,6 @@ const upload = multer({
 
 const connectToMongo = (req,collection) => {
     let isLoggedIn = req.params.isLoggedIn;
-    let url;
     let catalogue;
     let url = isLoggedIn ? urlLoggedIn : urlNotLoggedIn;
 
