@@ -17,7 +17,7 @@ class App extends Component {
       <div className="App">
         <Menu/>
         <main className="mainView">
-        <Login/>
+
         </main>
       </div>
     );
