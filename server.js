@@ -12,7 +12,7 @@ var jsonParser = bodyParser.text();
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 const databaseName = 'sellyourstuff';
-const collectionName = 'user-products';
+const collectionName = 'users';
 const MongoClient = require('mongodb').MongoClient;
 // url här under tillåter CRUD
 const urlLoggedIn = 'mongodb://feu17:Hejhej1234@ds119503.mlab.com:19503/sellyourstuff';
