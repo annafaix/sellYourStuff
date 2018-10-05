@@ -3,17 +3,40 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    height: 10vh;
-    width: 100%;
+}
+#loginButton{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: auto 8vh;
+    border: 2px solid gray;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 20px 0;
+}
+#loginButton img{
+    height: 5vh;
+    padding-right:15px;
+}
+#loginButton:hover{
+    cursor: pointer;
+    background-color: rgb(212, 208, 208);
 }
 .logMe{
     height: 100%;
-    width: auto;
+    max-width: 60%;
 }
 #googleLogo{
     padding-right: 12px;
 }
-#logginButton{
-    border: 2px solid gray !important;
-    border-radius:5px !important;
+#triggerButton{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    width: 80px;
+    border-radius: 5px;
+
 }

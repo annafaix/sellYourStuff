@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import fetch from 'isomorphic-fetch'
-//import './Login.css'
+import './Login.css'
 import googleLogo from '../google.ico';
 import ModalLogin from './ModalLogin'
 import { Button, Header, Image, Modal, Icon } from 'semantic-ui-react'
@@ -88,16 +88,10 @@ class Login extends Component {
   render() {
     const isLoggedIn = !this.state.isLoggedIn ? (
       <div className="logMe">
-        <Modal trigger={<button>Log In</button>}>
-          <Modal.Header>Select a Photo</Modal.Header>
-          <Modal.Content image>
-            <Image wrapped size='medium' src='/images/avatar/large/rachel.png' />
-            <Modal.Description>
-              <Header>Default Profile Image</Header>
-              <Button style={{border: "2px solid gray"}}icon="house" color="green" labelPosition='left' id="loginButton" onClick={() => { this.loginWithGoogle() }}>Log in with Google</Button>
-              <p>We've found the following gravatar image associated with your e-mail address.</p>
-              <p>Is it okay to use this photo?</p>
-            </Modal.Description>
+        <Modal size="mini" dimmer="blurring" trigger={<button id="triggerButton">Log In</button>} closeIcon>
+          <Modal.Header style={{fontSize:"1.3em"}}>Select a Login Alternative</Modal.Header>
+          <Modal.Content style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
+              <button type="button" id="loginButton" onClick={() => { this.loginWithGoogle() }}><img src={googleLogo}/>Log in with Google</button>
           </Modal.Content>
         </Modal>
       </div>
