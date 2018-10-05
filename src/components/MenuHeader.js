@@ -7,7 +7,8 @@ export default class MenuHeader extends Component {
   state = {}
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-
+  setUser = (user,credentials) => this.props.setUser(user,credentials)
+  isLoggedIn = (bool) => this.props.isLoggedIn(bool)
   render() {
     const { activeItem } = this.state
 
@@ -18,7 +19,7 @@ export default class MenuHeader extends Component {
             <Image src='/Logo.png' style={{width:'80px'}}/>
           </Menu.Item>
           <Menu.Item position='right' style={{padding:'0', margin:'0'}}>
-            <Login/>
+            <Login setUser={this.setUser} isLoggedIn={this.isLoggedIn}/>
           </Menu.Item>
         </Menu>
       </Segment>
