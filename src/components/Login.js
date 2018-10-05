@@ -53,6 +53,7 @@ class Login extends Component {
       }).catch(err => {
         console.log(err)
       })
+      this.setState({isLoggedIn: true }, this.showState)
     }).catch(error => {
       // Handle Errors here.
       var errorCode = error.code;
@@ -85,7 +86,7 @@ class Login extends Component {
       </div>
     ) : (
         <div id="logout">
-          <h2>You are logged in, {this.state.user.displayName}</h2>
+          <h2>You are logged in, {this.state.user.name}</h2>
           <button onClick={() => { this.logoutWithGoogle() }}>Log out</button>
         </div>
       )
