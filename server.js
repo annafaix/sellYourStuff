@@ -10,8 +10,8 @@ const collectionName = 'collectionName';
 const MongoClient = require('mongodb').MongoClient;
 
 /* next: generateData function
-takes a number parameter to 
-specify number of mock products 
+takes a number parameter to
+specify number of mock products
 to add to database: */
 
 const generateData = require('./mockData').generateData;
@@ -26,7 +26,7 @@ const db = client.db(databaseName);
 const catalogue = db.collection(collectionName);
 })
 
-// 
+//
 /* For Uploading Files:
 
 const multer = require('multer');
@@ -42,7 +42,7 @@ server.use((req, res, next) => {
     next()
 })
 server.get('/api', (req, res) => {
-    //
+    res.send("Api call")
 })
 
 server.get('*', (req, res) => {
