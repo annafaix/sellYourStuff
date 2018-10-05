@@ -1,0 +1,26 @@
+.header {
+  width: 50px;
+}
+nav {
+    display: inline;
+    float: left;
+    color: black;
+}
+nav div {
+    display: inline;
+    margin-right: 8px;
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+nav div:hover {
+    border-bottom: 3px solid #3300FF;
+}
+
+.invincible {
+    display: none;
+}
+
+.chosen {
+    border-bottom: 3px solid #3300FF;
+}

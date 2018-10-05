@@ -139,7 +139,7 @@ server.get('/mock', (req, res) => {
           client.close();
       }
       console.log('Connected to mongo database.')
-      generateData(10, catalogue)
+      //generateData(10, catalogue)
       //catalogue.insertMany(mockList)
       client.close()
 })
