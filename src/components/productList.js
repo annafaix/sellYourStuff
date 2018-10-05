@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import productItem from 'productItem.js'
+import ProductItem from './productItem.js'
 
-class prouctList extends Component {
+class productList extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -11,7 +11,7 @@ class prouctList extends Component {
   render() {
     return (
       <div>
-        <productItem/>
+        <ProductItem/>
        Product list
       </div>
     );

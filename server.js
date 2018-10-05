@@ -12,7 +12,8 @@ var jsonParser = bodyParser.text();
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 const databaseName = 'sellyourstuff';
-const collectionName = 'user-products';
+const collectionName = 'users';
+const collectionName2 = 'products';
 const MongoClient = require('mongodb').MongoClient;
 // url här under tillåter CRUD
 const urlLoggedIn = 'mongodb://feu17:Hejhej1234@ds119503.mlab.com:19503/sellyourstuff';
@@ -126,10 +127,25 @@ server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
     }
 })*/
 })
-server.get('/api', (req, res) => {
-    res.send("Api call")
+server.get('/mock', (req, res) => {
+  console.log("api")
+  //let mockList = generateData(10);
+
+  MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
+    let db = client.db(databaseName)
+    let catalogue = db.collection(collectionName2)
+      if (err) {
+          console.log('Could not connect! Error: ', err);
+          client.close();
+      }
+      console.log('Connected to mongo database.')
+      generateData(10, catalogue)
+      //catalogue.insertMany(mockList)
+      client.close()
 })
-server.post('/api/create:isLoggedIn', (req, res) => {})
+
+})
+server.post('/api/create:isLoggedIn', (req, res) => {
 
     /*
 
