@@ -57,3 +57,18 @@ nav div:hover {
 .chosen {
 
 }
+
+.profile{
+  margin: 20px;
+
+}
+.profile p{
+  text-align: left;
+}
+
+.profile img{
+  border:5px solid hotpink;
+  shape-outside: circle();
+  margin-right: 15px;
+  float: left;
+}

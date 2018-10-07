@@ -20,15 +20,19 @@ class App extends Component {
     const loggedIn = !this.state.isLoggedIn ? (
       null
     ) : (
-      <h2>You are logged in, {this.state.user.name}</h2>
+      <div>
+        <h2>You are logged in, {this.state.user.name}</h2>
+        <Profile user={this.state.user}/>
+      </div>
     )
     return (
       <div className="App">
-        <Menu setUser={this.setUserState} isLoggedIn={this.isLoggedIn}/>
+        <Menu setUser={this.setUserState}
+              isLoggedIn={this.isLoggedIn}
+              showProfile={this.state.isLoggedIn}/>
         <main className="mainView">
             {loggedIn}
         </main>
-        <Profile user={"Anna"}/>
       </div>
     );
   }
