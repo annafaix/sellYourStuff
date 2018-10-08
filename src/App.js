@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Login from './components/Login'
 import ProductList from './components/productList.js'
+import Menu from './components/MenuHeader'
 import firebase from 'firebase'
 
 class App extends Component {
@@ -11,9 +12,11 @@ class App extends Component {
     this.state = {
       currentPage: "login",
       products: [],
-
+      isLoggedIn: false
     }
   }
+  setUserState = (user,credentials) => this.setState({user: user, credentials: credentials})
+  isLoggedIn = (bool) => this.setState({isLoggedIn: bool})
 
   componentDidMount(){
     console.log("Inside component")
@@ -44,6 +47,11 @@ class App extends Component {
     })*/
   }
   render() {
+    const loggedIn = !this.state.isLoggedIn ? (
+      null
+    ) : (
+      <h2>You are logged in, {this.state.user.name}</h2>
+    )
     let currentApp = null;
     if(this.state.currentPage === "login"){
       currentApp = <Login/>
@@ -53,8 +61,10 @@ class App extends Component {
     }
     return (
       <div className="App">
+        <Menu setUser={this.setUserState} isLoggedIn={this.isLoggedIn}/>
         <main className="mainView">
           {currentApp}
+            {loggedIn}
         </main>
       </div>
     );

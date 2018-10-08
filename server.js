@@ -65,13 +65,7 @@ const userExists = (catalogue, user, res, client, closeClient) => {
     console.log(email)
     catalogue.find({ email: email }).toArray((err, docs) => {
         console.log('The products are: ', docs);
-        /*if (err) {
-            console.log('Could not use query find: ', err);
-            res
-                .send(err)
-                .end();
-            return;
-        }*/ if (docs.length < 1) {
+ if (docs.length < 1) {
             console.log('The products are: ', docs);
             catalogue.insertOne(user, (err, response) => {
                 if (err) {
@@ -88,45 +82,15 @@ const userExists = (catalogue, user, res, client, closeClient) => {
         }
     })
 }
-/*server.use((req, res, next) => {
-    res.send('Hello, I am a server who has been called: ');
-    next()
-})*/
+
 server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
     console.log('body: ', req.body);
     let isLoggedIn = req.params.isLoggedIn;
     let user = JSON.parse(req.body);
     console.log('user passed through: ', user)
     connectToMongo(isLoggedIn, user, userExists, res);
-
-    /*.find({ email: user.email }).toArray((err, docs) => {
-    console.log('The products are: ', docs);
-    client.close();
-    console.log('Connection closed.');
-    if (err) {
-        console.log('Could not use query find: ', err);
-        res
-            .send(err)
-            .end();
-        return;
-    } if (docs.length < 1) {
-        console.log('The products are: ', docs);
-        connectToMongo(isLoggedIn).insertOne(user, (err, response) => {
-            client.close();
-            console.log('Connection closed.');
-            if (err) {
-                console.log('Could not use query insertOne: ', err);
-                return;
-            } else {
-                console.log('Successfully signed up new user: ', response);
-            }
-        })
-        res
-            .send(response)
-            .end();
-    }
-})*/
 })
+
 server.get('/mock', (req, res) => {
   console.log("api")
   //let mockList = generateData(10);
@@ -144,6 +108,7 @@ server.get('/mock', (req, res) => {
       client.close()
     })
 })
+
 server.get('/api/products', (req, res) => {
   let returnList = null;
   MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
@@ -171,24 +136,6 @@ server.get('/api/products', (req, res) => {
         }
       })
     })
-})
-server.post('/api/create:isLoggedIn', (req, res) => {
-
-    /*
-
-        let collection = req.query.collection; --> '?collection=user01'
-
-        connectToMongo(req, collection).insertOne(data, (err) => {
-            if (err) {
-                console.log(err);
-                client.close();
-                return;
-            }
-            console.log('Inserted data...');
-            client.close();
-        })
-
-        */
 })
 
 const port = 3000;

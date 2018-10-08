@@ -4,6 +4,9 @@ import React, { Component } from 'react'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import fetch from 'isomorphic-fetch'
+import './Login.css'
+import googleLogo from '../google.ico';
+import { Button, Header, Image, Modal, Icon } from 'semantic-ui-react'
 
 const config = {
   apiKey: "AIzaSyCJVOXUyP9bMysoDBpqN5nDbV9yQPLq3i4",
@@ -36,7 +39,7 @@ class Login extends Component {
       // The signed-in user info.
       let myUser = result.additionalUserInfo.profile;
       // ...
-      this.setState({ token: token, user: myUser}, this.showState)
+      this.setState({ token: token, user: myUser }, () => {this.props.setUser(myUser, token)})
     }).then((success) => {
       var user = JSON.stringify(this.state.user);
       console.log('this is the user parameter: ' + user)
@@ -44,16 +47,16 @@ class Login extends Component {
         method: 'POST',
         mode: 'no-cors',
         headers: {
-          'Access-Control-Allow-Origin' : '*'
+          'Access-Control-Allow-Origin': '*'
         },
         body: user
       }).then(res => {
         console.log('Lyckades skicka req till API:et och kontrollera att user redan finns eller signa upp ny user:' + res);
-        this.setState({isLoggedIn: true }, this.showState)
+        this.setState({ isLoggedIn: true }, () => {this.props.isLoggedIn(true)})
       }).catch(err => {
         console.log(err)
       })
-      this.setState({isLoggedIn: true }, this.showState)
+      this.setState({ isLoggedIn: true }, () => {this.props.isLoggedIn(true)})
     }).catch(error => {
       // Handle Errors here.
       var errorCode = error.code;
@@ -65,14 +68,16 @@ class Login extends Component {
       // ...
 
       this.setState({ credential: error.credential, errorCode: error.code, errorMessage: error.message, isLoggedIn: false },
-        this.showState
+        () => {this.props.isLoggedIn(false)}
       )
     });
   }
   logoutWithGoogle() {
     firebase.auth().signOut().then(() => {
       // Sign-out successful.
-      this.setState({ isLoggedIn: false })
+      this.setState({ isLoggedIn: false, token: undefined, user: undefined },
+        () => {this.props.isLoggedIn(false)}
+      )
 
     }).catch(error => {
       // An error happened.
@@ -81,17 +86,21 @@ class Login extends Component {
   }
   render() {
     const isLoggedIn = !this.state.isLoggedIn ? (
-      <div id="login">
-        <button onClick={() => { this.loginWithGoogle() }}>Log in with Google</button>
+      <div className="logMe">
+        <Modal size="mini" dimmer="blurring" trigger={<button id="triggerButton">Log In</button>} closeIcon>
+          <Modal.Header style={{fontSize:"1.3em"}}>Select a Login Alternative</Modal.Header>
+          <Modal.Content style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
+              <button type="button" id="loginButton" onClick={() => { this.loginWithGoogle() }}><img src={googleLogo}/>Log in with Google</button>
+          </Modal.Content>
+        </Modal>
       </div>
     ) : (
-        <div id="logout">
-          <h2>You are logged in, {this.state.user.name}</h2>
-          <button onClick={() => { this.logoutWithGoogle() }}>Log out</button>
+        <div className="logMe">
+          <button id="logout" onClick={() => { this.logoutWithGoogle() }}>Log out</button>
         </div>
       )
     return (
-      <div className="login">
+      <div id="login">
         {isLoggedIn}
       </div>
     );
