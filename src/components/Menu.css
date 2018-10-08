@@ -60,15 +60,18 @@ nav div:hover {
 
 .profile{
   margin: 20px;
-
-}
-.profile p{
   text-align: left;
+}
+.profile .divider{
+  height: 1px;
+
+  margin-left: 165px;
+  background-color: black;
 }
 
 .profile img{
-  border:5px solid hotpink;
-  shape-outside: circle();
+  border:5px solid #DB0278;
+  /* shape-outside: circle(); */
   margin-right: 15px;
   float: left;
 }

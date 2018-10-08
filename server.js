@@ -87,6 +87,8 @@ server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
     console.log('user passed through: ', user)
     connectToMongo(isLoggedIn, user, userExists, res);
 })
+//Anna testar
+
 
 const port = 3000;
 server.listen(port, (err) => {
