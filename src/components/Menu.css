@@ -81,9 +81,12 @@ nav div:hover {
 }
 #cartMenu {
   display: flex;
-  flexflow: column nowrap;
+  flexflow: row nowrap;
   justify-content: center;
   align-items: center;
+  padding: 3px 13px 3px 13px;
+  background-color: #00CD00;
+  border: 2px solid #00CD00;
 }
 #userMenu {
   padding-left: 10px;

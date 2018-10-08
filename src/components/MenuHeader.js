@@ -38,8 +38,8 @@ export default class MenuHeader extends Component {
                  <p className=" productsMenu inline">Profile page</p>
               </div>
               <div id="cartMenu" className="menuBtn inline" onClick={() => funcClick("cart")}>
-                <p className="inline">My basket</p>
-                <Icon name="cart" style={{alignSelf:'center', width:'2em', height:'2em', margin:'0'}}/>
+                <p className="inline"  style={{alignSelf:'center', margin:'auto'}}>My basket</p>
+                <Icon name="cart" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
               </div>
           </div>
 
