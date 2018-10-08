@@ -142,8 +142,35 @@ server.get('/mock', (req, res) => {
       //generateData(10, catalogue)
       //catalogue.insertMany(mockList)
       client.close()
+    })
 })
-
+server.get('/api/products', (req, res) => {
+  let returnList = null;
+  MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
+      if (err) {
+          console.log('Could not connect! Error: ', err);
+          client.close();
+      }
+      let db = client.db(databaseName)
+      let catalogue = db.collection(collectionName2)
+      console.log('Connected to mongo database.')
+      catalogue.find().toArray((err, result) => {
+        /*result.forEach((item) => {
+          returnList.push(item)
+          console.log(returnList[0])
+        })*/
+        console.log("inserting result")
+        returnList = result;
+        if(returnList !== null){
+          console.log("closing")
+          client.close()
+          console.log(returnList[0])
+          res.header("Access-Control-Allow-Origin", '*')
+          console.log("sending")
+          res.send(returnList)
+        }
+      })
+    })
 })
 server.post('/api/create:isLoggedIn', (req, res) => {
 
