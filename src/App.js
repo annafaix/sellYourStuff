@@ -11,7 +11,7 @@ class App extends Component {
     super(props);
     this.state = {
       isLoggedIn: false,
-      currentTab: "products"
+      currentTab: "products",
       currentPage: "login",
       products: []
     }
