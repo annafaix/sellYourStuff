@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import Login from './components/Login'
 import ProductList from './components/productList.js'
 import Menu from './components/MenuHeader'
-import firebase from 'firebase'
+// import firebase from 'firebase'
+import Profile from './components/Profile'
 
 class App extends Component {
   constructor(props){
@@ -56,7 +57,10 @@ class App extends Component {
     const loggedIn = !this.state.isLoggedIn ? (
       null
     ) : (
-      <h2>You are logged in, {this.state.user.name}</h2>
+      <div>
+        <h2>You are logged in, {this.state.user.name}</h2>
+        <Profile user={this.state.user}/>
+      </div>
     )
     let currentApp = null;
     if(this.state.currentTab === "shop"){
@@ -64,7 +68,13 @@ class App extends Component {
     }
     return (
       <div className="App">
+<<<<<<< HEAD
         <Menu setUser={this.setUserState} isLoggedIn={this.isLoggedIn} clickEvent={this.tabClick}/>
+=======
+        <Menu setUser={this.setUserState}
+              isLoggedIn={this.isLoggedIn}
+              showProfile={this.state.isLoggedIn}/>
+>>>>>>> anna
         <main className="mainView">
           {currentApp}
           <button onClick={this.changeToShop}> Change to shop </button>
