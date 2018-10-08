@@ -9,10 +9,16 @@ class productList extends Component {
     }
   }
   render() {
+    let productList = this.props.productsProp;
+    let display = productList.map(product => {
+      return <ProductItem name={product.name} userName={product.userName} info={product.info}
+      userPicture={product.userPicture} price={product.price} category={product.category}/>
+    })
     return (
       <div>
-        <ProductItem/>
-       Product list
+      {display}
+      <button>previous</button>
+      <button>next</button>
       </div>
     );
   }

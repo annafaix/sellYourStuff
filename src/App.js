@@ -17,13 +17,14 @@ class App extends Component {
   }
   setUserState = (user,credentials) => this.setState({user: user, credentials: credentials})
   isLoggedIn = (bool) => this.setState({isLoggedIn: bool})
+  changeToShop = () => this.setState({currentPage: "shop"})
 
   componentDidMount(){
     console.log("Inside component")
     let req = new XMLHttpRequest();
     req.onreadystatechange = (event) => {
     if( req.readyState == 4){
-        this.setState({ products: req.response })
+        this.setState({ products: JSON.parse(req.response) })
         console.log(this.state.products)
     }
     else {
@@ -53,17 +54,15 @@ class App extends Component {
       <h2>You are logged in, {this.state.user.name}</h2>
     )
     let currentApp = null;
-    if(this.state.currentPage === "login"){
-      currentApp = <Login/>
-    }
-    else if(this.state.currentPage === "shop"){
-      currentApp = <ProductList/>
+    if(this.state.currentPage === "shop"){
+      currentApp = <ProductList productsProp = {this.state.products}/>
     }
     return (
       <div className="App">
         <Menu setUser={this.setUserState} isLoggedIn={this.isLoggedIn}/>
         <main className="mainView">
           {currentApp}
+          <button onClick={this.changeToShop}> Change to shop </button>
             {loggedIn}
         </main>
       </div>
