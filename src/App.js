@@ -68,13 +68,11 @@ class App extends Component {
     }
     return (
       <div className="App">
-<<<<<<< HEAD
-        <Menu setUser={this.setUserState} isLoggedIn={this.isLoggedIn} clickEvent={this.tabClick}/>
-=======
         <Menu setUser={this.setUserState}
               isLoggedIn={this.isLoggedIn}
-              showProfile={this.state.isLoggedIn}/>
->>>>>>> anna
+              showProfile={this.state.isLoggedIn}
+              clickEvent={this.tabClick}/>
+              
         <main className="mainView">
           {currentApp}
           <button onClick={this.changeToShop}> Change to shop </button>
