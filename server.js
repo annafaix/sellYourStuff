@@ -13,6 +13,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 const databaseName = 'sellyourstuff';
 const collectionName = 'users';
+const collectionName2 = 'products';
 const MongoClient = require('mongodb').MongoClient;
 // url här under tillåter CRUD
 const urlLoggedIn = 'mongodb://feu17:Hejhej1234@ds119503.mlab.com:19503/sellyourstuff';
@@ -20,14 +21,14 @@ const urlLoggedIn = 'mongodb://feu17:Hejhej1234@ds119503.mlab.com:19503/sellyour
 const urlNotLoggedIn = 'mongodb://notLoggedIn:Hejhej1234@ds119503.mlab.com:19503/sellyourstuff';
 
 /* next: generateData function
-takes a number parameter to 
-specify number of mock products 
+takes a number parameter to
+specify number of mock products
 to add to database: */
 
 const generateData = require('./mockData').generateData;
 
 
-// 
+//
 /* For Uploading Files:
 
 const multer = require('multer');
@@ -88,6 +89,53 @@ server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
     let user = JSON.parse(req.body);
     console.log('user passed through: ', user)
     connectToMongo(isLoggedIn, user, userExists, res);
+})
+
+server.get('/mock', (req, res) => {
+  console.log("api")
+  //let mockList = generateData(10);
+
+  MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
+    let db = client.db(databaseName)
+    let catalogue = db.collection(collectionName2)
+      if (err) {
+          console.log('Could not connect! Error: ', err);
+          client.close();
+      }
+      console.log('Connected to mongo database.')
+      //generateData(10, catalogue)
+      //catalogue.insertMany(mockList)
+      client.close()
+    })
+})
+
+server.get('/api/products', (req, res) => {
+  let returnList = null;
+  MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
+      if (err) {
+          console.log('Could not connect! Error: ', err);
+          client.close();
+      }
+      let db = client.db(databaseName)
+      let catalogue = db.collection(collectionName2)
+      console.log('Connected to mongo database.')
+      catalogue.find().toArray((err, result) => {
+        /*result.forEach((item) => {
+          returnList.push(item)
+          console.log(returnList[0])
+        })*/
+        console.log("inserting result")
+        returnList = result;
+        if(returnList !== null){
+          console.log("closing")
+          client.close()
+          console.log(returnList[0])
+          res.header("Access-Control-Allow-Origin", '*')
+          console.log("sending")
+          res.send(returnList)
+        }
+      })
+    })
 })
 
 const port = 3000;
