@@ -11,8 +11,7 @@ class App extends Component {
     super(props);
     this.state = {
       isLoggedIn: false,
-      currentTab: "products",
-      currentPage: "login",
+      currentTab: "login",
       products: []
     }
     this.tabClick = this.tabClick.bind(this);
@@ -23,7 +22,7 @@ class App extends Component {
   }
   setUserState = (user,credentials) => this.setState({user: user, credentials: credentials})
   isLoggedIn = (bool) => this.setState({isLoggedIn: bool})
-  changeToShop = () => this.setState({currentPage: "shop"})
+  changeToShop = () => this.setState({currentTab: "shop"})
 
   componentDidMount(){
     console.log("Inside component")
@@ -60,7 +59,7 @@ class App extends Component {
       <h2>You are logged in, {this.state.user.name}</h2>
     )
     let currentApp = null;
-    if(this.state.currentPage === "shop"){
+    if(this.state.currentTab === "shop"){
       currentApp = <ProductList productsProp = {this.state.products}/>
     }
     return (
