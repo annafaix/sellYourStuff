@@ -10,11 +10,17 @@ class App extends Component {
     super(props);
     this.state = {
       isLoggedIn: false,
+      currentTab: "products"
     }
+    this.tabClick = this.tabClick.bind(this);
+  }
+  tabClick(ind) {
+    console.log('Tab clicked: ' + ind);
+    this.setState({currentTab: ind});
   }
   setUserState = (user,credentials) => this.setState({user: user, credentials: credentials})
   isLoggedIn = (bool) => this.setState({isLoggedIn: bool})
-  
+
   render() {
     const loggedIn = !this.state.isLoggedIn ? (
       null
@@ -23,9 +29,18 @@ class App extends Component {
     )
     return (
       <div className="App">
-        <Menu setUser={this.setUserState} isLoggedIn={this.isLoggedIn}/>
+        <Menu setUser={this.setUserState} isLoggedIn={this.isLoggedIn} clickEvent={this.tabClick}/>
         <main className="mainView">
             {loggedIn}
+            <div id="productsPage" className={(this.state.currentTab==="products") ? "show" : "hide"}>
+            products page
+            </div>
+            <div id="profilePage" className={(this.state.currentTab==="profile") ? "show" : "hide"}>
+              profile page
+            </div>
+            <div id="cartPage" className={(this.state.currentTab==="cart") ? "show" : "hide"}>
+              shopping cart page
+            </div>
         </main>
       </div>
     );

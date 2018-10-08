@@ -50,10 +50,59 @@ nav div:hover {
     border-bottom: 3px solid #3300FF;
 }
 
-.invincible {
-    display: none;
+.show {
+  display: block;
 }
-
-.chosen {
-
+.hide {
+  display: none;
+}
+.inline {
+  display: inline;
+}
+.menuInnerShow{
+  display: flex;
+}
+#menuInner {
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+#userMenu, #profile, #cartMenu {
+  display: inline;
+}
+.profile {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#cartMenu {
+  display: flex;
+  flexflow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+#userMenu {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.products {
+  padding-left: 10px;
+  padding-right: 10px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-around;
+  align-items: center;
+}
+.productsMenu {
+  align-self: center;
+}
+.menuBtn {
+  background-color: #1b1c1d;
+  border: 1.5px solid grey;
+  height: 27px;
+  border-radius: 3px;
 }
