@@ -86,12 +86,17 @@ nav div:hover {
   padding-right: 10px;
 }
 .products {
-  padding-left: 10px;
+  padding-left: 5px;
+  padding-top: 2px;
   padding-right: 10px;
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: row nowrap;
   justify-content: space-around;
   align-items: center;
+  border: 1.5px solid grey;
+  border-radius: 3px;
+  height: 27px;
+  margin-left: 15px;
 }
 .productsMenu {
   align-self: center;
@@ -103,7 +108,7 @@ nav div:hover {
   border-radius: 3px;
 }
 
-.profile{
+.profile {
   margin: 20px;
   text-align: left;
 }
@@ -119,4 +124,10 @@ nav div:hover {
   /* shape-outside: circle(); */
   margin-right: 15px;
   float: left;
+}
+.menuLeftWrap {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
 }

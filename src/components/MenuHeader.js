@@ -31,11 +31,15 @@ export default class MenuHeader extends Component {
           </Menu.Item>
 
           <div id="menuInner" className={this.state.loginStatus ? 'menuInnerShow' : 'hide'}>
-              <div className="products inline" onClick={() => funcClick("products")}>
-                 <p className=" productsMenu inline">Products</p>
-              </div>
-              <div className="products inline" onClick={() => funcClick("profile")}>
-                 <p className=" productsMenu inline">Profile page</p>
+              <div className="menuLeftWrap">
+                  <div className="products inline" onClick={() => funcClick("products")}>
+                    <Icon name="home" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
+                     <p className=" productsMenu inline">Home</p>
+                  </div>
+                  <div className="products inline" onClick={() => funcClick("profile")}>
+                     <Icon name="user secret" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
+                     <p className=" productsMenu inline">Profile</p>
+                  </div>
               </div>
               <div id="cartMenu" className="menuBtn inline" onClick={() => funcClick("cart")}>
                 <p className="inline"  style={{alignSelf:'center', margin:'auto'}}>My basket</p>
