@@ -12,8 +12,8 @@ var jsonParser = bodyParser.text();
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 const databaseName = 'sellyourstuff';
-const userCollection = 'users';
-const productCollection = 'products';
+const collectionName = 'users';
+const collectionName2 = 'products';
 const MongoClient = require('mongodb').MongoClient;
 // url här under tillåter CRUD
 const urlLoggedIn = 'mongodb://feu17:Hejhej1234@ds119503.mlab.com:19503/sellyourstuff';
@@ -37,7 +37,8 @@ const upload = multer({
 });
 */
 
-const connectToMongo = (isLoggedIn, options, callback, res, myCatalogue) => {
+const connectToMongo = (isLoggedIn, user, callback, res) => {
+    let catalogue;
     let url;
     isLoggedIn == 'true' ? url = urlLoggedIn : url = urlNotLoggedIn;
 
@@ -49,12 +50,12 @@ const connectToMongo = (isLoggedIn, options, callback, res, myCatalogue) => {
         console.log('Connected to mongo database.')
 
         var db = client.db(databaseName);
-        let catalogue = db.collection(myCatalogue);
+        catalogue = db.collection(collectionName);
         let closeClient = () => {
             client.close();
             console.log('Connection closed.');
         }
-        callback(catalogue, options, res, client, closeClient);
+        callback(catalogue, user, res, client, closeClient);
     })
 }
 const userExists = (catalogue, user, res, client, closeClient) => {
@@ -79,57 +80,15 @@ const userExists = (catalogue, user, res, client, closeClient) => {
         }
     })
 }
-const filterFunction = (catalogue, filter, res, client, closeClient) =>{
-    // Jobbar med aggregation
-    catalogue.find(filter).toArray((err, docs) => {
-        if (err) {
-            console.log('Could not filter due to: ', err);
-            client.close();
-            return;
-        } else {
-            console.log('Matched the following products: ', docs);
-        }
-        res
-            .send(docs)
-            .end();
-        }, closeClient)
-}
-// försätt senare :
-server.get('/api/getOverview', (req,res) => {
-    let getOverview = () => {
-        db.collection(productCollection).aggregate([{$group: {_id: "$category", amount: {$sum: "1" }}}, 
-        {$group: {_id: null, max: {$max: "$price" }, max: {$min: "$price" }}}], (err,docs) => {
-            if (err) {
-                console.log('Could not filter due to: ', err);
-                client.close();
-                return;
-            } else {
-                docs.max = docs[1].max;
-                docs.min = docs[1].min;
-                docs.categories = docs[0];
-            }
-            res
-                .send(docs)
-                .end();
-            }, closeClient)
-    }
-    connectToMongo(false, null, getOverview, res, productCollection);
-});
-
-server.get('/api/filter/:filter', (req, res) => {
-    let filter = JSON.parse("{" + req.params.filter + "}");
-    connectToMongo(false, filter, filterFunction, res, productCollection);
-})
 
 server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
     console.log('body: ', req.body);
     let isLoggedIn = req.params.isLoggedIn;
     let user = JSON.parse(req.body);
     console.log('user passed through: ', user)
-    connectToMongo(isLoggedIn, user, userExists, res, userCollection);
+    connectToMongo(isLoggedIn, user, userExists, res);
 })
-
-//Marie Louise Leblanc testar
+//Anna testar
 
 
 server.get('/mock', (req, res) => {
@@ -138,7 +97,7 @@ server.get('/mock', (req, res) => {
 
   MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
     let db = client.db(databaseName)
-    let catalogue = db.collection(productCollection)
+    let catalogue = db.collection(collectionName2)
       if (err) {
           console.log('Could not connect! Error: ', err);
           client.close();
@@ -158,7 +117,7 @@ server.get('/api/products', (req, res) => {
           client.close();
       }
       let db = client.db(databaseName)
-      let catalogue = db.collection(productCollection)
+      let catalogue = db.collection(collectionName2)
       console.log('Connected to mongo database.')
       catalogue.find().toArray((err, result) => {
         /*result.forEach((item) => {

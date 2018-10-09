@@ -27,9 +27,6 @@ class Login extends Component {
   componentDidMount() {
     firebase.initializeApp(config);
     firebase.auth().useDeviceLanguage();
-    fetch('http://localhost:3000/api/getOverview').then(response => {
-      console.log(response);
-    })
   }
   showState = () => {
     console.log(this.state)

@@ -13,9 +13,7 @@ class App extends Component {
     this.state = {
       isLoggedIn: false,
       currentTab: "login",
-      products: [],
-      user: {},
-      token: ""
+      products: []
     }
     this.tabClick = this.tabClick.bind(this);
   }
