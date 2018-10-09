@@ -62,7 +62,7 @@ const userExists = (catalogue, user, res, client, closeClient) => {
     console.log(email)
     catalogue.find({ email: email }).toArray((err, docs) => {
         console.log('The products are: ', docs);
- if (docs.length < 1) {
+        if (docs.length < 1) {
             console.log('The products are: ', docs);
             catalogue.insertOne(user, (err, response) => {
                 if (err) {
@@ -79,7 +79,7 @@ const userExists = (catalogue, user, res, client, closeClient) => {
         }
     })
 }
-const filterFunction = (catalogue, filter, res, client, closeClient) =>{
+const filterFunction = (catalogue, filter, res, client, closeClient) => {
     // Jobbar med aggregation
     catalogue.find(filter).toArray((err, docs) => {
         if (err) {
@@ -92,28 +92,29 @@ const filterFunction = (catalogue, filter, res, client, closeClient) =>{
         res
             .send(docs)
             .end();
-        }, closeClient)
+    }, closeClient)
 }
-// försätt senare :
-server.get('/api/getOverview', (req,res) => {
-    let getOverview = () => {
-        db.collection(productCollection).aggregate([{$group: {_id: "$category", amount: {$sum: "1" }}}, 
-        {$group: {_id: null, max: {$max: "$price" }, max: {$min: "$price" }}}], (err,docs) => {
-            if (err) {
-                console.log('Could not filter due to: ', err);
-                client.close();
-                return;
-            } else {
-                docs.max = docs[1].max;
-                docs.min = docs[1].min;
-                docs.categories = docs[0];
-            }
-            res
-                .send(docs)
-                .end();
-            }, closeClient)
-    }
-    connectToMongo(false, null, getOverview, res, productCollection);
+const getOverview = () => {
+    client.db(databaseName).collection(productCollection).aggregate([{ $group: { _id: "$category", amount: { $sum: "1" } } },
+    { $group: { _id: null, max: { $max: "$price" }, max: { $min: "$price" } } }], (err, docs) => {
+        if (err) {
+            console.log('Could not filter due to: ', err);
+            client.close();
+            return;
+        } else {
+            docs.max = docs[1].max;
+            docs.min = docs[1].min;
+            docs.categories = docs[0];
+        }
+        console.log('get overview docs: ', docs);
+        res
+            .send(docs)
+            .end();
+    }, closeClient)
+}
+// fortsätt senare :
+server.get('/api/getOverview', (req, res) => {
+    connectToMongo(false, {}, getOverview, res, productCollection);
 });
 
 server.get('/api/filter/:filter', (req, res) => {
@@ -133,50 +134,42 @@ server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
 
 
 server.get('/mock', (req, res) => {
-  console.log("api")
-  //let mockList = generateData(10);
+    console.log("api")
+    //let mockList = generateData(10);
 
-  MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
-    let db = client.db(databaseName)
-    let catalogue = db.collection(productCollection)
-      if (err) {
-          console.log('Could not connect! Error: ', err);
-          client.close();
-      }
-      console.log('Connected to mongo database.')
-      //generateData(10, catalogue)
-      //catalogue.insertMany(mockList)
-      client.close()
+    MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
+        let db = client.db(databaseName)
+        let catalogue = db.collection(productCollection)
+        if (err) {
+            console.log('Could not connect! Error: ', err);
+            client.close();
+        }
+        console.log('Connected to mongo database.')
+        //generateData(10, catalogue)
+        //catalogue.insertMany(mockList)
+        client.close()
     })
 })
 
 server.get('/api/products', (req, res) => {
-  let returnList = null;
-  MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
-      if (err) {
-          console.log('Could not connect! Error: ', err);
-          client.close();
-      }
-      let db = client.db(databaseName)
-      let catalogue = db.collection(productCollection)
-      console.log('Connected to mongo database.')
-      catalogue.find().toArray((err, result) => {
-        /*result.forEach((item) => {
-          returnList.push(item)
-          console.log(returnList[0])
-        })*/
-        console.log("inserting result")
-        returnList = result;
-        if(returnList !== null){
-          console.log("closing")
-          client.close()
-          console.log(returnList[0])
-          res.header("Access-Control-Allow-Origin", '*')
-          console.log("sending")
-          res.send(returnList)
+    MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
+        let db = client.db(databaseName)
+        let catalogue = db.collection(productCollection)
+        if (err) {
+            console.log('Could not connect! Error: ', err);
+            client.close();
+            return;
         }
-      })
-    })
+            console.log('Connected to mongo database.')
+            catalogue.find().toArray((err, docs) => {
+                console.log(docs);
+                console.log("inserting result")
+        })
+        res
+            .send(docs)
+            .end()
+    }, closeClient)
+    
 })
 
 const port = 3000;

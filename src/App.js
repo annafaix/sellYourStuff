@@ -4,6 +4,7 @@ import './App.css';
 import Login from './components/Login'
 import ProductList from './components/productList.js'
 import Menu from './components/MenuHeader'
+import fetch from 'isomorphic-fetch'
 // import firebase from 'firebase'
 import Profile from './components/Profile'
 
@@ -28,10 +29,14 @@ class App extends Component {
   changeToShop = () => this.setState({currentTab: "shop"})
 
   componentDidMount(){
-    console.log("Inside component")
-    let req = new XMLHttpRequest();
-    req.onreadystatechange = (event) => {
+    fetch('http://localhost:3000/api/products, {
+      method: 'GET',
+      mode: 'no-cors',
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+    }).then()
     if( req.readyState == 4){
+        console.log(req.response)
         this.setState({ products: JSON.parse(req.response) })
         console.log(this.state.products)
     }
