@@ -71,14 +71,14 @@ nav div:hover {
 #userMenu, #profile, #cartMenu {
   display: inline;
 }
-/* .profile {
+/*.profile {
   display: inline-flex;
   flex-flow: row nowrap;
   justify-content: space-around;
   align-items: center;
   padding-left: 10px;
   padding-right: 10px;
-} */
+}*/
 #cartMenu {
   display: flex;
   flexflow: row nowrap;
