@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ProductItem from './productItem.js'
+import Search from './Search.js'
 
 class productList extends Component {
   constructor(props){
@@ -16,6 +17,9 @@ class productList extends Component {
     })
     return (
       <div>
+          <div className="searchFilter" style={{padding:'10px 20px 10px 20px', backgroundColor:'#989898'}}>
+              <Search/>
+          </div>
       {display}
       <button>previous</button>
       <button>next</button>

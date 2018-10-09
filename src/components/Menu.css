@@ -110,12 +110,15 @@ nav div:hover {
   border: 1.5px solid grey;
   height: 27px;
   border-radius: 3px;
+  border: 2px solid #00CD00;
 }
 .menuBtn:hover {
   background-color: #505050;
+  border: 2px solid #505050;
 }
 .chosenMenuItem {
   background-color: #505050;
+  border: 2px solid #505050;
 }
 .products:hover {
   background-color: #505050;
