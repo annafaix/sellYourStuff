@@ -80,7 +80,7 @@ class App extends Component {
             <div id="productsPage" className={(this.state.currentTab==="products") ? "show" : "hide"}>
             products page
             </div>
-            <div id="profilePage" className={(this.state.currentTab==="profile") ? "show" : "hide"}>
+            <div id="profilePage" className={((this.state.currentTab==="profile") && (this.state.isLoggedIn===true)) ? "show" : "hide"}>
               {loggedIn}
             </div>
             <div id="cartPage" className={((this.state.currentTab==="cart") && (this.state.isLoggedIn===true)) ? "show" : "hide"}>
