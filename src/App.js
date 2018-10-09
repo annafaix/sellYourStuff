@@ -70,7 +70,8 @@ class App extends Component {
       <div className="App">
         <Menu setUser={this.setUserState}
               isLoggedIn={this.isLoggedIn}
-              clickEvent={this.tabClick}/>
+              clickEvent={this.tabClick}
+              chosenTab={this.state.currentTab}/>
 
         <main className="mainView">
           {currentApp}
