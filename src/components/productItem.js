@@ -9,6 +9,13 @@ class productItem extends Component {
 
     }
   }
+  addProductToShoppingCart = () => {
+    fetch()
+    .then(data => data.json())
+    .then((json) => {
+      console.log(json)
+    })
+  }
   render() {
     return (
       <div>
