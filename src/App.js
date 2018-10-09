@@ -77,13 +77,13 @@ class App extends Component {
           {currentApp}
           <button onClick={this.changeToShop}> Change to shop </button>
             {loggedIn}
-            <div id="productsPage" className={(this.state.currentTab==="products") ? "show" : "hide"}>
+            <div id="productsPage" className={((this.state.currentTab==="products") || (this.state.isLoggedIn===false)) ? "show" : "hide"}>
             products page
             </div>
-            <div id="profilePage" className={(this.state.currentTab==="profile") ? "show" : "hide"}>
+            <div id="profilePage" className={((this.state.currentTab==="profile") && (this.state.isLoggedIn===true)) ? "show" : "hide"}>
               profile page
             </div>
-            <div id="cartPage" className={(this.state.currentTab==="cart") ? "show" : "hide"}>
+            <div id="cartPage" className={((this.state.currentTab==="cart") && (this.state.isLoggedIn===true)) ? "show" : "hide"}>
               shopping cart page
             </div>
         </main>
