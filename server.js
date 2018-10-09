@@ -30,13 +30,11 @@ const generateData = require('./mockData').generateData;
 
 //
 /* For Uploading Files:
-
 const multer = require('multer');
 const upload = multer({
     dest: "./temp"
     // you might also want to set some limits: https://github.com/expressjs/multer#limits
 });
-
 */
 
 const connectToMongo = (isLoggedIn, user, callback, res) => {
@@ -90,6 +88,8 @@ server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
     console.log('user passed through: ', user)
     connectToMongo(isLoggedIn, user, userExists, res);
 })
+//Anna testar
+
 
 server.get('/mock', (req, res) => {
   console.log("api")

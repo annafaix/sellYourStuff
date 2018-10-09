@@ -71,14 +71,7 @@ nav div:hover {
 #userMenu, #profile, #cartMenu {
   display: inline;
 }
-.profile {
-  display: inline-flex;
-  flex-flow: row nowrap;
-  justify-content: space-around;
-  align-items: center;
-  padding-left: 10px;
-  padding-right: 10px;
-}
+
 #cartMenu {
   display: flex;
   flexflow: row nowrap;
@@ -108,4 +101,22 @@ nav div:hover {
   border: 1.5px solid grey;
   height: 27px;
   border-radius: 3px;
+}
+
+.profile{
+  margin: 20px;
+  text-align: left;
+}
+.profile .divider{
+  height: 1px;
+
+  margin-left: 165px;
+  background-color: black;
+}
+
+.profile img{
+  border:5px solid #DB0278;
+  /* shape-outside: circle(); */
+  margin-right: 15px;
+  float: left;
 }
