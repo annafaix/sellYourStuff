@@ -13,7 +13,8 @@ class App extends Component {
     this.state = {
       isLoggedIn: false,
       currentTab: "login",
-      products: []
+      products: [],
+      shoppingCart: [],
     }
     this.tabClick = this.tabClick.bind(this);
   }
