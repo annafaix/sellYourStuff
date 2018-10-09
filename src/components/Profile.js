@@ -22,7 +22,7 @@ export default class Profile extends Component{
   render(){
     return(
       <React.Fragment>
-      <div className="ui raised card centered fluid" style={{width: "90%"}}>
+      <div className="ui raised card centered fluid">
         <div className="content profile">
         <Image src={this.props.user.picture}
         alt="profile picture" size="small" circular/>
@@ -33,7 +33,7 @@ export default class Profile extends Component{
         </p>
         {this.state.editAbout}
         {this.state.openEdit ? (
-          <Form>
+          <Form style={{marginTop: "20px"}}>
             <TextArea
               name='aboutMe'
               placeholder={this.state.editAbout}
@@ -45,7 +45,7 @@ export default class Profile extends Component{
         <Button content="Edit" icon="edit" floated='right' onClick={() => this.handleEdit()}/>
       </div>
     </div>
-    <Button color='green'>
+    <Button color='green' floated="right">
       <Icon name="plus"/> Create new item
     </Button>
 

@@ -46,13 +46,6 @@ export default class MenuHeader extends Component {
                 <Icon name="cart" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
               </div>
           </div>
-
-          {this.props.showProfile ? (
-            <Menu.Item>
-            <Button onClick={()=> console.log(this.props.showProfile)} inverted color ="yellow">My profile</Button>
-            </Menu.Item>
-            ) : (null)
-          }
           <Menu.Item position='right' style={{padding:'0', margin:'0'}}>
             <Login setUser={this.setUser} isLoggedIn={this.isLoggedIn}/>
           </Menu.Item>
