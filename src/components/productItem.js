@@ -6,15 +6,19 @@ class productItem extends Component {
   constructor(props){
     super(props);
     this.state = {
-
+      item: {
+        userPicture: this.props.userPicture,
+        name: this.props.name,
+        userName: this.props.userName,
+        info: this.props.info,
+        id: this.props.id,
+        price: this.props.price,
+        category: this.props.category,
+      }
     }
   }
-  addProductToShoppingCart = () => {
-    fetch()
-    .then(data => data.json())
-    .then((json) => {
-      console.log(json)
-    })
+  addProductToCart = () => {
+    this.props.cartFunction(this.state.item)
   }
   render() {
     return (
@@ -31,14 +35,14 @@ class productItem extends Component {
               userPicture={this.props.userPicture} price={this.props.price} category={this.props.category}/>
             </Card.Description>
           </Card.Content>
-          <Card.Content price>
+          <Card.Content>
             <a>
               <Icon name='user' />
               {this.props.price} Rupees
             </a>
             <br/>
             <span> Category: {this.props.category}</span>
-            <button> Buy </button>
+            <button onClick={this.addProductToCart}> Buy </button>
           </Card.Content>
         </Card>
       </div>

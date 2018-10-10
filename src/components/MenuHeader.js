@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import './Menu.css';
-import { Menu, Segment, Button, Image, Icon } from 'semantic-ui-react'
+import { Menu, Segment, Button, Image, Icon, Modal } from 'semantic-ui-react'
 import Login from '../components/Login'
+import CartPopup from './cartPopup.js'
 
 export default class MenuHeader extends Component {
   constructor(props) {
     super(props);
-    this.state = {loginStatus: false};
+    this.state = {
+      loginStatus: false,
+    }
     this.isLoggedIn = this.isLoggedIn.bind(this);
   }
 
@@ -37,10 +40,13 @@ export default class MenuHeader extends Component {
               <div className="products inline" onClick={() => funcClick("profile")}>
                  <p className=" productsMenu inline">Profile page</p>
               </div>
-              <div id="cartMenu" className="menuBtn inline" onClick={() => funcClick("cart")}>
-                <p className="inline"  style={{alignSelf:'center', margin:'auto'}}>My basket</p>
-                <Icon name="cart" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
-              </div>
+              <Modal trigger={
+                <div id="cartMenu" className="menuBtn inline" onClick={() => funcClick("cart")}>
+                  <p className="inline"  style={{alignSelf:'center', margin:'auto'}}>My basket</p>
+                  <Icon name="cart" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
+                </div>}>
+                <CartPopup cart={this.props.cart} deleteCart={this.props.deleteCart}/>
+              </Modal>
           </div>
 
           {this.props.showProfile ? (

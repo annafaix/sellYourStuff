@@ -25,12 +25,34 @@ class App extends Component {
   setUserState = (user,credentials) => this.setState({user: user, credentials: credentials})
   isLoggedIn = (bool) => this.setState({isLoggedIn: bool})
   changeToShop = () => this.setState({currentTab: "shop"})
+  addToCart = (boughtItem) => {
+    console.log(boughtItem)
+    let newCart = this.state.shoppingCart;
+    let found = false;
+    newCart.forEach(x => {
+      if(x.id === boughtItem.id){
+        found = true;
+        console.log("Found duplicate", x, boughtItem)
+      }
+    })
+    if (found === false){
+      newCart.push(boughtItem);
+    }
+    this.setState({shoppingCart: newCart})
+  }
+  removeFromCart = (itemToDelete) => {
+    let oldCart = this.state.shoppingCart
+    let newCart = (this.state.shoppingCart).filter(x => x.id !== itemToDelete.id)
+    this.setState({shoppingCart: newCart})
+    console.log(itemToDelete)
 
+  }
   componentDidMount(){
     console.log("Inside component")
     let req = new XMLHttpRequest();
     req.onreadystatechange = (event) => {
     if( req.readyState == 4){
+      console.log(req.response)
         this.setState({ products: JSON.parse(req.response) })
         console.log(this.state.products)
     }
@@ -65,14 +87,16 @@ class App extends Component {
     )
     let currentApp = null;
     if(this.state.currentTab === "shop"){
-      currentApp = <ProductList productsProp = {this.state.products}/>
+      currentApp = <ProductList productsProp = {this.state.products} cartFunction={this.addToCart}/>
     }
     return (
       <div className="App">
         <Menu setUser={this.setUserState}
               isLoggedIn={this.isLoggedIn}
               showProfile={this.state.isLoggedIn}
-              clickEvent={this.tabClick}/>
+              clickEvent={this.tabClick}
+              cart={this.state.shoppingCart}
+              deleteCart={this.removeFromCart}/>
 
         <main className="mainView">
           {currentApp}

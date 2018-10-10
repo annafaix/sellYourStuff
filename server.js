@@ -73,6 +73,7 @@ const userExists = (catalogue, user, res, client, closeClient) => {
                 } else {
                     console.log('Successfully signed up new user: ', response);
                 }
+                res.header("Access-Control-Allow-Origin", '*')
                 res
                     .send(response)
                     .end();
