@@ -86,24 +86,44 @@ nav div:hover {
   padding-right: 10px;
 }
 .products {
-  padding-left: 10px;
+  padding-top: 2px;
   padding-right: 10px;
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: row nowrap;
   justify-content: space-around;
   align-items: center;
+  border: 1.5px solid grey;
+  border-radius: 3px;
+  height: 27px;
+  margin-left: 15px;
 }
 .productsMenu {
   align-self: center;
 }
 .menuBtn {
-  background-color: #1b1c1d;
+  display: flex;
+  flexflow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  padding: 3px 13px 3px 13px;
+  background-color: #00CD00;
   border: 1.5px solid grey;
   height: 27px;
   border-radius: 3px;
+  border: 2px solid #00CD00;
 }
-
-.profile{
+.menuBtn:hover {
+  background-color: #505050;
+  border: 2px solid #505050;
+}
+.chosenMenuItem {
+  background-color: #505050;
+  border: 2px solid #505050;
+}
+.products:hover {
+  background-color: #505050;
+}
+.profile {
   margin: 20px;
   text-align: left;
 }
@@ -119,4 +139,10 @@ nav div:hover {
   /* shape-outside: circle(); */
   margin-right: 15px;
   float: left;
+}
+.menuLeftWrap {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
 }
