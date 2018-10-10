@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
 import Login from './components/Login'
 import ProductList from './components/productList.js'
 import Menu from './components/MenuHeader'
-// import firebase from 'firebase'
 import Profile from './components/Profile'
+import LandingPage from './components/LandingPage'
 import fetch from 'isomorphic-fetch'
 
 class App extends Component {
@@ -43,6 +42,7 @@ aggregateMaxAndMin = () => {
   })
 }
 
+
 getInitialProducts = () => {
   console.log("Inside component")
     let req = new XMLHttpRequest();
@@ -75,6 +75,7 @@ filterMeBabyOhYeahFilterMePlease = filter => {
   })
 }
 
+
   componentDidMount() {
     this.aggregateMaxAndMin();
     this.getInitialProducts();
@@ -95,11 +96,10 @@ filterMeBabyOhYeahFilterMePlease = filter => {
           isLoggedIn={this.isLoggedIn}
           clickEvent={this.tabClick}
           chosenTab={this.state.currentTab} />
-
         <main className="mainView">
+          <LandingPage/>
           {currentApp}
           <button onClick={this.changeToShop}> Change to shop </button>
-
           <div id="productsPage" className={(this.state.currentTab === "products") ? "show" : "hide"}>
             products page
             </div>
