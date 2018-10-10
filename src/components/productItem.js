@@ -31,8 +31,7 @@ class productItem extends Component {
               <span className='date'>Listed by {this.props.userName}</span>
             </Card.Meta>
             <Card.Description>
-              <Popups name={this.props.name} userName={this.props.userName} info={this.props.info}
-              userPicture={this.props.userPicture} price={this.props.price} category={this.props.category}/>
+              <Popups product={this.state.item} addToCart={this.props.cartFunction}/>
             </Card.Description>
           </Card.Content>
           <Card.Content>

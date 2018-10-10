@@ -8,18 +8,22 @@ class productItem extends Component {
 
     }
   }
+  addProductToCart = () => {
+    this.props.addToCart(this.props.product)
+  }
+
   render() {
     return (
       <div>
         <Modal trigger={<Button>Info</Button>}>
-          <Modal.Header>{this.props.name}</Modal.Header>
+          <Modal.Header>{this.props.product.name}</Modal.Header>
           <Modal.Content image>
-          <Image wrapped size='medium' src={this.props.userPicture} />
+          <Image wrapped size='medium' src={this.props.product.userPicture} />
               <Modal.Description>
-                <Header>Listed by: {this.props.userName}</Header>
-                <p>{this.props.info}</p>
-                <p>{this.props.price} Rupees</p>
-                <button> Buy </button>
+                <Header>Listed by: {this.props.product.userName}</Header>
+                <p>{this.props.product.info}</p>
+                <p>{this.props.product.price} Rupees</p>
+                <button onClick={this.addProductToCart}> Buy </button>
               </Modal.Description>
             </Modal.Content>
         </Modal>
