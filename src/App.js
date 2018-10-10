@@ -57,10 +57,7 @@ class App extends Component {
     const loggedIn = !this.state.isLoggedIn ? (
       null
     ) : (
-      <div>
-        <h2>You are logged in, {this.state.user.name}</h2>
         <Profile user={this.state.user}/>
-      </div>
     )
     let currentApp = null;
     if(this.state.currentTab === "shop"){

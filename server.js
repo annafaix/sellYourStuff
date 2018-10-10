@@ -27,6 +27,7 @@ to add to database: */
 
 const generateData = require('./mockData').generateData;
 
+let ObjectID = require('mongodb').ObjectID;
 
 //
 /* For Uploading Files:
@@ -89,6 +90,21 @@ server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
     connectToMongo(isLoggedIn, user, userExists, res);
 })
 //Anna testar
+server.get('api/users', (req, res) => {
+  let db = client.db(databaseName);
+  let catalogue = db.collection('users');
+  MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) =>{
+    if(err){
+      console.log("taking a break");
+      client.close()
+    }
+    console.log('Connected to mongo database.')
+    console.log('db is:', db, "collection is: "+ catalogue);
+  })
+
+});
+
+
 
 
 server.get('/mock', (req, res) => {
