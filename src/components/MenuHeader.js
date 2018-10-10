@@ -20,8 +20,9 @@ export default class MenuHeader extends Component {
 
   render() {
     const { activeItem } = this.state
-    console.log("Logged in funktion" + this.isLoggedIn);
     const funcClick = this.props.clickEvent;
+    const chosenTab = this.props.chosenTab;
+    console.log("chosenTab" + chosenTab);
 
     return (
       <Segment inverted style={{borderRadius:'0', position:'fixed', width: '100%', top:'0', padding:'0 4rem 0 2rem', zIndex:'1'}}>
@@ -32,16 +33,16 @@ export default class MenuHeader extends Component {
 
           <div id="menuInner" className={this.state.loginStatus ? 'menuInnerShow' : 'hide'}>
               <div className="menuLeftWrap">
-                  <div className="products inline" onClick={() => funcClick("products")}>
+                  <div className={(chosenTab) === "products" ? 'products inline chosenMenuItem' : 'products inline'}  onClick={() => funcClick("products")}>
                     <Icon name="home" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
                      <p className=" productsMenu inline">Home</p>
                   </div>
-                  <div className="products inline" onClick={() => funcClick("profile")}>
-                     <Icon name="user secret" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
+                  <div className={(chosenTab) === "profile" ? 'products inline chosenMenuItem' : 'products inline'} onClick={() => funcClick("profile")}>
+                     <Icon name="user" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
                      <p className=" productsMenu inline">Profile</p>
                   </div>
               </div>
-              <div id="cartMenu" className="menuBtn inline" onClick={() => funcClick("cart")}>
+              <div className={(chosenTab) === "cart" ? 'menuBtn inline chosenMenuItem' : 'menuBtn inline'} onClick={() => funcClick("cart")}>
                 <p className="inline"  style={{alignSelf:'center', margin:'auto'}}>My basket</p>
                 <Icon name="cart" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
               </div>
