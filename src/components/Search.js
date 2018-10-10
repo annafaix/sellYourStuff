@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'semantic-ui-react'
+import { Icon, Input } from 'semantic-ui-react'
 
 export default class Search extends Component {
   constructor(props) {
@@ -15,7 +15,10 @@ export default class Search extends Component {
 
     return (
       <div>
-           Search wrap
+          <Input icon placeholder='Search...' style={{marginLeft:"20px"}}>
+           <input style={{color:"#707070"}}/>
+           <Icon name='search' style={{color:"black"}}/>
+          </Input>
       </div>
     )
   }
