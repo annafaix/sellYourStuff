@@ -134,6 +134,8 @@ server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
 })
 //Anna testar
 
+//Elin testar
+// server.post('/api/createProduct/')
 
 server.get('/mock', (req, res) => {
     console.log("api")
@@ -182,7 +184,7 @@ server.get('/api/products', (req, res) => {
         }, () => { client.close() })
     })
 })
-  
+
 
 const port = 3000;
 server.listen(port, (err) => {

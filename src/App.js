@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import Login from './components/Login'
-import ProductList from './components/productList.js'
-import Menu from './components/MenuHeader'
+import Login from './components/Login';
+import ProductList from './components/productList.js';
+import Menu from './components/MenuHeader';
+import Create from './components/CreateForm';
 // import firebase from 'firebase'
-import Profile from './components/Profile'
-import fetch from 'isomorphic-fetch'
+import Profile from './components/Profile';
+import fetch from 'isomorphic-fetch';
 
 class App extends Component {
   constructor(props) {
@@ -27,6 +28,7 @@ class App extends Component {
   setUserState = (user, credentials) => this.setState({ user: user, credentials: credentials })
   isLoggedIn = (bool) => this.setState({ isLoggedIn: bool })
   changeToShop = () => this.setState({ currentTab: "shop" })
+  changePage = (name) => {this.setState({currentTab: name})}
 
 aggregateMaxAndMin = () => {
     fetch('http://localhost:3000/api/getPriceRange', {
@@ -58,7 +60,7 @@ getInitialProducts = () => {
     req.open('GET', 'http://localhost:3000/api/products');
     req.send();
 }
-// filter funktion tar ett filter-objekt som parameter t.ex.: 
+// filter funktion tar ett filter-objekt som parameter t.ex.:
 // {category: "furniture"}
 filterMeBabyOhYeahFilterMePlease = filter => {
   fetch('http://localhost:3000/api/filter' + JSON.stringify(filter), {
@@ -92,6 +94,9 @@ filterMeBabyOhYeahFilterMePlease = filter => {
     if (this.state.currentTab === "shop") {
       currentApp = <ProductList productsProp={this.state.products} />
     }
+    if (this.state.currentTab === "create") {
+      currentApp = <Create userId={123}/>
+    }
     return (
       <div className="App">
         <Menu setUser={this.setUserState}
@@ -102,6 +107,7 @@ filterMeBabyOhYeahFilterMePlease = filter => {
         <main className="mainView">
           {currentApp}
           <button onClick={this.changeToShop}> Change to shop </button>
+          <button onClick={() => this.changePage('create')}>Temporary create button</button>
 
           <div id="productsPage" className={(this.state.currentTab === "products") ? "show" : "hide"}>
             products page
@@ -112,6 +118,9 @@ filterMeBabyOhYeahFilterMePlease = filter => {
           <div id="cartPage" className={((this.state.currentTab === "cart") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
             shopping cart page
             </div>
+          <div id="createForm" className={((this.state.currentTab === "create") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
+
+          </div>
         </main>
       </div>
     );
