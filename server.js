@@ -37,11 +37,11 @@ const upload = multer({
 });
 */
 
-server.use(function(req, res, next) {
+server.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept");
     next();
-  });
+});
 
 const connectToMongo = (isLoggedIn, options, callback, res, collection) => {
     let catalogue;
@@ -89,35 +89,79 @@ const userExists = (catalogue, user, res, client, closeClient) => {
 
 const getPriceRange = (catalogue, options, res, client, closeClient) => {
     console.log('hello')
-    let cursor = catalogue.aggregate([{ $match: {}}
-    ,{ $group: { _id: null, max: { $max: "$price" }, min: { $min: "$price" } } }]);
-    cursor.on('data', function(doc) {
+    let cursor = catalogue.aggregate([{ $match: {} }
+        , { $group: { _id: null, max: { $max: "$price" }, min: { $min: "$price" } } }]);
+    cursor.on('data', function (doc) {
         res.send(doc)
         res.end()
     })
-    cursor.once('end', function(){
+    cursor.once('end', function () {
         closeClient
     })
 }
 
-const filterFunction = (catalogue, filter, res, client, closeClient) => {
-    catalogue.find(filter).toArray((err, docs) => {
+const filterFunction = (catalogue, options, res, client, closeClient) => {
+    if (options.category != 'all' && options.myMin) {
+        let cursor = catalogue.aggregate([{
+            $match: {
+                $category: options.category, 
+                $price: {
+                    $gt : options.myMin
+                }, $price: { 
+                    $lt: options.myMax 
+                }
+            }
+        }]);
+        cursor.on('data', function (doc) {
+            res.send(doc)
+            res.end()
+        })
+        cursor.once('end', function () {
+            closeClient
+        })
+    }
+    else if (options.category == 'all'  && options.myMin) {
+        let cursor = catalogue.aggregate([{
+            $match: {
+                $price: {
+                    $gt : options.myMin
+                }, $price: { 
+                    $lt: options.myMax 
+                }
+            }
+        }]);
+        cursor.on('data', function (doc) {
+            res.send(doc)
+            res.end()
+        })
+        cursor.once('end', function () {
+            closeClient
+        })
+    } 
+    /*catalogue.find(filter).toArray((err, docs) => {
         if (err) {
-             console.log('Could not filter due to: ', err);
-             client.close();
-             return;
-         } else {
-             console.log('Matched the following products: ', docs);
-         }
+            console.log('Could not filter due to: ', err);
+            client.close();
+            return;
+        } else {
+            console.log('Matched the following products: ', docs);
+        }
         res
             .send(docs)
             .end();
-        }, closeClient)
+    }, closeClient)*/
 }
 
-server.get('/api/filter/:filter', (req,res) => {
-    let filter = JSON.parse(req.params.filter);
-    connectToMongo('false', filter, filterFunction, res, productCollection);
+const filterManyWithAggregate = (catalogue, filter, res, client, closeClient, sort) => {
+
+}
+
+server.get('/api/filter/:category/', jsonParser, (req, res) => {
+    let options;
+    let category = req.params.category;
+    if (req.query !== {}) options.myMin = req.query.myMin; options.myMax = req.query.myMax
+    if (category != 'all') options.category = category
+    connectToMongo('false', options, filterFunction, res, productCollection)
 });
 
 server.get('/api/getPriceRange', (req, res) => {
@@ -182,7 +226,7 @@ server.get('/api/products', (req, res) => {
         }, () => { client.close() })
     })
 })
-  
+
 
 const port = 3000;
 server.listen(port, (err) => {
