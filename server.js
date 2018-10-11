@@ -43,7 +43,6 @@ server.use(function(req, res, next) {
     next();
   });
 
-//server.use(bodyParser.json());
 
 const connectToMongo = (isLoggedIn, options, callback, res, collection) => {
     let catalogue;
@@ -117,6 +116,21 @@ const filterFunction = (catalogue, filter, res, client, closeClient) => {
         }, closeClient)
 }
 
+const searchFunction = (catalogue, filter, res, client, closeClient) => {
+    catalogue.find({$contains:{"name":filter}}).toArray((err, docs) => {
+        if (err) {
+             console.log('Could not filter due to: ', err);
+             client.close();
+             return;
+         } else {
+             console.log('Matched the following products: ', docs);
+         }
+        res
+            .send(docs)
+            .end();
+        }, closeClient)
+}
+
 server.get('/api/filter/:filter', (req,res) => {
     let filter = JSON.parse(req.params.filter);
     connectToMongo('false', filter, filterFunction, res, productCollection);
@@ -129,6 +143,7 @@ server.get('/api/getPriceRange', (req, res) => {
 server.post('/api/search', jsonParser, (req,res) => {
     //let searchText = JSON.stringify(req.body);
     console.log('server get request from search comp ' + req.body);
+    connectToMongo('false', req.body, searchFunction, res, productCollection);
     res.header("Access-Control-Allow-Origin", '*');
     res.send({ success: true });
     res.end();
