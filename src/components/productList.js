@@ -3,6 +3,7 @@ import ProductItem from './productItem.js'
 import Search from './Search.js'
 import FilterCat from './FilterCategories.js'
 import PriceSlider from './PriceSlider.js'
+import { Card } from 'semantic-ui-react'
 
 class productList extends Component {
   constructor(props){
@@ -13,9 +14,14 @@ class productList extends Component {
   }
   render() {
     let productList = this.props.productsProp;
-    let display = productList.map(product => {
-      return <ProductItem name={product.name} userName={product.userName} info={product.info}
-      userPicture={product.userPicture} price={product.price} category={product.category}/>
+    let display = productList.map((product, i) => {
+      return <ProductItem name={product.name}
+                key={i}
+                userName={product.userName}
+                info={product.info}
+                userPicture={product.userPicture}
+                price={product.price}
+                category={product.category}/>
     })
     return (
       <div>
@@ -26,7 +32,9 @@ class productList extends Component {
               <PriceSlider addPrice={this.props.addPrice} min={this.props.minRange} max={this.props.maxRange}/>
               </div>
           </div>
-      {display}
+        <Card.Group itemsPerRow={6}>
+        {display}
+        </Card.Group>
       <button>previous</button>
       <button>next</button>
       </div>

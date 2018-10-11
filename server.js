@@ -27,7 +27,9 @@ to add to database: */
 
 const generateData = require('./mockData').generateData;
 
+let ObjectID = require('mongodb').ObjectID;
 
+let userId = "";
 //
 /* For Uploading Files:
 const multer = require('multer');
@@ -39,9 +41,11 @@ const upload = multer({
 
 server.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "PUT")
+    res.header("Access-Control-Allow-Headers",  "Origin, Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+
 
 const connectToMongo = (isLoggedIn, options, callback, res, collection) => {
     let catalogue;
@@ -68,9 +72,9 @@ const userExists = (catalogue, user, res, client, closeClient) => {
     let email = user.email;
     console.log(email)
     catalogue.find({ email: email }).toArray((err, docs) => {
-        console.log('The products are: ', docs);
+        console.log('The 1 products are: ', docs);
         if (docs.length < 1) {
-            console.log('The products are: ', docs);
+            console.log('The 2 products are: ', docs);
             catalogue.insertOne(user, (err, response) => {
                 if (err) {
                     console.log('Could not use query insertOne: ', err);
@@ -84,6 +88,11 @@ const userExists = (catalogue, user, res, client, closeClient) => {
                     .end();
             }, closeClient)
         }
+        let id = docs[0]["_id"];
+        userId = id;
+        console.log("userId is",userId);
+        res.send(docs)
+        res.end()
     })
 }
 
@@ -161,12 +170,60 @@ server.get('/api/filter/:category/', (req, res) => {
     if (req.query !== {}) options.myMin = req.query.myMin; options.myMax = req.query.myMax
     if (category != 'all') options.category = category
     connectToMongo('false', options, filterFunction, res, productCollection)
-});
+})
+
+const getUsersId = (catalogue, userId, res, client, closeClient) => {
+  catalogue.find(userId).toArray((err, result) => {
+      console.log(result)
+      res.set({
+        "Access-Control-Allow-Origin":'*',
+        'Content-Type': 'text/html'
+      })
+      res.send(result[0])
+      res.end()
+  }, () => { client.close() })
+}
+
+const updateUser = (catalogue, {detail, setDocument}, res, client, closeClient) => {
+    // let db = client.db(databaseName)
+    // let catalogue = db.collection(userCollection)
+    console.log('Connected to mongo database for real.')
+
+        catalogue.updateOne(detail, setDocument, (err, result) => {
+            res.set({
+              "Access-Control-Allow-Origin":'*'})
+            res.send(result)
+            res.end()
+        }, () => { client.close() })
+  }
+
+const searchFunction = (catalogue, filter, res, client, closeClient) => {
+    catalogue.find({$contains:{"name":filter}}).toArray((err, docs) => {
+        if (err) {
+             console.log('Could not filter due to: ', err);
+             client.close();
+             return;
+         } else {
+             console.log('Matched the following products: ', docs);
+         }
+        res
+            .send(docs)
+            .end();
+        }, closeClient)
+}
 
 server.get('/api/getPriceRange', (req, res) => {
     connectToMongo('false', {}, getPriceRange, res, productCollection);
 });
 
+server.post('/api/search', jsonParser, (req,res) => {
+    //let searchText = JSON.stringify(req.body);
+    console.log('server get request from search comp ' + req.body);
+    connectToMongo('false', req.body, searchFunction, res, productCollection);
+    res.header("Access-Control-Allow-Origin", '*');
+    res.send({ success: true });
+    res.end();
+});
 
 server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
     console.log('body: ', req.body);
@@ -175,8 +232,24 @@ server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
     console.log('user passed through: ', user)
     connectToMongo(isLoggedIn, user, userExists, res, userCollection);
 })
-//Anna testar
 
+//Anna testar update user by id
+
+server.get('/api/users/:id', (req, res) => {
+  const id = req.params.id;
+  const detail = {"id": id};
+  connectToMongo('true', detail , getUsersId , res, userCollection)
+})
+
+server.put('/api/user/:id', jsonParser, (req, res) => {
+  const id = req.params.id;
+  let body = (req.body);
+  const detail = {"_id": new ObjectID(id)};
+  let setDocument = { $set: { "about": req.body} };
+  connectToMongo('true', {detail, setDocument} , updateUser , res, userCollection)
+
+})
+// Anna har testat färdigt
 
 server.get('/mock', (req, res) => {
     console.log("api")
@@ -225,7 +298,6 @@ server.get('/api/products', (req, res) => {
         }, () => { client.close() })
     })
 })
-
 
 const port = 3000;
 server.listen(port, (err) => {
