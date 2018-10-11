@@ -43,6 +43,8 @@ server.use(function(req, res, next) {
     next();
   });
 
+//server.use(bodyParser.json());
+
 const connectToMongo = (isLoggedIn, options, callback, res, collection) => {
     let catalogue;
     let url;
@@ -124,9 +126,9 @@ server.get('/api/getPriceRange', (req, res) => {
     connectToMongo('false', {}, getPriceRange, res, productCollection);
 });
 
-server.get('/api/search/:searchRes', (req,res) => {
-    //let search = req.params.search
-    console.log('server get request from search comp');
+server.post('/api/search', jsonParser, (req,res) => {
+    //let searchText = JSON.stringify(req.body);
+    console.log('server get request from search comp ' + req.body);
     res.header("Access-Control-Allow-Origin", '*');
     res.send({ success: true });
     res.end();

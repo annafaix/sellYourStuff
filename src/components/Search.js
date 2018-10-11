@@ -13,8 +13,9 @@ export default class Search extends Component {
   handleChange(event) {
     this.setState({value: event.target.value});
 
-    fetch('http://localhost:3000/api/search/' + "stri", {
-    method: 'GET',
+    fetch('http://localhost:3000/api/search/', {
+    method: 'POST',
+    body: "lalala",
     headers: {
       "Access-Control-Allow-Origin": "*",
     }
@@ -31,6 +32,7 @@ export default class Search extends Component {
 
   render() {
   console.log("Search value is " + this.state.value);
+
 
     return (
       <div>
