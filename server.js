@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 const bodyParser = require('body-parser');
+const ObjectId = require('mongodb').ObjectID;
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var jsonParser = bodyParser.text();
 
@@ -116,6 +117,30 @@ const filterFunction = (catalogue, filter, res, client, closeClient) => {
         }, closeClient)
 }
 
+const buyFunction = (catalogue, cart, res, client, closeClient) => {
+  let newArray = cart.map(item => {
+    console.log("THIS IS ITEM: ", item.id)
+    return ObjectId(item.id)
+  })
+  let query = {_id: {$in: newArray}};
+  catalogue.find(query).toArray((err, doc) => {
+    console.log(doc)
+  })
+  catalogue.deleteMany(query, (err, result) => {
+    if (err) {
+      throw err
+    }
+    console.log(result)
+    res.send(result)
+  }, closeClient)
+}
+
+server.post('/api/buy', jsonParser, (req, res) => {
+  let cart = JSON.parse(req.body);
+  console.log(cart)
+  connectToMongo('true', cart, buyFunction, res, productCollection);
+})
+
 server.get('/api/filter/:filter', (req,res) => {
     let filter = JSON.parse(req.params.filter);
     connectToMongo('false', filter, filterFunction, res, productCollection);
@@ -147,9 +172,6 @@ server.get('/mock', (req, res) => {
             console.log('Could not connect! Error: ', err);
             client.close();
         }
-        console.log('Connected to mongo database.')
-        //generateData(10, catalogue)
-        //catalogue.insertMany(mockList)
         client.close()
     })
 })
@@ -163,17 +185,17 @@ server.get('/api/products', (req, res) => {
         }
         let db = client.db(databaseName)
         let catalogue = db.collection(productCollection)
-        console.log('Connected to mongo database.')
+        //console.log('Connected to mongo database.')
         catalogue.find().toArray((err, result) => {
             /*result.forEach((item) => {
               returnList.push(item)
               console.log(returnList[0])
             })*/
-            console.log("inserting result")
+            //console.log("inserting result")
             returnList = result;
             if (returnList !== null) {
                 console.log("closing")
-                console.log(returnList[0])
+                //console.log(returnList[0])
                 console.log("sending")
 
             }
@@ -183,7 +205,7 @@ server.get('/api/products', (req, res) => {
         }, () => { client.close() })
     })
 })
-  
+
 
 const port = 3000;
 server.listen(port, (err) => {
