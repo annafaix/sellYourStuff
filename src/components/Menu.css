@@ -24,9 +24,7 @@
   align-items: center;
 }
 
-#login, #logout {
-  /*background-color: #585858;*/
-}
+
 #login > button {
   background-color: #585858;
   border: none;
@@ -145,4 +143,8 @@ nav div:hover {
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
+}
+.landingPage{
+  text-align: center;
+  justify-content: center;
 }

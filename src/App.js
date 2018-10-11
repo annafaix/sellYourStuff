@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
 import Login from './components/Login';
 import ProductList from './components/productList.js';
@@ -7,6 +6,7 @@ import Menu from './components/MenuHeader';
 import Create from './components/CreateForm';
 // import firebase from 'firebase'
 import Profile from './components/Profile';
+import LandingPage from './components/LandingPage'
 import fetch from 'isomorphic-fetch';
 
 class App extends Component {
@@ -16,6 +16,7 @@ class App extends Component {
       isLoggedIn: false,
       currentTab: "login",
       products: [],
+      searchResults: [],
       max: Number,
       min: Number
     }
@@ -25,10 +26,31 @@ class App extends Component {
     console.log('Tab clicked: ' + ind);
     this.setState({ currentTab: ind });
   }
-  setUserState = (user, credentials) => this.setState({ user: user, credentials: credentials })
-  isLoggedIn = (bool) => this.setState({ isLoggedIn: bool })
+  setUserState = (user, credentials) =>{
+    this.setState({ user: user, credentials: credentials });
+
+  }
+  isLoggedIn = (bool) => {
+    this.setState({ isLoggedIn: bool })
+    this.getUser()}
   changeToShop = () => this.setState({ currentTab: "shop" })
   changePage = (name) => {this.setState({currentTab: name})}
+
+  getUser = () => {
+    let id = this.state.user.id;
+    let urlFetch = "http://localhost:3000/api/users/"+ id;
+    fetch( urlFetch,
+      {  method: 'GET' })
+      .then(res => { return res.json() })
+      .then(data => { this.getUserData(data); this.setState({user: data}) })
+      .catch(err => { console.log("Error is" , err) })
+  };
+
+  getUserData = (recivedData) => {
+    let body = (recivedData.about =  this.state.editAbout);
+    this.setState({userId:recivedData["_id"], userUpdate: recivedData })
+  }
+
 
 aggregateMaxAndMin = () => {
     fetch('http://localhost:3000/api/getPriceRange', {
@@ -45,16 +67,17 @@ aggregateMaxAndMin = () => {
   })
 }
 
+
 getInitialProducts = () => {
   console.log("Inside component")
     let req = new XMLHttpRequest();
     req.onreadystatechange = (event) => {
       if (req.readyState == 4) {
         this.setState({ products: JSON.parse(req.response)});
-        console.log(this.state.products)
+        // console.log(this.state.products)
       }
       else {
-        console.log(req.status)
+        // console.log(req.status)
       }
     }
     req.open('GET', 'http://localhost:3000/api/products');
@@ -77,6 +100,7 @@ filterMeBabyOhYeahFilterMePlease = filter => {
   })
 }
 
+
   componentDidMount() {
     this.aggregateMaxAndMin();
     this.getInitialProducts();
@@ -85,11 +109,8 @@ filterMeBabyOhYeahFilterMePlease = filter => {
     const loggedIn = !this.state.isLoggedIn ? (
       null
     ) : (
-        <div>
-          <h2>You are logged in, {this.state.user.name}</h2>
-          <Profile user={this.state.user} />
-        </div>
-      )
+        <Profile user={this.state.user}/>
+    )
     let currentApp = null;
     if (this.state.currentTab === "shop") {
       currentApp = <ProductList productsProp={this.state.products} />
@@ -103,8 +124,8 @@ filterMeBabyOhYeahFilterMePlease = filter => {
           isLoggedIn={this.isLoggedIn}
           clickEvent={this.tabClick}
           chosenTab={this.state.currentTab} />
-
         <main className="mainView">
+          <LandingPage/>
           {currentApp}
           <button onClick={this.changeToShop}> Change to shop </button>
           <button onClick={() => this.changePage('create')}>Temporary create button</button>
