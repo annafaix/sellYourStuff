@@ -13,19 +13,19 @@ export default class Search extends Component {
   handleChange(event) {
     this.setState({value: event.target.value});
 
-//http://localhost:3000
-    fetch('/api/search/' + this.state.value, {
+    fetch('http://localhost:3000/api/search/' + "stri", {
     method: 'GET',
     headers: {
       "Access-Control-Allow-Origin": "*",
     }
-    }).then(response =>{
-      //return response.json()
-    //}).then(data => {
-      console.log('data is recieved');
-    }).catch(err => {
-      console.log(err);
     })
+    .then(response => {
+      console.log('Fetch successful');
+    })
+    .catch(function(error) {
+      console.log(error);
+    })
+
 
   }
 

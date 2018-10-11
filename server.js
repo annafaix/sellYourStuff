@@ -124,12 +124,12 @@ server.get('/api/getPriceRange', (req, res) => {
     connectToMongo('false', {}, getPriceRange, res, productCollection);
 });
 
-server.get('/api/search/:search', (req,res) => {
-    //let search = req.params.search;
-    console.log('server get request from search comp' + req.params.search);
-    res.header("Access-Control-Allow-Origin", '*')
-    res.send("search answer")
-    res.end()
+server.get('/api/search/:searchRes', (req,res) => {
+    //let search = req.params.search
+    console.log('server get request from search comp');
+    res.header("Access-Control-Allow-Origin", '*');
+    res.send({ success: true });
+    res.end();
 });
 
 server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
