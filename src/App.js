@@ -23,9 +23,30 @@ class App extends Component {
     console.log('Tab clicked: ' + ind);
     this.setState({ currentTab: ind });
   }
-  setUserState = (user, credentials) => this.setState({ user: user, credentials: credentials })
-  isLoggedIn = (bool) => this.setState({ isLoggedIn: bool })
+  setUserState = (user, credentials) =>{
+    this.setState({ user: user, credentials: credentials });
+
+  }
+  isLoggedIn = (bool) => {
+    this.setState({ isLoggedIn: bool })
+    this.getUser()}
   changeToShop = () => this.setState({ currentTab: "shop" })
+
+  getUser = () => {
+    let id = this.state.user.id;
+    let urlFetch = "http://localhost:3000/api/users/"+ id;
+    fetch( urlFetch,
+      {  method: 'GET' })
+      .then(res => { return res.json() })
+      .then(data => { this.getUserData(data); this.setState({user: data}); console.log(this.state.user) })
+      .catch(err => { console.log("Error is" , err) })
+  };
+
+  getUserData = (recivedData) => {
+    let body = (recivedData.about =  this.state.editAbout);
+    this.setState({userId:recivedData["_id"], userUpdate: recivedData })
+  }
+
 
 aggregateMaxAndMin = () => {
     fetch('http://localhost:3000/api/getPriceRange', {

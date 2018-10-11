@@ -135,14 +135,17 @@ const getUsersId = (catalogue, userId, res, client, closeClient) => {
   }, () => { client.close() })
 }
 
-const updateUser = (catalogue, userId, res, client, closeClient) => {
-  catalogue.updateOne(userId ).toArray((err, result) => {
-      console.log("show result", result)
-      res.set({
-        "Access-Control-Allow-Origin":'*'})
-      res.send(result)
-      res.end()
-  }, () => { client.close() })
+const updateUser = (catalogue, {detail, setDocument}, res, client, closeClient) => {
+    // let db = client.db(databaseName)
+    // let catalogue = db.collection(userCollection)
+    console.log('Connected to mongo database for real.')
+
+        catalogue.updateOne(detail, setDocument, (err, result) => {
+            res.set({
+              "Access-Control-Allow-Origin":'*'})
+            res.send(result)
+            res.end()
+        }, () => { client.close() })
 }
 
 server.get('/api/filter/:filter', (req,res) => {
@@ -172,29 +175,13 @@ server.get('/api/users/:id', (req, res) => {
   connectToMongo('true', detail , getUsersId , res, userCollection)
 })
 
-server.put('/api/user/:id', (req, res) => {
+server.put('/api/user/:id', jsonParser, (req, res) => {
   const id = req.params.id;
   let body = (req.body);
-  console.log("what is thissss", body);
   const detail = {"_id": new ObjectID(id)};
-  MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
-      if (err) {
-          console.log('Could not connect! Error: ', err);
-          client.close();
-      }
-      let db = client.db(databaseName)
-      let catalogue = db.collection(userCollection)
-      console.log('Connected to mongo database for real.')
-      let setDocument = { $set: { "about": req.body} };
+  let setDocument = { $set: { "about": req.body} };
+  connectToMongo('true', {detail, setDocument} , updateUser , res, userCollection)
 
-      catalogue.updateOne(detail, setDocument, (err, result) => {
-          console.log(result)
-          res.set({
-            "Access-Control-Allow-Origin":'*'})
-          res.send(result)
-          res.end()
-      }, () => { client.close() })
-  })
 })
 // Anna har testat färdigt
 
