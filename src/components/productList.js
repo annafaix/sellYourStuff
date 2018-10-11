@@ -17,7 +17,7 @@ class productList extends Component {
     })
     return (
       <div>
-          <div className="searchFilter" style={{padding:'10px 20px 10px 20px', backgroundColor:'#989898'}}>
+          <div className="searchFilter" style={{padding:'10px 30px 10px 30px', backgroundColor:'#707070'}}>
               <Search/>
           </div>
       {display}
