@@ -20,7 +20,7 @@ click = (e, { name }) => {
     })
   } else {
   this.setState({ activeItem: name },
-    this.props.addCategory(this.state.activeItem)
+    this.props.addCategory(name)
   )}
 }
 
@@ -33,16 +33,16 @@ render() {
     <Popup trigger={<Button>Categories</Button>} flowing hoverable>
       <Grid centered divided columns={4} >
         <Grid.Column textAlign='center' style={style}>
-          <Button className='normal' name='technology' active = { activeItem === 'technology' } onClick={this.click}>Technology</Button>
+          <Button className='normal' name='Technology' active = { activeItem === 'technology' } onClick={this.click}>Technology</Button>
         </Grid.Column>
         <Grid.Column textAlign='center' style={style}>
-          <Button className='normal' name='entertainment' active = { activeItem === 'entertainment' } onClick={this.click}>Entertainment</Button>
+          <Button className='normal' name='Entertainment' active = { activeItem === 'entertainment' } onClick={this.click}>Entertainment</Button>
         </Grid.Column>
         <Grid.Column textAlign='center' style={style}>
-          <Button className='normal' name='clothing' active = { activeItem === 'clothing' } onClick={this.click}>Clothing</Button>
+          <Button className='normal' name='Clothing' active = { activeItem === 'clothing' } onClick={this.click}>Clothing</Button>
         </Grid.Column>
         <Grid.Column textAlign='center' style={style}>
-          <Button className='normal' name='home' active = { activeItem === 'home' } onClick={this.click}>Home</Button>
+          <Button className='normal' name='Home' active = { activeItem === 'home' } onClick={this.click}>Home</Button>
         </Grid.Column>
       </Grid>
     </Popup>

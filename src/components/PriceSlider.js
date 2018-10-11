@@ -19,17 +19,12 @@ class PriceSlider extends Component {
             }
         }
     }
-    updateMinValue = (e) => {
-        let value = e.target.value;
-        this.setState({ myMin: value })
+    getNewState = status => {
+        this.props.addPrice(status.priceRange)
     }
-    updateMaxValue = (e) => {
-        let value = e.target.value;
-        this.setState({ myMax: value })
-    }
-    onSliderChange = value => {
-        this.setState({priceRange: {myMin: value[0], myMax: value[1]}},
-            this.props.addPrice(this.state.priceRange) );
+    onSliderChange = (value) => {
+        this.props.addPrice({myMin: value[0], myMax: value[1]})
+        this.setState({priceRange:{myMin: value[0], myMax: value[1]}})
     }
     render() {
         const priceSlider = (
