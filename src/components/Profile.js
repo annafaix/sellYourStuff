@@ -56,7 +56,7 @@ export default class Profile extends Component{
         <p>{this.props.user.email}</p>
         <p id="about me">About me:
         </p>
-        {this.state.editAbout}
+        {this.props.user.about}
         {this.state.openEdit ? (
           <div>
           <Form

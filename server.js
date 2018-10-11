@@ -171,7 +171,6 @@ server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
 server.get('/api/users/:id', (req, res) => {
   const id = req.params.id;
   const detail = {"id": id};
-  console.log('Connected to mongo user database.Yeey!')
   connectToMongo('true', detail , getUsersId , res, userCollection)
 })
 

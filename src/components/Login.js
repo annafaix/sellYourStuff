@@ -42,7 +42,7 @@ class Login extends Component {
       this.setState({ token: token, user: myUser }, () => { this.props.setUser(myUser, token) })
     }).then((success) => {
       var user = JSON.stringify(this.state.user);
-      console.log('this is the user parameter: ' + user)
+      // console.log('this is the user parameter: ' + user)
       fetch('http://localhost:3000/api/signUp/true', {
         method: 'POST',
         headers: {
@@ -89,7 +89,8 @@ class Login extends Component {
         <Modal size="mini" dimmer="blurring" trigger={<button id="triggerButton">Log In</button>} closeIcon>
           <Modal.Header style={{ fontSize: "1.3em" }}>Select a Login Alternative</Modal.Header>
           <Modal.Content style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
-            <button type="button" id="loginButton" onClick={() => { this.loginWithGoogle() }}><img src={googleLogo} />Log in with Google</button>
+            <button type="button" id="loginButton" onClick={() => { this.loginWithGoogle() }}>
+            <img src={googleLogo} alt="google icon"/>Log in with Google</button>
           </Modal.Content>
         </Modal>
       </div>

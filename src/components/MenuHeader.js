@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Menu.css';
-import { Menu, Segment, Button, Image, Icon } from 'semantic-ui-react'
+import { Menu, Segment, Image, Icon } from 'semantic-ui-react'
 import Login from '../components/Login'
 
 export default class MenuHeader extends Component {
@@ -19,10 +19,10 @@ export default class MenuHeader extends Component {
   }
 
   render() {
-    const { activeItem } = this.state
+    // const { activeItem } = this.state
     const funcClick = this.props.clickEvent;
     const chosenTab = this.props.chosenTab;
-    console.log("chosenTab" + chosenTab);
+    // console.log("chosenTab" + chosenTab);
 
     return (
       <Segment inverted style={{borderRadius:'0', position:'fixed', width: '100%', top:'0', padding:'0 4rem 0 2rem', zIndex:'1'}}>

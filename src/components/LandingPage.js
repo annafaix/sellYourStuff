@@ -3,9 +3,9 @@ import { Image,  Button } from 'semantic-ui-react'
 import Bob from '../omg.svg'
 
 export default class LandingPage extends Component {
-  constructor(props){
-    super(props);
-  }
+  // constructor(props){
+  //   super(props);
+  // }
   render(){
 
     return(

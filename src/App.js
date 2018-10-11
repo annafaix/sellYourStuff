@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Login from './components/Login'
+// import Login from './components/Login'
 import ProductList from './components/productList.js'
 import Menu from './components/MenuHeader'
 import Profile from './components/Profile'
@@ -38,7 +38,7 @@ class App extends Component {
     fetch( urlFetch,
       {  method: 'GET' })
       .then(res => { return res.json() })
-      .then(data => { this.getUserData(data); this.setState({user: data}); console.log(this.state.user) })
+      .then(data => { this.getUserData(data); this.setState({user: data}) })
       .catch(err => { console.log("Error is" , err) })
   };
 
@@ -70,10 +70,10 @@ getInitialProducts = () => {
     req.onreadystatechange = (event) => {
       if (req.readyState == 4) {
         this.setState({ products: JSON.parse(req.response)});
-        console.log(this.state.products)
+        // console.log(this.state.products)
       }
       else {
-        console.log(req.status)
+        // console.log(req.status)
       }
     }
     req.open('GET', 'http://localhost:3000/api/products');
