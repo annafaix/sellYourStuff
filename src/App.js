@@ -31,6 +31,7 @@ class App extends Component {
   isLoggedIn = (bool) => {
     this.setState({ isLoggedIn: bool })
     this.getUser()}
+
   changeToShop = () => this.setState({ currentTab: "shop" })
 
   getUser = () => {
@@ -39,14 +40,14 @@ class App extends Component {
     fetch( urlFetch,
       {  method: 'GET' })
       .then(res => { return res.json() })
-      .then(data => { this.getUserData(data); this.setState({user: data}) })
+      .then(data => {  this.setState({user: data}) })
       .catch(err => { console.log("Error is" , err) })
   };
 
-  getUserData = (recivedData) => {
-    let body = (recivedData.about =  this.state.editAbout);
-    this.setState({userId:recivedData["_id"], userUpdate: recivedData })
-  }
+  // getUserData = (recivedData) => {
+  //   let body = (recivedData.about =  this.state.editAbout);
+  //   this.setState({userId:recivedData["_id"], userUpdate: recivedData })
+  // }
 
 
 aggregateMaxAndMin = () => {
@@ -104,7 +105,7 @@ filterMeBabyOhYeahFilterMePlease = filter => {
   }
   render() {
     const loggedIn = !this.state.isLoggedIn ? (
-      null
+        null
     ) : (
         <Profile user={this.state.user}/>
     )
@@ -119,7 +120,6 @@ filterMeBabyOhYeahFilterMePlease = filter => {
           clickEvent={this.tabClick}
           chosenTab={this.state.currentTab} />
         <main className="mainView">
-          <LandingPage/>
           {currentApp}
           <button onClick={this.changeToShop}> Change to shop </button>
           <div id="productsPage" className={(this.state.currentTab === "products") ? "show" : "hide"}>

@@ -94,6 +94,7 @@ nav div:hover {
   border-radius: 3px;
   height: 27px;
   margin-left: 15px;
+  cursor: pointer;
 }
 .productsMenu {
   align-self: center;
@@ -109,6 +110,7 @@ nav div:hover {
   height: 27px;
   border-radius: 3px;
   border: 2px solid #00CD00;
+  cursor: pointer;
 }
 .menuBtn:hover {
   background-color: #505050;
@@ -134,7 +136,7 @@ nav div:hover {
 
 .profile img{
   border:5px solid #DB0278;
-  /* shape-outside: circle(); */
+  shape-outside: circle();
   margin-right: 15px;
   float: left;
 }
