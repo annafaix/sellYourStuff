@@ -102,12 +102,14 @@ const getPriceRange = (catalogue, options, res, client, closeClient) => {
 
 const filterFunction = (catalogue, options, res, client, closeClient) => {
     if (options.category != 'all' && options.myMin) {
+        console.log('called with a category and price range')
         let cursor = catalogue.aggregate([{
             $match: {
-                $category: options.category, 
-                $price: {
+                category: options.category, 
+                price: {
                     $gt : options.myMin
-                }, $price: { 
+                },
+                price: { 
                     $lt: options.myMax 
                 }
             }
@@ -121,11 +123,12 @@ const filterFunction = (catalogue, options, res, client, closeClient) => {
         })
     }
     else if (options.category == 'all'  && options.myMin) {
+        console.log('called with all categories and price range')
         let cursor = catalogue.aggregate([{
             $match: {
-                $price: {
+                price: {
                     $gt : options.myMin
-                }, $price: { 
+                }, price: { 
                     $lt: options.myMax 
                 }
             }
@@ -152,12 +155,8 @@ const filterFunction = (catalogue, options, res, client, closeClient) => {
     }, closeClient)*/
 }
 
-const filterManyWithAggregate = (catalogue, filter, res, client, closeClient, sort) => {
-
-}
-
-server.get('/api/filter/:category/', jsonParser, (req, res) => {
-    let options;
+server.get('/api/filter/:category/', (req, res) => {
+    let options = {};
     let category = req.params.category;
     if (req.query !== {}) options.myMin = req.query.myMin; options.myMax = req.query.myMax
     if (category != 'all') options.category = category

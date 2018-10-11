@@ -81,7 +81,7 @@ class App extends Component {
         "Access-Control-Allow-Origin": "*",
       }
     }).then(response => {
-      console.log(response)
+      console.log('response: ', response)
       //return response.json()
     }).then(data => {
       console.log(data)
