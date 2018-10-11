@@ -26,7 +26,7 @@ export default class Profile extends Component{
     fetch( urlFetch,
       {  method: 'GET' })
       .then(res => { return res.json() })
-      .then(data => { this.getUserData(data) })
+      .then(data => { this.getUserData(data); this.setState({user: data}); console.log(this.state.user) })
       .catch(err => { console.log("Error is" , err) })
   };
 
@@ -38,21 +38,20 @@ export default class Profile extends Component{
   updateUserInfo = () => {
     let id = this.state.userId;
     console.log(this.state.editAbout);
-    let body = this.state.userUpdate;
-    console.log("what am I ", body);
+    let body = this.state.editAbout;
     let urlFetch = "http://localhost:3000/api/user/"+ id;
+    console.log(urlFetch);
     fetch( urlFetch,
       { method: 'PUT',
       body: body })
       .then(res => {
-        this.closeEdit()
-        console.log(res);})
+        console.log(res)})
       .catch(error => console.error('Error:', error))
       .then(res => console.log('Success:', JSON.stringify(res)));
       this.closeEdit();
   }
 
-  componentDidMount(){
+  componentWillMount(){
     this.getUser()
   }
   render(){

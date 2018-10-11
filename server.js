@@ -137,10 +137,10 @@ const getUsersId = (catalogue, userId, res, client, closeClient) => {
 
 const updateUser = (catalogue, userId, res, client, closeClient) => {
   catalogue.updateOne(userId ).toArray((err, result) => {
-      console.log(result)
+      console.log("show result", result)
       res.set({
         "Access-Control-Allow-Origin":'*'})
-      res.send(result[0])
+      res.send(result)
       res.end()
   }, () => { client.close() })
 }
@@ -174,25 +174,27 @@ server.get('/api/users/:id', (req, res) => {
 
 server.put('/api/user/:id', (req, res) => {
   const id = req.params.id;
-  let body = JSON.parse(req.body);
+  let body = (req.body);
   console.log("what is thissss", body);
   const detail = {"_id": new ObjectID(id)};
-  // MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
-  //     if (err) {
-  //         console.log('Could not connect! Error: ', err);
-  //         client.close();
-  //     }
-  //     let db = client.db(databaseName)
-  //     let catalogue = db.collection(userCollection)
-  //     console.log('Connected to mongo database for real.')
-  //     catalogue.update(detail, {$set:{ body} } ).toArray((err, result) => {
-  //         console.log(result)
-  //         res.set({
-  //           "Access-Control-Allow-Origin":'*'})
-  //         res.send(result[0])
-  //         res.end()
-  //     }, () => { client.close() })
-  // })
+  MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
+      if (err) {
+          console.log('Could not connect! Error: ', err);
+          client.close();
+      }
+      let db = client.db(databaseName)
+      let catalogue = db.collection(userCollection)
+      console.log('Connected to mongo database for real.')
+      let setDocument = { $set: { "about": req.body} };
+
+      catalogue.updateOne(detail, setDocument, (err, result) => {
+          console.log(result)
+          res.set({
+            "Access-Control-Allow-Origin":'*'})
+          res.send(result)
+          res.end()
+      }, () => { client.close() })
+  })
 })
 // Anna har testat färdigt
 

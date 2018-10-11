@@ -7,9 +7,10 @@ export default class LandingPage extends Component {
     super(props);
   }
   render(){
+
     return(
       <div className="landingPage">
-        <Image src={Bob}  centered/>
+        <Image src={Bob} style={{height:"50%"}} centered/>
         <h1>Welcome to E.BUY</h1>
         <h2>The online flea market</h2>
         <Button
