@@ -24,9 +24,7 @@
   align-items: center;
 }
 
-#login, #logout {
-  /*background-color: #585858;*/
-}
+
 #login > button {
   background-color: #585858;
   border: none;

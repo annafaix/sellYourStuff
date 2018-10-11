@@ -15,6 +15,7 @@ class App extends Component {
       isLoggedIn: false,
       currentTab: "login",
       products: [],
+      searchResults: [],
       max: Number,
       min: Number
     }
@@ -58,7 +59,7 @@ getInitialProducts = () => {
     req.open('GET', 'http://localhost:3000/api/products');
     req.send();
 }
-// filter funktion tar ett filter-objekt som parameter t.ex.: 
+// filter funktion tar ett filter-objekt som parameter t.ex.:
 // {category: "furniture"}
 filterMeBabyOhYeahFilterMePlease = filter => {
   fetch('http://localhost:3000/api/filter' + JSON.stringify(filter), {
