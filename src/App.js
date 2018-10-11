@@ -14,6 +14,7 @@ class App extends Component {
       isLoggedIn: false,
       currentTab: "login",
       products: [],
+      searchResults: [],
       max: Number,
       min: Number
     }

@@ -46,6 +46,7 @@ server.use(function(req, res, next) {
     next();
   });
 
+
 const connectToMongo = (isLoggedIn, options, callback, res, collection) => {
     let catalogue;
     let url;
@@ -123,6 +124,7 @@ const filterFunction = (catalogue, filter, res, client, closeClient) => {
         }, closeClient)
 }
 
+
 const getUsersId = (catalogue, userId, res, client, closeClient) => {
   catalogue.find(userId).toArray((err, result) => {
       console.log(result)
@@ -146,7 +148,23 @@ const updateUser = (catalogue, {detail, setDocument}, res, client, closeClient) 
             res.send(result)
             res.end()
         }, () => { client.close() })
+  }
+
+const searchFunction = (catalogue, filter, res, client, closeClient) => {
+    catalogue.find({$contains:{"name":filter}}).toArray((err, docs) => {
+        if (err) {
+             console.log('Could not filter due to: ', err);
+             client.close();
+             return;
+         } else {
+             console.log('Matched the following products: ', docs);
+         }
+        res
+            .send(docs)
+            .end();
+        }, closeClient)
 }
+
 
 server.get('/api/filter/:filter', (req,res) => {
     let filter = JSON.parse(req.params.filter);
@@ -157,6 +175,14 @@ server.get('/api/getPriceRange', (req, res) => {
     connectToMongo('false', {}, getPriceRange, res, productCollection);
 });
 
+server.post('/api/search', jsonParser, (req,res) => {
+    //let searchText = JSON.stringify(req.body);
+    console.log('server get request from search comp ' + req.body);
+    connectToMongo('false', req.body, searchFunction, res, productCollection);
+    res.header("Access-Control-Allow-Origin", '*');
+    res.send({ success: true });
+    res.end();
+});
 
 server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
     console.log('body: ', req.body);
