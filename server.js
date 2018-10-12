@@ -141,8 +141,8 @@ const filterFunction = (catalogue, options, res, client, closeClient) => {
                 price: {
                     $gt: options.myMin,
                     $lt: options.myMax
-                }/*, price: { 
-                    $lt: options.myMax 
+                }/*, price: {
+                    $lt: options.myMax
                 }*/
             }
         }]);
@@ -224,18 +224,18 @@ const updateUser = (catalogue, { detail, setDocument }, res, client, closeClient
 }
 
 const searchFunction = (catalogue, filter, res, client, closeClient) => {
-    catalogue.find({ $contains: { "name": filter } }).toArray((err, docs) => {
+    catalogue.find({$contains:{"name":filter}}).toArray((err, docs) => {
         if (err) {
-            console.log('Could not filter due to: ', err);
-            client.close();
-            return;
-        } else {
-            console.log('Matched the following products: ', docs);
-        }
+             console.log('Could not filter due to: ', err);
+             client.close();
+             return;
+         } else {
+             console.log('Matched the following products: ', docs);
+         }
         res
             .send(docs)
             .end();
-    }, closeClient)
+        }, closeClient)
 }
 
 const getInitialProps = (catalogue, filter, res, client, closeClient) => {
@@ -264,7 +264,7 @@ server.get('/api/getPriceRange', (req, res) => {
     connectToMongo('false', {}, getPriceRange, res, productCollection);
 });
 
-server.post('/api/search', jsonParser, (req, res) => {
+server.post('/api/search', jsonParser, (req,res) => {
     //let searchText = JSON.stringify(req.body);
     console.log('server get request from search comp ' + req.body);
     connectToMongo('false', req.body, searchFunction, res, productCollection);
