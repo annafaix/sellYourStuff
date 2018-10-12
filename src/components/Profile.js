@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import { Image, Button, Icon, Form, TextArea } from 'semantic-ui-react'
 import fetch from 'isomorphic-fetch'
+import UserProdItem from './userProductItem.js'
 
 export default class Profile extends Component{
   constructor(props){
     super(props);
-    this.state ={
+    this.state = {
     user: {},
     openEdit: false,
     editAbout: "We would like to know you better. Write something about you!",
+    userProducts: [],
     }
   }
 
@@ -43,8 +45,38 @@ export default class Profile extends Component{
       this.closeEdit();
   }
 
-  render(){
+  fetchUsersProd = () => {
+    fetch('http://localhost:3000/api/userProducts/' + this.props.user.name)
+    .then(response => {
+      return response.json()
+    })
+    .then(json => {
+      this.setState({userProducts: json})
+    })
+  }
 
+  componentDidMount() {
+    this.fetchUsersProd();
+  }
+
+  render(){
+    let userProductArray = null;
+    if(this.state.userProducts === []){
+      userProductArray = "Empty"
+    }
+    else {
+      let allProducts = this.state.userProducts
+      userProductArray = allProducts.map(item => {
+        return <UserProdItem name={item.name}
+                  key={item._id}
+                  id={item._id}
+                  userName={item.userName}
+                  info={item.info}
+                  userPicture={item.userPicture}
+                  price={item.price}
+                  category={item.category}/>
+      })
+    }
     return(
       <React.Fragment>
       <div className="ui raised card centered fluid">
@@ -82,6 +114,7 @@ export default class Profile extends Component{
       <Icon name="plus"/> Create new item
     </Button>
     <h2>Your stuff to sell:</h2>
+    {userProductArray}
   </React.Fragment>
     )
   }

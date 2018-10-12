@@ -71,18 +71,18 @@ const connectToMongo = (isLoggedIn, options, callback, res, collection) => {
 }
 const userExists = (catalogue, user, res, client, closeClient) => {
     let email = user.email;
-    console.log(email)
+    //console.log(email)
     catalogue.find({ email: email }).toArray((err, docs) => {
-        console.log('The 1 products are: ', docs);
+        //console.log('The 1 products are: ', docs);
         if (docs.length < 1) {
-            console.log('The 2 products are: ', docs);
+            //console.log('The 2 products are: ', docs);
             catalogue.insertOne(user, (err, response) => {
                 if (err) {
-                    console.log('Could not use query insertOne: ', err);
+                    //console.log('Could not use query insertOne: ', err);
                     client.close();
                     return;
                 } else {
-                    console.log('Successfully signed up new user: ', response);
+                    //console.log('Successfully signed up new user: ', response);
                 }
                 res.header("Access-Control-Allow-Origin", '*')
                 res
@@ -277,7 +277,7 @@ const getInitialProps = (catalogue, filter, res, client, closeClient) => {
         returnList = result;
         if (returnList !== null) {
             console.log("closing")
-            console.log(returnList[0])
+            //console.log(returnList[0])
             console.log("sending")
         }
         res.header("Access-Control-Allow-Origin", '*')
@@ -286,13 +286,29 @@ const getInitialProps = (catalogue, filter, res, client, closeClient) => {
     }, closeClient)
 }
 
+const findUserProducts = (catalogue, filter, res, client, closeClient) => {
+  let returnList = null;
+  console.log(filter)
+  catalogue.find({userName: filter}).toArray((err, result) => {
+    returnList = result;
+    console.log("finduserprod: ", returnList[(Math.floor(Math.random()*5))])
+    res.header("Access-Control-Allow-Origin", '*')
+    res.send(returnList)
+    res.end
+  }, closeClient)
+}
+
 server.get('/api/getPriceRange', (req, res) => {
     connectToMongo('false', {}, getPriceRange, res, productCollection);
 });
+server.get('/api/userProducts/:user', (req, res) => {
+  let user = req.params.user
+  connectToMongo('true', user, findUserProducts, res, productCollection)
+})
 
 server.post('/api/search', jsonParser, (req, res) => {
     //let searchText = JSON.stringify(req.body);
-    console.log('server get request from search comp ' + req.body);
+    //console.log('server get request from search comp ' + req.body);
     connectToMongo('false', req.body, searchFunction, res, productCollection);
     res.header("Access-Control-Allow-Origin", '*');
     res.send({ success: true });
@@ -300,10 +316,10 @@ server.post('/api/search', jsonParser, (req, res) => {
 });
 
 server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
-    console.log('body: ', req.body);
+    //console.log('body: ', req.body);
     let isLoggedIn = req.params.isLoggedIn;
     let user = JSON.parse(req.body);
-    console.log('user passed through: ', user)
+    //console.log('user passed through: ', user)
     connectToMongo(isLoggedIn, user, userExists, res, userCollection);
 })
 
