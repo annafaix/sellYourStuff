@@ -37,7 +37,7 @@ class FilterCategories extends Component {
     }
 
     const options = [
-      { key: 'a', text: 'All', value: 'All' },
+      { key: 'a', text: 'All', value: 'all' },
       { key: 'o', text: 'Other', value: 'Other' },
       { key: 'h', text: 'Home', value: 'Home' },
       { key: 'c', text: 'Clothing', value: 'Clothing' },
