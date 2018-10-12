@@ -241,9 +241,8 @@ const searchFunction = (catalogue, filter, res, client, closeClient) => {
 const getInitialProps = (catalogue, filter, res, client, closeClient) => {
     let returnList = null;
     let db = client.db(databaseName)
-    let products = db.collection(catalogue)
     console.log('Connected to mongo database.')
-    products.find().toArray((err, result) => {
+    catalogue.find().toArray((err, result) => {
         /*result.forEach((item) => {
           returnList.push(item)
           console.log(returnList[0])

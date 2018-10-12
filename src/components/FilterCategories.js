@@ -16,14 +16,16 @@ class FilterCategories extends Component {
 click = (e, { name }) => {
   if( name == this.state.activeItem){
     this.setState({ activeItem: 'all' },()=>{
-      console.log(this.state)
+      this.props.addCategory('all')
     })
   } else {
   this.setState({ activeItem: name },
     this.props.addCategory(name)
   )}
 }
-
+componentDidMount(){
+  this.setState({activeItem: this.props.category}, console.log('activeItem: ' + this.state.activeItem))
+}
 render() {
   const { activeItem } = this.state
   const style = {
