@@ -16,20 +16,22 @@ export default class Search extends Component {
 
   render() {
   console.log("Search value is " + this.state.value);
-  fetch('http://localhost:3000/api/search/', {
-  method: 'POST',
-  body: this.state.value,
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-  }
-  })
-  .then(response => {
-    console.log('Fetch successful');
-    return response.json()
-  })
-  .catch(function(error) {
-    console.log(error);
-  })
+    fetch('http://localhost:3000/api/search/', {
+    method: 'POST',
+    body: this.state.value,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    }
+    })
+    .then(response => {
+      return response.json()
+    }).then(data => {
+        for (var i = 0; i < data.length; i++) {
+          console.log("Search results" + data[i].name);
+        }
+    }).catch(err => {
+      console.log(err);
+    })
 
     return (
       <div>
