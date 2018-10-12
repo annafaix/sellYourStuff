@@ -39,12 +39,12 @@ const upload = multer({
 });
 */
 
-server.use(function(req, res, next) {
+server.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "PUT")
-    res.header("Access-Control-Allow-Headers",  "Origin, Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Origin, Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept");
     next();
-  });
+});
 
 
 const connectToMongo = (isLoggedIn, options, callback, res, collection) => {
@@ -90,7 +90,7 @@ const userExists = (catalogue, user, res, client, closeClient) => {
         }
         let id = docs[0]["_id"];
         userId = id;
-        console.log("userId is",userId);
+        console.log("userId is", userId);
         res.send(docs)
         res.end()
     })
@@ -98,57 +98,130 @@ const userExists = (catalogue, user, res, client, closeClient) => {
 
 const getPriceRange = (catalogue, options, res, client, closeClient) => {
     console.log('hello')
-    let cursor = catalogue.aggregate([{ $match: {}}
-    ,{ $group: { _id: null, max: { $max: "$price" }, min: { $min: "$price" } } }]);
-    cursor.on('data', function(doc) {
+    let cursor = catalogue.aggregate([{ $match: {} }
+        , { $group: { _id: null, max: { $max: "$price" }, min: { $min: "$price" } } }]);
+    cursor.on('data', function (doc) {
         res.send(doc)
         res.end()
     })
-    cursor.once('end', function(){
+    cursor.once('end', function () {
         closeClient
     })
 }
 
-const filterFunction = (catalogue, filter, res, client, closeClient) => {
-    catalogue.find(filter).toArray((err, docs) => {
+const filterFunction = (catalogue, options, res, client, closeClient) => {
+    console.log('options: ', options)
+    let list = [];
+    if (options.category != 'all' && options.myMin != undefined) {
+        console.log('called with a category and price range')
+        let cursor = catalogue.aggregate([{
+            $match: {
+                category: options.category,
+                price: {
+                    $gt: options.myMin,
+                    $lt: options.myMax
+                }
+            }
+        }]);
+        cursor.on('data', function (doc) {
+            console.log('filter result: ', doc)
+            list.push(doc);
+        })
+        cursor.once('end', function () {
+            res.send(list)
+            res.end()
+            closeClient
+        })
+    }
+    else if (options.category == 'all' && options.myMin != undefined) {
+        console.log('called with all categories and price range')
+        let list = [];
+        let cursor = catalogue.aggregate([{
+            $match: {
+                price: {
+                    $gt: options.myMin,
+                    $lt: options.myMax
+                }/*, price: {
+                    $lt: options.myMax
+                }*/
+            }
+        }]);
+        cursor.on('data', function (doc) {
+            console.log('filter result: ', doc)
+            list.push(doc);
+        })
+        cursor.once('end', function () {
+            res.send(list)
+            res.end()
+            closeClient
+        })
+    } else if (options.category != 'all' && options.myMin == undefined) {
+        console.log('called with a category and price range')
+        let cursor = catalogue.aggregate([{
+            $match: {
+                category: options.category,
+            }
+        }]);
+        cursor.on('data', function (doc) {
+            console.log('filter result: ', doc)
+            list.push(doc);
+        })
+        cursor.once('end', function () {
+            res.send(list)
+            res.end()
+            closeClient
+        })
+    }
+    /*catalogue.find(filter).toArray((err, docs) => {
         if (err) {
-             console.log('Could not filter due to: ', err);
-             client.close();
-             return;
-         } else {
-             console.log('Matched the following products: ', docs);
-         }
+            console.log('Could not filter due to: ', err);
+            client.close();
+            return;
+        } else {
+            console.log('Matched the following products: ', docs);
+        }
         res
             .send(docs)
             .end();
-        }, closeClient)
+    }, closeClient)*/
 }
 
+server.get('/api/filter/:category/', urlencodedParser, (req, res) => {
+    let options = {};
+    let category = req.params.category;
+    options.category = category
+    if (req.query.myMin != undefined) {
+        options.myMin = Number(req.query.myMin);
+        options.myMax = Number(req.query.myMax)
+    } else { console.log('throw err') }
+    connectToMongo('false', options, filterFunction, res, productCollection)
+})
 
 const getUsersId = (catalogue, userId, res, client, closeClient) => {
-  catalogue.find(userId).toArray((err, result) => {
-      console.log(result)
-      res.set({
-        "Access-Control-Allow-Origin":'*',
-        'Content-Type': 'text/html'
-      })
-      res.send(result[0])
-      res.end()
-  }, () => { client.close() })
+    catalogue.find(userId).toArray((err, result) => {
+        console.log(result)
+        res.set({
+            "Access-Control-Allow-Origin": '*',
+            'Content-Type': 'text/html'
+        })
+        res.send(result[0])
+        res.end()
+    }, () => { client.close() })
 }
 
-const updateUser = (catalogue, {detail, setDocument}, res, client, closeClient) => {
+const updateUser = (catalogue, { detail, setDocument }, res, client, closeClient) => {
     // let db = client.db(databaseName)
     // let catalogue = db.collection(userCollection)
     console.log('Connected to mongo database for real.')
 
-        catalogue.updateOne(detail, setDocument, (err, result) => {
-            res.set({
-              "Access-Control-Allow-Origin":'*'})
-            res.send(result)
-            res.end()
-        }, () => { client.close() })
-  }
+    catalogue.updateOne(detail, setDocument, (err, result) => {
+        res.set({
+            "Access-Control-Allow-Origin": '*'
+        })
+        res.send(result)
+        res.end()
+    }, () => { client.close() })
+}
 
 const searchFunction = (catalogue, filter, res, client, closeClient) => {
     catalogue.find({$contains:{"name":filter}}).toArray((err, docs) => {
@@ -165,11 +238,27 @@ const searchFunction = (catalogue, filter, res, client, closeClient) => {
         }, closeClient)
 }
 
-
-server.get('/api/filter/:filter', (req,res) => {
-    let filter = JSON.parse(req.params.filter);
-    connectToMongo('false', filter, filterFunction, res, productCollection);
-});
+const getInitialProps = (catalogue, filter, res, client, closeClient) => {
+    let returnList = null;
+    let db = client.db(databaseName)
+    console.log('Connected to mongo database.')
+    catalogue.find().toArray((err, result) => {
+        /*result.forEach((item) => {
+          returnList.push(item)
+          console.log(returnList[0])
+        })*/
+        console.log("inserting result")
+        returnList = result;
+        if (returnList !== null) {
+            console.log("closing")
+            console.log(returnList[0])
+            console.log("sending")
+        }
+        res.header("Access-Control-Allow-Origin", '*')
+        res.send(returnList)
+        res.end()
+    }, closeClient)
+}
 
 server.get('/api/getPriceRange', (req, res) => {
     connectToMongo('false', {}, getPriceRange, res, productCollection);
@@ -195,17 +284,17 @@ server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
 //Anna testar update user by id
 
 server.get('/api/users/:id', (req, res) => {
-  const id = req.params.id;
-  const detail = {"id": id};
-  connectToMongo('true', detail , getUsersId , res, userCollection)
+    const id = req.params.id;
+    const detail = { "id": id };
+    connectToMongo('true', detail, getUsersId, res, userCollection)
 })
 
 server.put('/api/user/:id', jsonParser, (req, res) => {
-  const id = req.params.id;
-  let body = (req.body);
-  const detail = {"_id": new ObjectID(id)};
-  let setDocument = { $set: { "about": req.body} };
-  connectToMongo('true', {detail, setDocument} , updateUser , res, userCollection)
+    const id = req.params.id;
+    let body = (req.body);
+    const detail = { "_id": new ObjectID(id) };
+    let setDocument = { $set: { "about": req.body } };
+    connectToMongo('true', { detail, setDocument }, updateUser, res, userCollection)
 
 })
 // Anna har testat färdigt
@@ -229,35 +318,8 @@ server.get('/mock', (req, res) => {
 })
 
 server.get('/api/products', (req, res) => {
-    let returnList = null;
-    MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
-        if (err) {
-            console.log('Could not connect! Error: ', err);
-            client.close();
-        }
-        let db = client.db(databaseName)
-        let catalogue = db.collection(productCollection)
-        console.log('Connected to mongo database.')
-        catalogue.find().toArray((err, result) => {
-            /*result.forEach((item) => {
-              returnList.push(item)
-              console.log(returnList[0])
-            })*/
-            console.log("inserting result")
-            returnList = result;
-            if (returnList !== null) {
-                console.log("closing")
-                console.log(returnList[0])
-                console.log("sending")
-
-            }
-            res.header("Access-Control-Allow-Origin", '*')
-            res.send(returnList)
-            res.end()
-        }, () => { client.close() })
-    })
+    connectToMongo('false', {}, getInitialProps, res, productCollection)
 })
-
 
 const port = 3000;
 server.listen(port, (err) => {

@@ -16,7 +16,9 @@ class App extends Component {
       products: [],
       searchResults: [],
       max: Number,
-      min: Number
+      min: Number,
+      category: 'all',
+      priceRange:{}
     }
     this.tabClick = this.tabClick.bind(this);
   }
@@ -52,18 +54,20 @@ class App extends Component {
 
 aggregateMaxAndMin = () => {
     fetch('http://localhost:3000/api/getPriceRange', {
-    method: 'GET',
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    }
-  }).then(response =>{
-    return response.json()
-  }).then(data => {
-    this.setState({max: data.max, min: data.min});
-  }).catch(err => {
-    console.log(err);
-  })
-}
+      method: 'GET',
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      }
+    }).then(response => {
+      return response.json()
+    }).then(data => {
+      this.setState({ max: data.max, min: data.min, priceRange:{myMin: data.min, myMax: data.max} }, () => {
+        console.log('state:', this.state);
+      });
+    }).catch(err => {
+      console.log(err);
+    })
+  }
 
 
 getInitialProducts = () => {
@@ -80,23 +84,51 @@ getInitialProducts = () => {
     }
     req.open('GET', 'http://localhost:3000/api/products');
     req.send();
-}
-// filter funktion tar ett filter-objekt som parameter t.ex.:
-// {category: "furniture"}
-filterMeBabyOhYeahFilterMePlease = filter => {
-  fetch('http://localhost:3000/api/filter' + JSON.stringify(filter), {
-    method: 'GET',
-    headers: {
-      "Access-Control-Allow-Origin": "*",
+  }
+
+  filterMeBabyOhYeahFilterMePlease = (category, priceRange) => {
+    console.log("filterMeBabyCalled")
+    console.log(category, priceRange)
+    console.log(priceRange.myMin)
+    let q, min, max;
+    if((priceRange.myMin == this.state.min && priceRange.myMax == this.state.max) ||
+    typeof priceRange.myMin != 'number' || typeof priceRange.myMax != 'number' ){
+      if (category == 'all') this.getInitialProducts();
+      else q = ''
+    } else {
+      min = priceRange.myMin;
+      max = priceRange.myMax;
+      q = '?myMin='+min+'&myMax='+max;
     }
-  }).then(response => {
-    return response.json()
-  }).then(data => {
-    this.setState({filteredProducts: data});
-  }).catch(err => {
-    console.log(err);
-  })
-}
+    console.log("q = " + q)
+    fetch('http://localhost:3000/api/filter/' + category + 
+    q, {
+      method: 'GET',
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      }
+    }).then(response => {
+      console.log(response)
+      return response.json()
+    }).then(data => {
+      console.log(data)
+      this.setState({ products: data });
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+  // use function add filter, the filterMeBaby[...] is just a callback. It's called inside addFilter
+  addCategory = (category) => {
+    this.setState({ category: category }, 
+      this.filterMeBabyOhYeahFilterMePlease(category, this.state.priceRange)
+  )
+  }
+  addPrice = (price) => {
+    this.setState({ priceRange: price })
+    this.filterMeBabyOhYeahFilterMePlease(this.state.category, price)
+  }
+  // filter funktion tar ett filter-objekt som parameter t.ex.: 
+  // {category: "furniture"}
 
 
   componentDidMount() {
@@ -111,7 +143,7 @@ filterMeBabyOhYeahFilterMePlease = filter => {
     )
     let currentApp = null;
     if (this.state.currentTab === "shop") {
-      currentApp = <ProductList productsProp={this.state.products} />
+      currentApp = <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category}/>
     }
     return (
       <div className="App">
