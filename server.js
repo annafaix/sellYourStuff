@@ -141,8 +141,8 @@ const filterFunction = (catalogue, options, res, client, closeClient) => {
                 price: {
                     $gt: options.myMin,
                     $lt: options.myMax
-                }/*, price: { 
-                    $lt: options.myMax 
+                }/*, price: {
+                    $lt: options.myMax
                 }*/
             }
         }]);
@@ -241,9 +241,8 @@ const searchFunction = (catalogue, filter, res, client, closeClient) => {
 const getInitialProps = (catalogue, filter, res, client, closeClient) => {
     let returnList = null;
     let db = client.db(databaseName)
-    let products = db.collection(catalogue)
     console.log('Connected to mongo database.')
-    products.find().toArray((err, result) => {
+    catalogue.find().toArray((err, result) => {
         /*result.forEach((item) => {
           returnList.push(item)
           console.log(returnList[0])
@@ -283,8 +282,10 @@ server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
 })
 
 //Elin testar
-// server.post('/api/createProduct/')
-
+// server.post('/api/createProduct/:isLoggedIn',(req, res) => {
+//   console.log(req.body);
+//   console.log(req.params.isLoggedIn);
+// })
 //Anna testar update user by id
 
 server.get('/api/users/:id', (req, res) => {

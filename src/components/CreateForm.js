@@ -13,6 +13,7 @@ import firebase from "firebase";
 
 // const path = require('path');
 // const defaultimg = path.join(__dirname, "./public/placeholder.png");
+const dafaultimg = 'https://firebasestorage.googleapis.com/v0/b/sellyourstuff-b27b2.appspot.com/o/productImages%2Fplaceholder.png?alt=media&token=230fbf95-36cf-4508-a1bb-985511142a86';
 // console.log(defaultimg)
 // var fileToUpload = defaultimg;
 
@@ -45,6 +46,14 @@ const formStyle = {
   margin: "auto"
 }
 
+const labelStyle ={
+    display: 'block',
+    margin: '0 0 .28571429rem 0',
+    color: 'rgba(0,0,0,.87)',
+    fontSize:' .92857143em',
+    fontWeight: '700',
+    textTransform: 'none',
+}
 const options = [
   { key: 'o', text: 'Other', value: 'Other' },
   { key: 'h', text: 'Home', value: 'Home' },
@@ -64,7 +73,7 @@ class CreateForm extends React.Component {
       userName: 'namn',
       productCreatorId: this.props.userId,
       imageName: 'fich.jpg',
-      userPicture: 'https://firebasestorage.googleapis.com/v0/b/sellyourstuff-b27b2.appspot.com/o/productImages%2FproductImages%2Ffich.jpg?alt=media&token=b0c989e8-3002-45ca-8d0e-3a41d6fd207f',
+      userPicture: 'https://firebasestorage.googleapis.com/v0/b/sellyourstuff-b27b2.appspot.com/o/productImages%2Fplaceholder.png?alt=media&token=230fbf95-36cf-4508-a1bb-985511142a86',
       info: ''
     }
   }
@@ -73,32 +82,78 @@ class CreateForm extends React.Component {
   }
 
   getFile = (e) =>{
-    let file = e.target.files[0];
+    let file = dafaultimg;
 
     if (file) {
       let data = new FormData();
       data.append('file', file);
     }
-    console.log(file);
+    console.log('file ', file);
     // fileToUpload = file.name;
   }
 
   uploadFile = () => {
-    // Get a reference to the storage service, which is used to create references in your storage bucket
-    let storage = firebase.storage();
-    console.log(storage);
-    // Create a storage reference from our storage service
-    let storageRef = storage.ref();
-    console.log(storageRef);
-    console.log(this.state);
-    // Create a child reference
-    // let imagesRef = storageRef.child('images');
-    // imagesRef now points to 'images'
+    let link = dafaultimg;
+    let file =  document.getElementById('photoUpload').files[0];
+    if (file) {
+      let storage = firebase.storage();
+      let storageRef = storage.ref();
 
-    // Child references can also take paths delimited by '/'
-    // let spaceRef = storageRef.child('images/space.jpg');
-    // spaceRef now points to "images/space.jpg"
-    // imagesRef still points to "images"
+      let metadata = {
+        contentType: 'image/jpeg'
+      };
+
+      // Upload file and metadata to the object 'images/mountains.jpg'
+      var uploadTask = storageRef.child('/productImages/' + file.name).put(file, metadata);
+
+      // Listen for state changes, errors, and completion of the upload.
+      // console.log(firebase.storage.TaskEvent.STATE_CHANGED);
+      uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED: // or 'paused'
+              console.log('Upload is paused');
+              break;
+            case firebase.storage.TaskState.RUNNING: // or 'running'
+              console.log('Upload is running');
+              break;
+          }
+        }, (error) => {
+
+        // A full list of error codes is available at
+        // https://firebase.google.com/docs/storage/web/handle-errors
+        switch (error.code) {
+          case 'storage/unauthorized':
+            console.log('User doesn'+"'"+'t have permission to access the object');
+            break;
+
+          case 'storage/canceled':
+            console.log('User canceled the upload');
+            break;
+
+          case 'storage/unknown':
+            console.log('Unknown error occurred, inspect error.serverResponse');
+            break;
+        }
+      }, () => {
+        // Upload completed successfully, now we can get the download URL
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          console.log('File available at', downloadURL);
+          link = downloadURL;
+          this.setState({userPicture: link })
+          console.log('image updated');
+          console.log(this.state);
+        });
+      });
+    }else {
+      console.log('you did not pick an image, you recived a default image');
+      link = dafaultimg;
+      this.setState({userPicture: link })
+      console.log(this.state);
+    }
+
 
   }
 
@@ -129,6 +184,10 @@ class CreateForm extends React.Component {
             value={this.state.info}
             onChange={(e) => this.setState({ info: e.target.value })}
           />
+
+          <label style={labelStyle}>
+          Category
+          </label>
           <select
             className="ui dropdown"
             label='Category'
@@ -163,7 +222,7 @@ class CreateForm extends React.Component {
 
           <br />
 
-          <Button onClick={()=> console.log(this.state)} type='submit' color='green'> Submit </Button>
+          <Button onClick={()=> this.uploadFile()} type='submit' color='green'> Submit </Button>
           <Button basic color='red' onClick={()=>console.log('cancel')}> Cancel </Button>
         </Form>
        </div>
