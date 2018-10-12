@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ProductItem from './productItem.js'
 import Search from './Search.js'
+import FilterCat from './FilterCategories.js'
+import PriceSlider from './PriceSlider.js'
 import { Card } from 'semantic-ui-react'
 
 class productList extends Component {
@@ -25,6 +27,10 @@ class productList extends Component {
       <div>
           <div className="searchFilter" style={{padding:'10px 30px 10px 30px', backgroundColor:'#707070'}}>
               <Search/>
+              <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around', width: '100%'}}>
+              <FilterCat size="small" addCategory={this.props.addCategory}/>
+              <PriceSlider addPrice={this.props.addPrice} min={this.props.minRange} max={this.props.maxRange}/>
+              </div>
           </div>
         <Card.Group itemsPerRow={6}>
         {display}
