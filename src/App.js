@@ -26,11 +26,11 @@ class App extends Component {
   }
   setUserState = (user, credentials) =>{
     this.setState({ user: user, credentials: credentials });
-
   }
   isLoggedIn = (bool) => {
     this.setState({ isLoggedIn: bool })
-    this.getUser()}
+    this.getUser()
+  }
 
   changeToShop = () => this.setState({ currentTab: "shop" })
 
@@ -40,14 +40,14 @@ class App extends Component {
     fetch( urlFetch,
       {  method: 'GET' })
       .then(res => { return res.json() })
-      .then(data => {  this.setState({user: data}) })
+      .then(data => {  this.setUserData(data) } )
       .catch(err => { console.log("Error is" , err) })
   };
-
-  // getUserData = (recivedData) => {
-  //   let body = (recivedData.about =  this.state.editAbout);
-  //   this.setState({userId:recivedData["_id"], userUpdate: recivedData })
-  // }
+  //här vill jag spara user data från databasen för att skiska till Profile.js
+  setUserData = (recivedData) => {
+    this.setState({user: recivedData});
+    console.log(this.state.user);
+  }
 
 
 aggregateMaxAndMin = () => {
@@ -104,7 +104,7 @@ filterMeBabyOhYeahFilterMePlease = filter => {
     this.getInitialProducts();
   }
   render() {
-    const loggedIn = !this.state.isLoggedIn ? (
+    const loggedIn = !this.state.user ? (
         null
     ) : (
         <Profile user={this.state.user}/>
@@ -120,6 +120,7 @@ filterMeBabyOhYeahFilterMePlease = filter => {
           clickEvent={this.tabClick}
           chosenTab={this.state.currentTab} />
         <main className="mainView">
+          <LandingPage/>
           {currentApp}
           <button onClick={this.changeToShop}> Change to shop </button>
           <div id="productsPage" className={(this.state.currentTab === "products") ? "show" : "hide"}>
@@ -127,6 +128,7 @@ filterMeBabyOhYeahFilterMePlease = filter => {
             </div>
           <div id="profilePage" className={((this.state.currentTab === "profile") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
             {loggedIn}
+
           </div>
           <div id="cartPage" className={((this.state.currentTab === "cart") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
             shopping cart page

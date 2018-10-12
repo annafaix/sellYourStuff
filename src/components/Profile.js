@@ -8,7 +8,6 @@ export default class Profile extends Component{
     this.state ={
     openEdit: false,
     disabled: true,
-    editAbout: this.props.user.about
     }
   }
 
@@ -20,10 +19,9 @@ export default class Profile extends Component{
     let changeAbout= !this.state.openEdit;
     this.setState({openEdit: changeAbout});
   }
-
- componentDidMount(){
-     
-     console.log(this.state.editAbout);
+// TODO: att this.state.editAbout renderas, nu är det undefind? ...
+ componentWillMount(){
+   console.log(this.props.user)
  }
 
   updateUserInfo = () => {
@@ -50,8 +48,7 @@ export default class Profile extends Component{
         <div className="divider"></div>
         <p>{this.props.user.email}</p>
         <p id="about me">About me:
-        </p>
-        {this.props.user.about}
+        </p>{  this.props.user.about  }
         {this.state.openEdit ? (
           <div>
           <Form floated='right'
