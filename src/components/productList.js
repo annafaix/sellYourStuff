@@ -30,7 +30,7 @@ class productList extends Component {
           <div className="searchFilter" style={{padding:'10px 30px 10px 30px', backgroundColor:'#707070'}}>
               <Search/>
               <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around', width: '100%'}}>
-              <FilterCat size="small" addCategory={this.props.addCategory}/>
+              <FilterCat category={this.props.category} size="small" addCategory={this.props.addCategory}/>
               <PriceSlider addPrice={this.props.addPrice} min={this.props.minRange} max={this.props.maxRange}/>
               </div>
           </div>

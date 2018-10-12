@@ -116,7 +116,8 @@ getInitialProducts = () => {
     let q, min, max;
     if((priceRange.myMin == this.state.min && priceRange.myMax == this.state.max) ||
     typeof priceRange.myMin != 'number' || typeof priceRange.myMax != 'number' ){
-      q = '';
+      if (category == 'all') this.getInitialProducts();
+      else q = ''
     } else {
       min = priceRange.myMin;
       max = priceRange.myMax;
@@ -165,7 +166,7 @@ getInitialProducts = () => {
     )
     let currentApp = null;
     if (this.state.currentTab === "shop") {
-      currentApp = <ProductList productsProp={this.state.products} cartFunction={this.addToCart} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice}/>
+      currentApp = <ProductList productsProp={this.state.products} cartFunction={this.addToCart} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category}/>
     }
     return (
       <div className="App">
