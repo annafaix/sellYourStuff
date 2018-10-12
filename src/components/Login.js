@@ -6,7 +6,7 @@ import 'firebase/auth'
 import fetch from 'isomorphic-fetch'
 import './Login.css'
 import googleLogo from '../google.ico';
-import { Button, Header, Image, Modal, Icon } from 'semantic-ui-react'
+import { Modal } from 'semantic-ui-react'
 
 const config = {
   apiKey: "AIzaSyCJVOXUyP9bMysoDBpqN5nDbV9yQPLq3i4",
@@ -42,16 +42,15 @@ class Login extends Component {
       this.setState({ token: token, user: myUser }, () => { this.props.setUser(myUser, token) })
     }).then((success) => {
       var user = JSON.stringify(this.state.user);
-      console.log('this is the user parameter: ' + user)
+      // console.log('this is the user parameter: ' + user)
       fetch('http://localhost:3000/api/signUp/true', {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
           'Access-Control-Allow-Origin': '*'
         },
         body: user
       }).then(res => {
-        console.log('Lyckades skicka req till API:et och kontrollera att user redan finns eller signa upp ny user:' + res);
+        console.log('Lyckades skicka req till API:et och kontrollera att user redan finns eller signa upp ny user:', res);
         this.setState({ isLoggedIn: true }, () => { this.props.isLoggedIn(true) })
       }).catch(err => {
         console.log(err)
@@ -90,7 +89,8 @@ class Login extends Component {
         <Modal size="mini" dimmer="blurring" trigger={<button id="triggerButton">Log In</button>} closeIcon>
           <Modal.Header style={{ fontSize: "1.3em" }}>Select a Login Alternative</Modal.Header>
           <Modal.Content style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
-            <button type="button" id="loginButton" onClick={() => { this.loginWithGoogle() }}><img src={googleLogo} />Log in with Google</button>
+            <button type="button" id="loginButton" onClick={() => { this.loginWithGoogle() }}>
+            <img src={googleLogo} alt="google icon"/>Log in with Google</button>
           </Modal.Content>
         </Modal>
       </div>

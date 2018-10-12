@@ -22,10 +22,10 @@ export default class MenuHeader extends Component {
   }
 
   render() {
-    const { activeItem } = this.state
+    // const { activeItem } = this.state
     const funcClick = this.props.clickEvent;
     const chosenTab = this.props.chosenTab;
-    console.log("chosenTab" + chosenTab);
+    // console.log("chosenTab" + chosenTab);
 
     return (
       <Segment inverted style={{borderRadius:'0', position:'fixed', width: '100%', top:'0', padding:'0 4rem 0 2rem', zIndex:'1'}}>

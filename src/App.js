@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
-import Login from './components/Login'
+// import Login from './components/Login'
 import ProductList from './components/productList.js'
 import Menu from './components/MenuHeader'
-// import firebase from 'firebase'
 import Profile from './components/Profile'
+import LandingPage from './components/LandingPage'
 import fetch from 'isomorphic-fetch'
 
 class App extends Component {
@@ -16,8 +15,11 @@ class App extends Component {
       currentTab: "login",
       products: [],
       shoppingCart: [],
+      searchResults: [],
       max: Number,
-      min: Number
+      min: Number,
+      category: 'all',
+      priceRange:{}
     }
     this.tabClick = this.tabClick.bind(this);
   }
@@ -25,46 +27,71 @@ class App extends Component {
     console.log('Tab clicked: ' + ind);
     this.setState({ currentTab: ind });
   }
-  setUserState = (user, credentials) => this.setState({ user: user, credentials: credentials })
-  isLoggedIn = (bool) => this.setState({ isLoggedIn: bool })
+  setUserState = (user, credentials) =>{
+    this.setState({ user: user, credentials: credentials });
+
+  }
+  isLoggedIn = (bool) => {
+    this.setState({ isLoggedIn: bool })
+    this.getUser()}
   changeToShop = () => this.setState({ currentTab: "shop" })
+
+  getUser = () => {
+    let id = this.state.user.id;
+    let urlFetch = "http://localhost:3000/api/users/"+ id;
+    fetch( urlFetch,
+      {  method: 'GET' })
+      .then(res => { return res.json() })
+      .then(data => { this.getUserData(data); this.setState({user: data}) })
+      .catch(err => { console.log("Error is" , err) })
+  };
+
+  getUserData = (recivedData) => {
+    let body = (recivedData.about =  this.state.editAbout);
+    this.setState({userId:recivedData["_id"], userUpdate: recivedData })
+  }
+
 
 aggregateMaxAndMin = () => {
     fetch('http://localhost:3000/api/getPriceRange', {
-    method: 'GET',
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    }
-  }).then(response =>{
-    return response.json()
-  }).then(data => {
-    this.setState({max: data.max, min: data.min});
-  }).catch(err => {
-    console.log(err);
-  })
-}
-addToCart = (boughtItem) => {
-  console.log(boughtItem)
-  let newCart = this.state.shoppingCart;
-  let found = false;
-  newCart.forEach(x => {
-    if(x.id === boughtItem.id){
-      found = true;
-      console.log("Found duplicate", x, boughtItem)
-    }
-  })
-  if (found === false){
-    newCart.push(boughtItem);
+      method: 'GET',
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      }
+    }).then(response => {
+      return response.json()
+    }).then(data => {
+      this.setState({ max: data.max, min: data.min, priceRange:{myMin: data.min, myMax: data.max} }, () => {
+        console.log('state:', this.state);
+      });
+    }).catch(err => {
+      console.log(err);
+    })
   }
-  this.setState({shoppingCart: newCart})
-}
-removeFromCart = (itemToDelete) => {
-  let oldCart = this.state.shoppingCart
-  let newCart = (this.state.shoppingCart).filter(x => x.id !== itemToDelete.id)
-  this.setState({shoppingCart: newCart})
-  console.log(itemToDelete)
 
-}
+  addToCart = (boughtItem) => {
+    console.log(boughtItem)
+    let newCart = this.state.shoppingCart;
+    let found = false;
+    newCart.forEach(x => {
+      if(x.id === boughtItem.id){
+        found = true;
+        console.log("Found duplicate", x, boughtItem)
+      }
+    })
+    if (found === false){
+      newCart.push(boughtItem);
+    }
+    this.setState({shoppingCart: newCart})
+  }
+  removeFromCart = (itemToDelete) => {
+    let oldCart = this.state.shoppingCart
+    let newCart = (this.state.shoppingCart).filter(x => x.id !== itemToDelete.id)
+    this.setState({shoppingCart: newCart})
+    console.log(itemToDelete)
+
+  }
+
 
 getInitialProducts = () => {
   console.log("Inside component")
@@ -72,31 +99,59 @@ getInitialProducts = () => {
     req.onreadystatechange = (event) => {
       if (req.readyState == 4) {
         this.setState({ products: JSON.parse(req.response)});
-        console.log(this.state.products)
+        // console.log(this.state.products)
       }
       else {
-        console.log(req.status)
+        // console.log(req.status)
       }
     }
     req.open('GET', 'http://localhost:3000/api/products');
     req.send();
-}
-// filter funktion tar ett filter-objekt som parameter t.ex.:
-// {category: "furniture"}
-filterMeBabyOhYeahFilterMePlease = filter => {
-  fetch('http://localhost:3000/api/filter' + JSON.stringify(filter), {
-    method: 'GET',
-    headers: {
-      "Access-Control-Allow-Origin": "*",
+  }
+
+  filterMeBabyOhYeahFilterMePlease = (category, priceRange) => {
+    console.log("filterMeBabyCalled")
+    console.log(category, priceRange)
+    console.log(priceRange.myMin)
+    let q, min, max;
+    if((priceRange.myMin == this.state.min && priceRange.myMax == this.state.max) ||
+    typeof priceRange.myMin != 'number' || typeof priceRange.myMax != 'number' ){
+      q = '';
+    } else {
+      min = priceRange.myMin;
+      max = priceRange.myMax;
+      q = '?myMin='+min+'&myMax='+max;
     }
-  }).then(response => {
-    return response.json()
-  }).then(data => {
-    this.setState({filteredProducts: data});
-  }).catch(err => {
-    console.log(err);
-  })
-}
+    console.log("q = " + q)
+    fetch('http://localhost:3000/api/filter/' + category +
+    q, {
+      method: 'GET',
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      }
+    }).then(response => {
+      console.log(response)
+      return response.json()
+    }).then(data => {
+      console.log(data)
+      this.setState({ products: data });
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+  // use function add filter, the filterMeBaby[...] is just a callback. It's called inside addFilter
+  addCategory = (category) => {
+    this.setState({ category: category },
+      this.filterMeBabyOhYeahFilterMePlease(category, this.state.priceRange)
+  )
+  }
+  addPrice = (price) => {
+    this.setState({ priceRange: price })
+    this.filterMeBabyOhYeahFilterMePlease(this.state.category, price)
+  }
+  // filter funktion tar ett filter-objekt som parameter t.ex.:
+  // {category: "furniture"}
+
 
   componentDidMount() {
     this.aggregateMaxAndMin();
@@ -106,14 +161,11 @@ filterMeBabyOhYeahFilterMePlease = filter => {
     const loggedIn = !this.state.isLoggedIn ? (
       null
     ) : (
-        <div>
-          <h2>You are logged in, {this.state.user.name}</h2>
-          <Profile user={this.state.user} />
-        </div>
-      )
+        <Profile user={this.state.user}/>
+    )
     let currentApp = null;
-    if(this.state.currentTab === "shop"){
-      currentApp = <ProductList productsProp = {this.state.products} cartFunction={this.addToCart}/>
+    if (this.state.currentTab === "shop") {
+      currentApp = <ProductList productsProp={this.state.products} cartFunction={this.addToCart} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice}/>
     }
     return (
       <div className="App">
@@ -125,9 +177,9 @@ filterMeBabyOhYeahFilterMePlease = filter => {
           deleteCart={this.removeFromCart} />
 
         <main className="mainView">
+          <LandingPage/>
           {currentApp}
           <button onClick={this.changeToShop}> Change to shop </button>
-
           <div id="productsPage" className={(this.state.currentTab === "products") ? "show" : "hide"}>
             products page
             </div>
