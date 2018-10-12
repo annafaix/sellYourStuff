@@ -238,6 +238,29 @@ const searchFunction = (catalogue, filter, res, client, closeClient) => {
     }, closeClient)
 }
 
+const getInitialProps = (catalogue, filter, res, client, closeClient) => {
+    let returnList = null;
+    let db = client.db(databaseName)
+    let products = db.collection(catalogue)
+    console.log('Connected to mongo database.')
+    products.find().toArray((err, result) => {
+        /*result.forEach((item) => {
+          returnList.push(item)
+          console.log(returnList[0])
+        })*/
+        console.log("inserting result")
+        returnList = result;
+        if (returnList !== null) {
+            console.log("closing")
+            console.log(returnList[0])
+            console.log("sending")
+        }
+        res.header("Access-Control-Allow-Origin", '*')
+        res.send(returnList)
+        res.end()
+    }, closeClient)
+}
+
 server.get('/api/getPriceRange', (req, res) => {
     connectToMongo('false', {}, getPriceRange, res, productCollection);
 });
@@ -296,33 +319,7 @@ server.get('/mock', (req, res) => {
 })
 
 server.get('/api/products', (req, res) => {
-    let returnList = null;
-    MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
-        if (err) {
-            console.log('Could not connect! Error: ', err);
-            client.close();
-        }
-        let db = client.db(databaseName)
-        let catalogue = db.collection(productCollection)
-        console.log('Connected to mongo database.')
-        catalogue.find().toArray((err, result) => {
-            /*result.forEach((item) => {
-              returnList.push(item)
-              console.log(returnList[0])
-            })*/
-            console.log("inserting result")
-            returnList = result;
-            if (returnList !== null) {
-                console.log("closing")
-                console.log(returnList[0])
-                console.log("sending")
-
-            }
-            res.header("Access-Control-Allow-Origin", '*')
-            res.send(returnList)
-            res.end()
-        }, () => { client.close() })
-    })
+    connectToMongo('false', {}, getInitialProps, res, productCollection)
 })
 
 const port = 3000;
