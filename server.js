@@ -227,7 +227,7 @@ const searchFunc = (catalogue, searchWord, res, client, closeClient) => {
     let returnList = null;
     let db = client.db(databaseName)
     console.log('Connected to mongo database.')
-    catalogue.find().limit(2).toArray((err, result) => {
+    catalogue.find().toArray((err, result) => {
         returnList = result;
         if (returnList !== null) {
              console.log("no result from search");
@@ -267,7 +267,7 @@ server.get('/api/getPriceRange', (req, res) => {
 server.post('/api/search', jsonParser, (req,res) => {
     //let searchText = JSON.stringify(req.body);
     console.log('server get request from search comp ' + req.body);
-    connectToMongo('false', req.body, searchFunc, res, productCollection);
+    connectToMongo('false', {}, searchFunc, res, productCollection);
     /*
     MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
         let db = client.db(databaseName)
