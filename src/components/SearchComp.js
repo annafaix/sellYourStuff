@@ -62,10 +62,12 @@ export default class SearchComp extends Component {
 
   render() {
   let products = this.state.results;
-  if(products){
-  for (var i = 0; i < products.length; i++) {
-    console.log("Search results " + products[i].name);
+
+  if(results){
+  for (var i = 0; i < results.length; i++) {
+    console.log("Search results " + results[i].name);
   }
+
 }
   const { isLoading, value, results } = this.state
   console.log("Search value is " + this.state.value);
@@ -75,12 +77,15 @@ export default class SearchComp extends Component {
           <Search style={{borderRadius:"1px"}}
             loading={isLoading}
             onResultSelect={this.handleResultSelect}
-            onSearchChange={_.debounce(this.handleSearchChange, 500, { loading: true })}
+            onSearchChange={_.debounce(this.handleSearchChange, 50, { loading: true })}
             results={results}
             value={value}
             {...this.props}
           />
           </Input>
+
+          <div className="ui container">
+          </div>
 
       </div>
     )

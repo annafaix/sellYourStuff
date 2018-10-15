@@ -21,7 +21,14 @@ class App extends Component {
       priceRange:{}
     }
     this.tabClick = this.tabClick.bind(this);
+    this.getSearchResult = this.getSearchResult.bind(this);
   }
+
+  getSearchResult(searchedProducts) {
+    console.log('Click event happened in searchComp');
+    //this.setState({ products: searchedProducts });
+  }
+
   tabClick(ind) {
     console.log('Tab clicked: ' + ind);
     this.setState({ currentTab: ind });
@@ -101,7 +108,7 @@ getInitialProducts = () => {
       q = '?myMin='+min+'&myMax='+max;
     }
     console.log("q = " + q)
-    fetch('http://localhost:3000/api/filter/' + category + 
+    fetch('http://localhost:3000/api/filter/' + category +
     q, {
       method: 'GET',
       headers: {
@@ -119,7 +126,7 @@ getInitialProducts = () => {
   }
   // use function add filter, the filterMeBaby[...] is just a callback. It's called inside addFilter
   addCategory = (category) => {
-    this.setState({ category: category }, 
+    this.setState({ category: category },
       this.filterMeBabyOhYeahFilterMePlease(category, this.state.priceRange)
   )
   }
@@ -127,7 +134,7 @@ getInitialProducts = () => {
     this.setState({ priceRange: price })
     this.filterMeBabyOhYeahFilterMePlease(this.state.category, price)
   }
-  // filter funktion tar ett filter-objekt som parameter t.ex.: 
+  // filter funktion tar ett filter-objekt som parameter t.ex.:
   // {category: "furniture"}
 
 
@@ -143,7 +150,7 @@ getInitialProducts = () => {
     )
     let currentApp = null;
     if (this.state.currentTab === "shop") {
-      currentApp = <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category}/>
+      currentApp = <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category} searchClick={this.getSearchResult}/>
     }
     return (
       <div className="App">
