@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Icon, Input, Grid, Search, Header, Segment } from 'semantic-ui-react'
 import fetch from 'isomorphic-fetch'
 import _ from 'lodash'
+import './Search.css';
 
 export default class SearchComp extends Component {
   constructor(props) {
@@ -25,7 +26,17 @@ export default class SearchComp extends Component {
       .then(response => {
         return response.json()
       }).then(data => {
-          this.setState({products: data});
+        let editedList = [];
+        for (var i = 0; i < data.length; i++) {
+          editedList.push({
+          id: data[i]._id,
+          title: data[i].name,
+          description: data[i].info,
+          image: data[i].userPicture,
+          price: data[i].price
+        })
+      }
+          this.setState({products: editedList});
           //for (var i = 0; i < data.length; i++) {
           //  console.log("Search results " + data[i].name);
           //}
@@ -39,7 +50,7 @@ export default class SearchComp extends Component {
 //recieves user input in search field
 /*
   handleChange(event) {
-    this.setState({value: event.target.value});
+    this.setState({search: event.target.value});
   }*/
   handleSearchChange = (e, { value }) => {
     this.setState({ isLoading: true, value })
@@ -48,7 +59,7 @@ export default class SearchComp extends Component {
       if (this.state.value.length < 1) return this.resetComponent()
 
       const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
-      const isMatch = result => re.test(result.name)
+      const isMatch = result => re.test(result.title)
 
       this.setState({
         isLoading: false,
@@ -58,17 +69,15 @@ export default class SearchComp extends Component {
   }
 
   resetComponent = () => this.setState({ isLoading: false, results: [], value: '' })
-  handleResultSelect = (e, { result }) => this.setState({ value: result.name })
+  handleResultSelect = (e, { result }) => this.setState({ value: result.title })
 
   render() {
-  let products = this.state.results;
+  //let products = this.state.results;
 
-  if(results){
-  for (var i = 0; i < results.length; i++) {
-    console.log("Search results " + results[i].name);
-  }
-
-}
+  //if(results){
+  //for (var i = 0; i < results.length; i++) {
+  //  console.log("Search results " + results[i].title);
+  //}
   const { isLoading, value, results } = this.state
   console.log("Search value is " + this.state.value);
     return (
@@ -84,8 +93,7 @@ export default class SearchComp extends Component {
           />
           </Input>
 
-          <div className="ui container">
-          </div>
+
 
       </div>
     )
