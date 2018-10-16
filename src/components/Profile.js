@@ -1,27 +1,34 @@
 import React, { Component } from 'react'
 import { Image, Button, Icon, Form, TextArea } from 'semantic-ui-react'
 import fetch from 'isomorphic-fetch'
+import UserProdItem from './userProductItem.js'
 
 export default class Profile extends Component{
   constructor(props){
     super(props);
-    this.state ={
+    this.state = {
+    user: {},
+    openEdit: false,
+    editAbout: "We would like to know you better. Write something about you!",
+    userProducts: [],
     openEdit: false,
     disabled: true,
+    editAbout: '',
     }
   }
 
   openEdit = ()=> {
     let changeAbout= !this.state.openEdit;
-    this.setState({openEdit: changeAbout});
+    this.setState({openEdit: changeAbout, editAbout: this.props.user.about});
+    console.log(this.props.user)
+
   }
   closeEdit = ()=> {
     let changeAbout= !this.state.openEdit;
     this.setState({openEdit: changeAbout});
   }
-// TODO: att this.state.editAbout renderas, nu är det undefind? ...
- componentWillMount(){
-   console.log(this.props.user)
+
+ componentDidMount(){
  }
 
   updateUserInfo = () => {
@@ -37,10 +44,41 @@ export default class Profile extends Component{
       this.closeEdit();
   }
 
+  fetchUsersProd = () => {
+    fetch('http://localhost:3000/api/userProducts/' + this.props.user.name)
+    .then(response => {
+      return response.json()
+    })
+    .then(json => {
+      this.setState({userProducts: json})
+    })
+  }
+
+  componentDidMount() {
+    this.fetchUsersProd();
+  }
+
   render(){
+    let userProductArray = null;
+    if(this.state.userProducts === []){
+      userProductArray = "Empty"
+    }
+    else {
+      let allProducts = this.state.userProducts
+      userProductArray = allProducts.map(item => {
+        return <UserProdItem name={item.name}
+                  key={item._id}
+                  id={item._id}
+                  userName={item.userName}
+                  info={item.info}
+                  userPicture={item.userPicture}
+                  price={item.price}
+                  category={item.category}/>
+      })
+    }
     return(
       <React.Fragment>
-      <div className="ui raised card centered fluid">
+      <div className="ui raised card centered fluid" style={{backgroundColor:"F4F4F4"}}>
         <div className="content profile">
         <Image src={this.props.user.picture}
         alt="profile picture" size="small" circular/>
@@ -49,13 +87,14 @@ export default class Profile extends Component{
         <p>{this.props.user.email}</p>
         <p id="about me">About me:
         </p>{  this.props.user.about  }
+        <Button content="Edit" icon="edit" floated='right' style={{marginTop:"15px"}}
+        disabled={this.state.openEdit}
+        onClick={() => this.openEdit() }/>
         {this.state.openEdit ? (
           <div>
-          <Form floated='right'
-            style={{marginTop: "20px", width:"70%"}}>
-            <TextArea
+          <Form fluid="true">
+            <TextArea style={{marginTop: "20px"}} placeholder="Tell us more about you"
               name='aboutMe'
-              placeholder={this.state.editAbout}
               onChange={ (event) => {
                 if(event.target.value.length > 0){
                   this.setState({disabled: false})
@@ -64,7 +103,7 @@ export default class Profile extends Component{
                  this.setState({disabled: true})
                }
              }}>
-              </TextArea>
+            </TextArea>
           </Form>
           <Button content="Save"
             icon="save"
@@ -73,17 +112,21 @@ export default class Profile extends Component{
             disabled={this.state.disabled}
             onClick={()=> this.updateUserInfo()}
            />
+         <Button content="Close"
+           icon="close"
+           floated='right'
+           style={{marginTop:"15px"}}
+           onClick={()=> this.closeEdit()}
+          />
           </div>
         ): null}
-        <Button content="Edit" icon="edit" floated='right' style={{marginTop:"15px"}}
-          disabled={this.state.openEdit}
-          onClick={() => this.openEdit() }/>
       </div>
     </div>
     <Button onClick={()=>console.log(this.props.user._id) }color='green' floated="right">
       <Icon name="plus"/> Create new item
     </Button>
     <h2>Your stuff to sell:</h2>
+    {userProductArray}
   </React.Fragment>
     )
   }

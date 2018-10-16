@@ -12,8 +12,9 @@ class App extends Component {
     super(props);
     this.state = {
       isLoggedIn: false,
-      currentTab: "login",
+      currentTab: "landing",
       products: [],
+      shoppingCart: [],
       searchResults: [],
       max: Number,
       min: Number,
@@ -21,14 +22,7 @@ class App extends Component {
       priceRange:{}
     }
     this.tabClick = this.tabClick.bind(this);
-    this.getSearchResult = this.getSearchResult.bind(this);
   }
-
-  getSearchResult(searchedProducts) {
-    console.log('Click event happened in searchComp');
-    //this.setState({ products: searchedProducts });
-  }
-
   tabClick(ind) {
     console.log('Tab clicked: ' + ind);
     this.setState({ currentTab: ind });
@@ -37,7 +31,7 @@ class App extends Component {
     this.setState({ user: user, credentials: credentials });
   }
   isLoggedIn = (bool) => {
-    this.setState({ isLoggedIn: bool })
+    this.setState({ isLoggedIn: bool, currentTab: "shop" })
     this.getUser()
   }
 
@@ -52,10 +46,16 @@ class App extends Component {
       .then(data => {  this.setUserData(data) } )
       .catch(err => { console.log("Error is" , err) })
   };
-  //här vill jag spara user data från databasen för att skiska till Profile.js
+  //här vill jag spara user data från databasen för att skicka till Profile.js
   setUserData = (recivedData) => {
     this.setState({user: recivedData});
     console.log(this.state.user);
+  }
+
+  emptyShoppingCart = () => {
+    this.setState({
+      shoppingCart: [],
+    })
   }
 
 
@@ -74,6 +74,29 @@ aggregateMaxAndMin = () => {
     }).catch(err => {
       console.log(err);
     })
+  }
+
+  addToCart = (boughtItem) => {
+    console.log(boughtItem)
+    let newCart = this.state.shoppingCart;
+    let found = false;
+    newCart.forEach(x => {
+      if(x.id === boughtItem.id){
+        found = true;
+        console.log("Found duplicate", x, boughtItem)
+      }
+    })
+    if (found === false){
+      newCart.push(boughtItem);
+    }
+    this.setState({shoppingCart: newCart})
+  }
+  removeFromCart = (itemToDelete) => {
+    let oldCart = this.state.shoppingCart
+    let newCart = (this.state.shoppingCart).filter(x => x.id !== itemToDelete.id)
+    this.setState({shoppingCart: newCart})
+    console.log(itemToDelete)
+
   }
 
 
@@ -146,32 +169,39 @@ getInitialProducts = () => {
     const loggedIn = !this.state.user ? (
         null
     ) : (
-        <Profile user={this.state.user}/>
+        <Profile user={this.state.user} getUser={this.getUser}/>
     )
+    const landingPage = (this.state.currentTab == "landing" && !this.state.isLoggedIn) ? (
+      <LandingPage changeToShop={this.changeToShop}/>
+    ) : null;
+
     let currentApp = null;
     if (this.state.currentTab === "shop") {
-      currentApp = <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category} searchClick={this.getSearchResult}/>
+      currentApp =
+          <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category} cartFunction={this.addToCart}/>
+
     }
     return (
       <div className="App">
         <Menu setUser={this.setUserState}
           isLoggedIn={this.isLoggedIn}
           clickEvent={this.tabClick}
-          chosenTab={this.state.currentTab} />
+          chosenTab={this.state.currentTab}
+          cart={this.state.shoppingCart}
+          deleteCart={this.removeFromCart}
+          emptyCart={this.emptyShoppingCart}/>
+
         <main className="mainView">
-          <LandingPage/>
-          {currentApp}
-          <button onClick={this.changeToShop}> Change to shop </button>
-          <div id="productsPage" className={(this.state.currentTab === "products") ? "show" : "hide"}>
-            products page
-            </div>
+        {currentApp}
+          <div id="landingPage" className={((this.state.currentTab === "landing") && (this.state.isLoggedIn === false)) ? "show" : "hide"}>
+            {landingPage}
+          </div>
+          <div id="productsPage" className={(this.state.currentTab === "shop") ? "show" : "hide"}>
+            {currentApp}
+          </div>
           <div id="profilePage" className={((this.state.currentTab === "profile") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
             {loggedIn}
-
           </div>
-          <div id="cartPage" className={((this.state.currentTab === "cart") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
-            shopping cart page
-            </div>
         </main>
       </div>
     );

@@ -3,7 +3,7 @@ import ProductItem from './productItem.js'
 import Search from './SearchComp.js'
 import FilterCat from './FilterCategories.js'
 import PriceSlider from './PriceSlider.js'
-import { Card } from 'semantic-ui-react'
+// import { Card } from 'semantic-ui-react'
 
 class productList extends Component {
   constructor(props){
@@ -17,6 +17,8 @@ class productList extends Component {
     let display = productList.map((product, i) => {
       return <ProductItem name={product.name}
                 key={i}
+                id={product._id}
+                cartFunction={this.props.cartFunction}
                 userName={product.userName}
                 info={product.info}
                 userPicture={product.userPicture}
@@ -32,9 +34,9 @@ class productList extends Component {
               <PriceSlider addPrice={this.props.addPrice} min={this.props.minRange} max={this.props.maxRange}/>
               </div>
           </div>
-        <Card.Group itemsPerRow={6}>
-        {display}
-        </Card.Group>
+        <div className="ui four stackable cards">
+          {display}
+        </div>
       <button>previous</button>
       <button>next</button>
       </div>

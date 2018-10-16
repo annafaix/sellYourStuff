@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import {Card, Icon, Image, Button } from 'semantic-ui-react'
+import {Card, Icon, Image } from 'semantic-ui-react'
 import Popups from './productPopup.js'
 
-class productItem extends Component {
+class userProdItem extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -17,32 +17,34 @@ class productItem extends Component {
       }
     }
   }
-  addProductToCart = () => {
-    this.props.cartFunction(this.state.item)
-  }
   render() {
     return (
+      <div>
         <Card>
-          <Image src={this.props.userPicture} style={{height: "250px"}}/>
+          <Image src={this.props.userPicture}/>
           <Card.Content>
             <Card.Header>{this.props.name}</Card.Header>
             <Card.Meta>
               <span className='date'>Listed by {this.props.userName}</span>
             </Card.Meta>
             <Card.Description>
-              <Popups product={this.state.item} addToCart={this.props.cartFunction}/>
+              {this.props.info}
             </Card.Description>
           </Card.Content>
-          <Card.Content >
-            <span> Category: {this.props.category}</span>
-            <Button color="green"   floated='right' onClick={this.addProductToCart}> Buy </Button>
+          <Card.Content>
+            <a>
+              <Icon name='user' />
+              {this.props.price} Rupees
+            </a>
             <br/>
-            <Icon name='rupee' />
-            {this.props.price} Rupees
+            <span> Category: {this.props.category}</span>
+            <button> Edit </button>
+            <button> Delete </button>
           </Card.Content>
         </Card>
+      </div>
     );
   }
 }
 
-export default productItem;
+export default userProdItem;

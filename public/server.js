@@ -5,7 +5,6 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 const bodyParser = require('body-parser');
-const ObjectId = require('mongodb').ObjectID;
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var jsonParser = bodyParser.text();
 
@@ -71,20 +70,19 @@ const connectToMongo = (isLoggedIn, options, callback, res, collection) => {
 }
 const userExists = (catalogue, user, res, client, closeClient) => {
     let email = user.email;
-    //console.log(email)
+    console.log(email)
     catalogue.find({ email: email }).toArray((err, docs) => {
-        //console.log('The 1 products are: ', docs);
+        console.log('The 1 products are: ', docs);
         if (docs.length < 1) {
-            //console.log('The 2 products are: ', docs);
+            console.log('The 2 products are: ', docs);
             catalogue.insertOne(user, (err, response) => {
                 if (err) {
-                    //console.log('Could not use query insertOne: ', err);
+                    console.log('Could not use query insertOne: ', err);
                     client.close();
                     return;
                 } else {
-                    //console.log('Successfully signed up new user: ', response);
+                    console.log('Successfully signed up new user: ', response);
                 }
-                res.header("Access-Control-Allow-Origin", '*')
                 res
                     .send(response)
                     .end();
@@ -188,30 +186,6 @@ const filterFunction = (catalogue, options, res, client, closeClient) => {
     }, closeClient)*/
 }
 
-const buyFunction = (catalogue, cart, res, client, closeClient) => {
-  let newArray = cart.map(item => {
-    console.log("THIS IS ITEM: ", item.id)
-    return ObjectId(item.id)
-  })
-  let query = {_id: {$in: newArray}};
-  catalogue.find(query).toArray((err, doc) => {
-    console.log(doc)
-  })
-  catalogue.deleteMany(query, (err, result) => {
-    if (err) {
-      throw err
-    }
-    console.log(result)
-    res.send(result)
-  }, closeClient)
-}
-
-server.post('/api/buy', jsonParser, (req, res) => {
-  let cart = JSON.parse(req.body);
-  console.log(cart)
-  connectToMongo('true', cart, buyFunction, res, productCollection);
-})
-
 server.get('/api/filter/:category/', urlencodedParser, (req, res) => {
     let options = {};
     let category = req.params.category;
@@ -277,7 +251,7 @@ const getInitialProps = (catalogue, filter, res, client, closeClient) => {
         returnList = result;
         if (returnList !== null) {
             console.log("closing")
-            //console.log(returnList[0])
+            console.log(returnList[0])
             console.log("sending")
         }
         res.header("Access-Control-Allow-Origin", '*')
@@ -286,25 +260,9 @@ const getInitialProps = (catalogue, filter, res, client, closeClient) => {
     }, closeClient)
 }
 
-const findUserProducts = (catalogue, filter, res, client, closeClient) => {
-  let returnList = null;
-  console.log(filter)
-  catalogue.find({userName: filter}).toArray((err, result) => {
-    returnList = result;
-    console.log("finduserprod: ", returnList[(Math.floor(Math.random()*5))])
-    res.header("Access-Control-Allow-Origin", '*')
-    res.send(returnList)
-    res.end
-  }, closeClient)
-}
-
 server.get('/api/getPriceRange', (req, res) => {
     connectToMongo('false', {}, getPriceRange, res, productCollection);
 });
-server.get('/api/userProducts/:user', (req, res) => {
-  let user = req.params.user
-  connectToMongo('true', user, findUserProducts, res, productCollection)
-})
 
 server.post('/api/search', jsonParser, (req,res) => {
     //let searchText = JSON.stringify(req.body);
@@ -333,10 +291,10 @@ server.post('/api/search', jsonParser, (req,res) => {
 });
 
 server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
-    //console.log('body: ', req.body);
+    console.log('body: ', req.body);
     let isLoggedIn = req.params.isLoggedIn;
     let user = JSON.parse(req.body);
-    //console.log('user passed through: ', user)
+    console.log('user passed through: ', user)
     connectToMongo(isLoggedIn, user, userExists, res, userCollection);
 })
 
@@ -369,6 +327,9 @@ server.get('/mock', (req, res) => {
             console.log('Could not connect! Error: ', err);
             client.close();
         }
+        console.log('Connected to mongo database.')
+        //generateData(10, catalogue)
+        //catalogue.insertMany(mockList)
         client.close()
     })
 })
