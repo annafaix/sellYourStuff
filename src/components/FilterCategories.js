@@ -49,7 +49,7 @@ class FilterCategories extends Component {
       <div>
         <label style={labelStyle}>
           Category
-            </label>
+        </label>
         <select
           className="ui dropdown"
           label='Category'

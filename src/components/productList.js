@@ -27,18 +27,14 @@ class productList extends Component {
     })
     return (
       <div>
-          <div className="searchFilter" style={{padding:'10px 30px 10px 30px', backgroundColor:'#707070'}}>
+          <div className="searchFilter" style={{padding:'10px 30px 10px 30px', backgroundColor:'#707070', display: 'flex', flexDirection: 'row', justifyContent: 'space-around', width: '100%'}}>
               <Search/>
-              <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around', width: '100%'}}>
               <FilterCat category={this.props.category} size="small" addCategory={this.props.addCategory}/>
               <PriceSlider addPrice={this.props.addPrice} min={this.props.minRange} max={this.props.maxRange}/>
-              </div>
           </div>
         <div className="ui four stackable cards">
           {display}
         </div>
-      <button>previous</button>
-      <button>next</button>
       </div>
     );
   }
