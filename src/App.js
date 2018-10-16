@@ -142,7 +142,7 @@ getInitialProducts = () => {
         <Profile user={this.state.user} getUser={this.getUser}/>
     )
     const landingPage = (this.state.currentTab == "landing" && !this.state.isLoggedIn) ? (
-      <LandingPage/>
+      <LandingPage changeToShop={this.changeToShop}/>
     ) : null;
 
     let currentApp = null;
@@ -157,13 +157,13 @@ getInitialProducts = () => {
           clickEvent={this.tabClick}
           chosenTab={this.state.currentTab} />
         <main className="mainView">
-          {currentApp}
+        {currentApp}
           <div id="landingPage" className={((this.state.currentTab === "landing") && (this.state.isLoggedIn === false)) ? "show" : "hide"}>
             {landingPage}
           </div>
           <div id="productsPage" className={(this.state.currentTab === "products") ? "show" : "hide"}>
+          {currentApp}
             <button onClick={this.changeToShop}> Change to shop </button>
-            products page
           </div>
           <div id="profilePage" className={((this.state.currentTab === "profile") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
             {loggedIn}

@@ -15,10 +15,10 @@ export default class LandingPage extends Component {
         <h2>The online flea market</h2>
         <Button
           style={{ width: "220px", height:"50px", fontSize: "16px"}}
-          animated='fade' color="olive"
-          onClick={()=> console.log("Page location is " + window.location.href)}>
+          animated='fade' color="orange"
+          onClick={this.props.changeToShop}>
           <Button.Content visible>Go to market</Button.Content>
-          <Button.Content hidden>Log in or Sign-up for FREE</Button.Content>
+          <Button.Content hidden>NOW!</Button.Content>
         </Button>
       </div>
     )
