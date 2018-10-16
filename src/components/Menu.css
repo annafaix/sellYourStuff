@@ -15,7 +15,7 @@
   background-color: #585858;
   border: none;
   width: 150px;
-  height: 27px;
+  height: 30px;
   color: white;
   border-radius: 3px;
   display: flex;
@@ -31,6 +31,7 @@
   height: 100%;
   width:100%;
   color: white;
+
 }
 nav {
     display: inline;
@@ -92,8 +93,9 @@ nav div:hover {
   align-items: center;
   border: 1.5px solid grey;
   border-radius: 3px;
-  height: 27px;
+  height: 30px;
   margin-left: 15px;
+  cursor: pointer;
 }
 .productsMenu {
   align-self: center;
@@ -104,11 +106,13 @@ nav div:hover {
   justify-content: center;
   align-items: center;
   padding: 3px 13px 3px 13px;
+  background-color: #F9B233;
   background-color: #00CD00;
-  border: 1.5px solid grey;
-  height: 27px;
+  height: 30px;
   border-radius: 3px;
+  border: 1px solid #F9B233;
   border: 2px solid #00CD00;
+  cursor: pointer;
 }
 .menuBtn:hover {
   background-color: #505050;
@@ -134,7 +138,7 @@ nav div:hover {
 
 .profile img{
   border:5px solid #DB0278;
-  /* shape-outside: circle(); */
+  shape-outside: circle();
   margin-right: 15px;
   float: left;
 }

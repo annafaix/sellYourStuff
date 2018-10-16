@@ -249,18 +249,18 @@ const updateUser = (catalogue, { detail, setDocument }, res, client, closeClient
     }, () => { client.close() })
 }
 
-const searchFunction = (catalogue, filter, res, client, closeClient) => {
-    catalogue.find({ $contains: { "name": filter } }).toArray((err, docs) => {
-        if (err) {
-            console.log('Could not filter due to: ', err);
-            client.close();
-            return;
-        } else {
-            console.log('Matched the following products: ', docs);
+const searchFunc = (catalogue, searchWord, res, client, closeClient) => {
+    let returnList = null;
+    let db = client.db(databaseName)
+    console.log('Connected to mongo database.')
+    catalogue.find().toArray((err, result) => {
+        returnList = result;
+        if (returnList !== null) {
+             console.log("no result from search");
         }
-        res
-            .send(docs)
-            .end();
+        res.header("Access-Control-Allow-Origin", '*')
+        res.send(returnList)
+        res.end()
     }, closeClient)
 }
 
@@ -306,13 +306,30 @@ server.get('/api/userProducts/:user', (req, res) => {
   connectToMongo('true', user, findUserProducts, res, productCollection)
 })
 
-server.post('/api/search', jsonParser, (req, res) => {
+server.post('/api/search', jsonParser, (req,res) => {
     //let searchText = JSON.stringify(req.body);
-    //console.log('server get request from search comp ' + req.body);
-    connectToMongo('false', req.body, searchFunction, res, productCollection);
-    res.header("Access-Control-Allow-Origin", '*');
-    res.send({ success: true });
-    res.end();
+    console.log('server get request from search comp ' + req.body);
+    connectToMongo('false', {}, searchFunc, res, productCollection);
+    /*
+    MongoClient.connect(urlLoggedIn, { useNewUrlParser: true }, (err, client) => {
+        let db = client.db(databaseName)
+        let catalogue = db.collection(productCollection)
+        let products = [];
+        if (err) {
+            console.log('Could not connect! Error: ', err);
+            client.close();
+        }
+        console.log('Connected to mongo database from search comp.')
+
+
+        //generateData(10, catalogue)
+        //catalogue.insertMany(mockList)
+        client.close()
+    })*/
+    //connectToMongo('false', req.body, searchFunction, res, productCollection);
+    //res.header("Access-Control-Allow-Origin", '*');
+    //res.send({ success: true });
+    //res.end();
 });
 
 server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {

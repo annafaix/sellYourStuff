@@ -29,11 +29,12 @@ class App extends Component {
   }
   setUserState = (user, credentials) =>{
     this.setState({ user: user, credentials: credentials });
-
   }
   isLoggedIn = (bool) => {
     this.setState({ isLoggedIn: bool })
-    this.getUser()}
+    this.getUser()
+  }
+
   changeToShop = () => this.setState({ currentTab: "shop" })
 
   getUser = () => {
@@ -42,13 +43,13 @@ class App extends Component {
     fetch( urlFetch,
       {  method: 'GET' })
       .then(res => { return res.json() })
-      .then(data => { this.getUserData(data); this.setState({user: data}) })
+      .then(data => {  this.setUserData(data) } )
       .catch(err => { console.log("Error is" , err) })
   };
-
-  getUserData = (recivedData) => {
-    let body = (recivedData.about =  this.state.editAbout);
-    this.setState({userId:recivedData["_id"], userUpdate: recivedData })
+  //här vill jag spara user data från databasen för att skiska till Profile.js
+  setUserData = (recivedData) => {
+    this.setState({user: recivedData});
+    console.log(this.state.user);
   }
 
 
@@ -159,8 +160,8 @@ getInitialProducts = () => {
     this.getInitialProducts();
   }
   render() {
-    const loggedIn = !this.state.isLoggedIn ? (
-      null
+    const loggedIn = !this.state.user ? (
+        null
     ) : (
         <Profile user={this.state.user}/>
     )
@@ -186,6 +187,7 @@ getInitialProducts = () => {
             </div>
           <div id="profilePage" className={((this.state.currentTab === "profile") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
             {loggedIn}
+
           </div>
           <div id="cartPage" className={((this.state.currentTab === "cart") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
             shopping cart page

@@ -5,6 +5,7 @@
     align-items: center;
 }
 #loginButton{
+
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -36,10 +37,16 @@
     justify-content: center;
     align-items: center;
     height: 30px;
-    width: 80px;
-    border-radius: 5px;
+    width: 90px;
+    background-color: #000;
+    padding-top: 2px;
+    padding-right: 10px;
+    border: 1.5px solid grey;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
 }
 #triggerButton:hover, #logout:hover{
     cursor: pointer;
-    background-color: rgb(233, 229, 229);
+    background-color: #585858;
 }

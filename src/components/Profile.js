@@ -11,6 +11,8 @@ export default class Profile extends Component{
     openEdit: false,
     editAbout: "We would like to know you better. Write something about you!",
     userProducts: [],
+    openEdit: false,
+    disabled: true,
     }
   }
 
@@ -22,25 +24,20 @@ export default class Profile extends Component{
     let changeAbout= !this.state.openEdit;
     this.setState({openEdit: changeAbout});
   }
-
-  // findAbout = () => {
-  //   const aboutUserInfo = !this.props.user.about ? (
-  //     this.setState({ editAbout: "We would like to know you better. Write something about you!"})
-  //     console.log("state utan about",this.state);
-  //   ) : (
-  //     this.setState({ editAbout: this.props.user.about})
-  //     console.log(this.state);
-  //   )
-  // }
+// TODO: att this.state.editAbout renderas, nu är det undefind? ...
+ componentWillMount(){
+   console.log(this.props.user)
+ }
 
   updateUserInfo = () => {
     let id = this.props.user._id;
     let body = this.state.editAbout;
+    console.log(body);
     let urlFetch = "http://localhost:3000/api/user/"+ id;
     fetch( urlFetch,
       { method: 'PUT',
       body: body })
-      .then(res => { console.log(res)})
+      .then(res => { console.log(res) })
       .catch(error => console.error('Error:', error))
       this.closeEdit();
   }
@@ -87,27 +84,36 @@ export default class Profile extends Component{
         <div className="divider"></div>
         <p>{this.props.user.email}</p>
         <p id="about me">About me:
-        </p>
-        {this.props.user.about}
+        </p>{  this.props.user.about  }
         {this.state.openEdit ? (
           <div>
-          <Form
+          <Form floated='right'
             style={{marginTop: "20px", width:"70%"}}>
             <TextArea
               name='aboutMe'
-
-              onChange={event => this.setState({editAbout: event.target.value}) }>
+              placeholder={this.state.editAbout}
+              onChange={ (event) => {
+                if(event.target.value.length > 0){
+                  this.setState({disabled: false})
+                  this.setState({editAbout: event.target.value})
+                }else{
+                 this.setState({disabled: true})
+               }
+             }}>
               </TextArea>
           </Form>
           <Button content="Save"
             icon="save"
             floated='right'
             style={{marginTop:"15px"}}
+            disabled={this.state.disabled}
             onClick={()=> this.updateUserInfo()}
            />
           </div>
         ): null}
-        <Button content="Edit" icon="edit" floated='right' style={{marginTop:"15px"}} disabled={this.state.openEdit} onClick={() => this.openEdit() }/>
+        <Button content="Edit" icon="edit" floated='right' style={{marginTop:"15px"}}
+          disabled={this.state.openEdit}
+          onClick={() => this.openEdit() }/>
       </div>
     </div>
     <Button onClick={()=>console.log(this.props.user._id) }color='green' floated="right">
