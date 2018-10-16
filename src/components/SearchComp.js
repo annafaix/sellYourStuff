@@ -7,7 +7,7 @@ import './Search.css';
 export default class SearchComp extends Component {
   constructor(props) {
     super(props);
-    this.state = {value: "", products:[], isLoading: false, results:[]};
+    this.state = {value: "", products:[], isLoading: false, results:[], key: 0};
     //this.handleChange = this.handleChange.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.resetComponent = this.resetComponent.bind(this);
@@ -29,7 +29,7 @@ export default class SearchComp extends Component {
         let editedList = [];
         for (var i = 0; i < data.length; i++) {
           editedList.push({
-          id: data[i]._id,
+          id: data[i]["_id"],
           title: data[i].name,
           description: data[i].info,
           image: data[i].userPicture,
@@ -54,6 +54,12 @@ export default class SearchComp extends Component {
   }*/
   resetComponent(){
     this.setState({ isLoading: false, results: [], value: '' })
+  }
+
+  generateKey(){
+    this.setState({ key: this.state.key + 1 }, () => {
+      return this.state.key
+    })
   }
 
   handleResultSelect = (e, { result }) => this.setState({ value: result.title })
@@ -94,14 +100,10 @@ export default class SearchComp extends Component {
             loading={isLoading}
             onResultSelect={this.handleResultSelect}
             onSearchChange={_.debounce(this.handleSearchChange, 30, { loading: true })}
-            results={results}
+            results={results} key={this.generateKey}
             value={value}
             {...this.props}
           />
-
-             <input type="text" value={this.state.value} onChange={this.handleChange} style={{color:"#707070", padding:'3px'}}/>
-             <Icon name='search' style={{color:"black"}}/>
-
           </Input>
       </div>
     )
