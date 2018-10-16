@@ -17,6 +17,8 @@ class productList extends Component {
     let display = productList.map((product, i) => {
       return <ProductItem name={product.name}
                 key={i}
+                id={product._id}
+                cartFunction={this.props.cartFunction}
                 userName={product.userName}
                 info={product.info}
                 userPicture={product.userPicture}

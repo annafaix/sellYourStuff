@@ -14,6 +14,7 @@ class App extends Component {
       isLoggedIn: false,
       currentTab: "login",
       products: [],
+      shoppingCart: [],
       searchResults: [],
       max: Number,
       min: Number,
@@ -69,6 +70,29 @@ aggregateMaxAndMin = () => {
     })
   }
 
+  addToCart = (boughtItem) => {
+    console.log(boughtItem)
+    let newCart = this.state.shoppingCart;
+    let found = false;
+    newCart.forEach(x => {
+      if(x.id === boughtItem.id){
+        found = true;
+        console.log("Found duplicate", x, boughtItem)
+      }
+    })
+    if (found === false){
+      newCart.push(boughtItem);
+    }
+    this.setState({shoppingCart: newCart})
+  }
+  removeFromCart = (itemToDelete) => {
+    let oldCart = this.state.shoppingCart
+    let newCart = (this.state.shoppingCart).filter(x => x.id !== itemToDelete.id)
+    this.setState({shoppingCart: newCart})
+    console.log(itemToDelete)
+
+  }
+
 
 getInitialProducts = () => {
   console.log("Inside component")
@@ -101,7 +125,7 @@ getInitialProducts = () => {
       q = '?myMin='+min+'&myMax='+max;
     }
     console.log("q = " + q)
-    fetch('http://localhost:3000/api/filter/' + category + 
+    fetch('http://localhost:3000/api/filter/' + category +
     q, {
       method: 'GET',
       headers: {
@@ -119,7 +143,7 @@ getInitialProducts = () => {
   }
   // use function add filter, the filterMeBaby[...] is just a callback. It's called inside addFilter
   addCategory = (category) => {
-    this.setState({ category: category }, 
+    this.setState({ category: category },
       this.filterMeBabyOhYeahFilterMePlease(category, this.state.priceRange)
   )
   }
@@ -127,7 +151,7 @@ getInitialProducts = () => {
     this.setState({ priceRange: price })
     this.filterMeBabyOhYeahFilterMePlease(this.state.category, price)
   }
-  // filter funktion tar ett filter-objekt som parameter t.ex.: 
+  // filter funktion tar ett filter-objekt som parameter t.ex.:
   // {category: "furniture"}
 
 
@@ -143,14 +167,17 @@ getInitialProducts = () => {
     )
     let currentApp = null;
     if (this.state.currentTab === "shop") {
-      currentApp = <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category}/>
+      currentApp = <ProductList productsProp={this.state.products} cartFunction={this.addToCart} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category}/>
     }
     return (
       <div className="App">
         <Menu setUser={this.setUserState}
           isLoggedIn={this.isLoggedIn}
           clickEvent={this.tabClick}
-          chosenTab={this.state.currentTab} />
+          chosenTab={this.state.currentTab}
+          cart={this.state.shoppingCart}
+          deleteCart={this.removeFromCart} />
+
         <main className="mainView">
           <LandingPage/>
           {currentApp}
