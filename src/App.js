@@ -196,15 +196,11 @@ getInitialProducts = () => {
           <div id="landingPage" className={((this.state.currentTab === "landing") && (this.state.isLoggedIn === false)) ? "show" : "hide"}>
             {landingPage}
           </div>
-          <div id="productsPage" className={(this.state.currentTab === "products") ? "show" : "hide"}>
-          {currentApp}
-            <button onClick={this.changeToShop}> Change to shop </button>
+          <div id="productsPage" className={(this.state.currentTab === "shop") ? "show" : "hide"}>
+            {currentApp}
           </div>
           <div id="profilePage" className={((this.state.currentTab === "profile") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
             {loggedIn}
-          </div>
-          <div id="cartPage" className={((this.state.currentTab === "cart") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
-            shopping cart page
           </div>
         </main>
       </div>

@@ -36,7 +36,7 @@ export default class MenuHeader extends Component {
 
           <div id="menuInner" className={this.state.loginStatus ? 'menuInnerShow' : 'hide'}>
               <div className="menuLeftWrap">
-                  <div className={(chosenTab) === "products" ? 'products inline chosenMenuItem' : 'products inline'}  onClick={() => funcClick("products")}>
+                  <div className={(chosenTab) === "products" ? 'products inline chosenMenuItem' : 'products inline'}  onClick={() => funcClick("shop")}>
                     <Icon name="home" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
                      <p className=" productsMenu inline">Home</p>
                   </div>
@@ -46,7 +46,7 @@ export default class MenuHeader extends Component {
                   </div>
               </div>
               <Modal trigger={
-                <div className={(chosenTab) === "cart" ? 'menuBtn inline chosenMenuItem' : 'menuBtn inline'} onClick={() => funcClick("cart")}>
+                <div className={(chosenTab) === "cart" ? 'menuBtn inline chosenMenuItem' : 'menuBtn inline'}>
                   <p className="inline"  style={{alignSelf:'center', margin:'auto'}}>My basket</p>
                   <Icon name="cart" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
                 </div>}>
