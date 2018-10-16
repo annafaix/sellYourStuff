@@ -192,7 +192,6 @@ getInitialProducts = () => {
           emptyCart={this.emptyShoppingCart}/>
 
         <main className="mainView">
-        {currentApp}
           <div id="landingPage" className={((this.state.currentTab === "landing") && (this.state.isLoggedIn === false)) ? "show" : "hide"}>
             {landingPage}
           </div>
