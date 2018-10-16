@@ -23,7 +23,9 @@ class productItem extends Component {
                 <Header>Listed by: {this.props.product.userName}</Header>
                 <p>{this.props.product.info}</p>
                 <p>{this.props.product.price} Rupees</p>
-                <button onClick={this.addProductToCart}> Buy </button>
+                <Modal.Actions>
+                <Button onClick={this.addProductToCart} color="green"> Buy </Button>
+                </Modal.Actions>
               </Modal.Description>
             </Modal.Content>
         </Modal>

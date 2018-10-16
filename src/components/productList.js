@@ -34,7 +34,7 @@ class productList extends Component {
               <PriceSlider addPrice={this.props.addPrice} min={this.props.minRange} max={this.props.maxRange}/>
               </div>
           </div>
-        <div className="ui three stackable cards">
+        <div className="ui four stackable cards">
           {display}
         </div>
       <button>previous</button>
