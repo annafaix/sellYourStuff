@@ -34,8 +34,8 @@ class productItem extends Component {
               <Popups product={this.state.item} addToCart={this.props.cartFunction}/>
             </Card.Description>
           </Card.Content>
-          <Card.Content>
-            <a>
+          <Card.Content >
+            <a href="/">
               <Icon name='user' />
               {this.props.price} Rupees
             </a>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Header, Button, Popup, Grid } from 'semantic-ui-react'
+// import { Header, Button, Popup, Grid } from 'semantic-ui-react'
 
 const activeStyle = { color: '#99ff66' }
 const emptyStyle = {}

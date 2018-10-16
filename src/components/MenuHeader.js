@@ -45,9 +45,6 @@ export default class MenuHeader extends Component {
                      <p className=" productsMenu inline">Profile</p>
                   </div>
               </div>
-              <div className="products inline" onClick={() => funcClick("profile")}>
-                 <p className=" productsMenu inline">Profile page</p>
-              </div>
               <Modal trigger={
                 <div className={(chosenTab) === "cart" ? 'menuBtn inline chosenMenuItem' : 'menuBtn inline'} onClick={() => funcClick("cart")}>
                   <p className="inline"  style={{alignSelf:'center', margin:'auto'}}>My basket</p>
