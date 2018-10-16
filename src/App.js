@@ -52,6 +52,12 @@ class App extends Component {
     console.log(this.state.user);
   }
 
+  emptyShoppingCart = () => {
+    this.setState({
+      shoppingCart: [],
+    })
+  }
+
 
 aggregateMaxAndMin = () => {
     fetch('http://localhost:3000/api/getPriceRange', {
@@ -176,7 +182,8 @@ getInitialProducts = () => {
           clickEvent={this.tabClick}
           chosenTab={this.state.currentTab}
           cart={this.state.shoppingCart}
-          deleteCart={this.removeFromCart} />
+          deleteCart={this.removeFromCart}
+          emptyCart={this.emptyShoppingCart}/>
 
         <main className="mainView">
           <LandingPage/>

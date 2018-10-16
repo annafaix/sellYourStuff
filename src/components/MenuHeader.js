@@ -53,7 +53,7 @@ export default class MenuHeader extends Component {
                   <p className="inline"  style={{alignSelf:'center', margin:'auto'}}>My basket</p>
                   <Icon name="cart" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
                 </div>}>
-                <CartPopup cart={this.props.cart} deleteCart={this.props.deleteCart}/>
+                <CartPopup cart={this.props.cart} deleteCart={this.props.deleteCart} emptyCart={this.props.emptyCart}/>
               </Modal>
           </div>
           <Menu.Item position='right' style={{padding:'0', margin:'0'}}>

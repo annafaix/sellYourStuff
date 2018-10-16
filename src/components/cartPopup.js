@@ -15,11 +15,10 @@ class cartPopup extends Component {
       method: 'POST',
       body: JSON.stringify(this.props.cart)
     }).then(data => {
-      console.log(data)
       return data.json()
     }).then(json => {
-      console.log(json)
     })
+    this.props.emptyCart()
   }
   render() {
     let cart = this.props.cart
