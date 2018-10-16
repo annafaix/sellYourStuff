@@ -6,7 +6,7 @@ import 'firebase/auth'
 import fetch from 'isomorphic-fetch'
 import './Login.css'
 import googleLogo from '../google.ico';
-import { Modal } from 'semantic-ui-react'
+import { Modal , Button } from 'semantic-ui-react'
 
 const config = {
   apiKey: "AIzaSyCJVOXUyP9bMysoDBpqN5nDbV9yQPLq3i4",
