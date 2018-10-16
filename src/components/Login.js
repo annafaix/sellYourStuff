@@ -96,7 +96,7 @@ class Login extends Component {
       </div>
     ) : (
         <div className="logMe">
-          <button id="logout" onClick={() => { this.logoutWithGoogle() }} basic inverted >Log out</button>
+          <button id="logout" onClick={() => { this.logoutWithGoogle() }} className={"basic inverted"} >Log out</button>
         </div>
       )
     return (

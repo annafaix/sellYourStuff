@@ -28,7 +28,7 @@ class userProdItem extends Component {
               <span className='date'>Listed by {this.props.userName}</span>
             </Card.Meta>
             <Card.Description>
-              this.state.info
+              {this.props.info}
             </Card.Description>
           </Card.Content>
           <Card.Content>
