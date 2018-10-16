@@ -24,7 +24,14 @@ class PriceSlider extends Component {
         this.props.addPrice({ myMin: value[0], myMax: value[1] })
         this.setState({ myMin: value[0], myMax: value[1] })
     }
+    updateLoadState = () => {
+        this.setState({loaded: true})
+      }
     getSpots = () => {
+        let callback = (object) =>{
+            this.setState({ marks: object, myMin: this.props.min, myMax: this.props.max}
+            ,this.updateLoadState)
+        }
         let total = this.props.max - this.props.min;
         let portion = total / 10;
         let object = {}
@@ -34,11 +41,10 @@ class PriceSlider extends Component {
             min += portion;
             object[min] = '';
         }
-        this.setState({ marks: object, myMin: this.props.min, myMax: this.props.max})
+        callback(object)
     }
     async componentDidMount() { 
         await this.getSpots();
-        this.setState({ loaded: true })
     }
     render() {
         const labelStyle = {
@@ -57,7 +63,7 @@ class PriceSlider extends Component {
                     Price range
                 </label>
                 {this.state.myMin}
-                <Range marks={this.state.marks} allowCross={false} step={1} min={this.state.myMin} max={this.state.myMax}
+                <Range allowCross={false} step={1} min={this.state.myMin} max={this.state.myMax}
                     defaultValue={[this.state.myMin, this.state.myMax]} style={{ minWidth: '200px', width: 'auto', marginLeft: 20, marginRight: 20 }}
                     onChange={this.onSliderChange} trackStyle={[{ backgroundColor: 'white' }, { backgroundColor: 'white' }]}
                     handleStyle={[{ backgroundColor: '#99ff99' }, { backgroundColor: '#ffcc00' }]}

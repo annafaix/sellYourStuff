@@ -20,7 +20,8 @@ class App extends Component {
       min: Number,
       category: 'all',
       priceRange: {},
-      loaded: false
+      loaded: false,
+      loaded2: false
     }
     this.tabClick = this.tabClick.bind(this);
   }
@@ -69,7 +70,7 @@ class App extends Component {
     }).then(response => {
       return response.json()
     }).then(data => {
-      this.setState({ max: data.max, min: data.min, priceRange: { myMin: data.min, myMax: data.max } }, () => {
+      this.setState({ max: data.max, min: data.min, priceRange: { myMin: data.min, myMax: data.max }, loaded: true }, () => {
         console.log('state:', this.state);
       });
     }).catch(err => {
@@ -99,14 +100,15 @@ class App extends Component {
     console.log(itemToDelete)
 
   }
-
-
+  updateLoadState = () => {
+    this.setState({loaded2: true})
+  }
   getInitialProducts = () => {
     console.log("Inside component")
     let req = new XMLHttpRequest();
     req.onreadystatechange = (event) => {
       if (req.readyState == 4) {
-        this.setState({ products: JSON.parse(req.response) });
+        this.setState({ products: JSON.parse(req.response) }, this.updateLoadState);
         // console.log(this.state.products)
       }
       else {
@@ -184,7 +186,7 @@ class App extends Component {
     }
     return (
       <div className="App">
-        {this.state.loaded ? (
+        {this.state.loaded && this.state.loaded2 ? (
           <div>
             <Menu setUser={this.setUserState}
               isLoggedIn={this.isLoggedIn}
