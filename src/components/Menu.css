@@ -106,17 +106,20 @@ nav div:hover {
   justify-content: center;
   align-items: center;
   padding: 3px 13px 3px 13px;
-  background-color: #F9B233;
   background-color: #00CD00;
+  background-color: #F9B233;
   height: 30px;
   border-radius: 3px;
-  border: 1px solid #F9B233;
   border: 2px solid #00CD00;
+  border: 1px solid #F9B233;
   cursor: pointer;
+  color:#000;
 }
 .menuBtn:hover {
   background-color: #505050;
   border: 2px solid #505050;
+  color:#FFF;
+
 }
 .chosenMenuItem {
   background-color: #505050;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Button, Icon, Form, TextArea } from 'semantic-ui-react'
+import { Image, Button, Icon, Form, TextArea, Card } from 'semantic-ui-react'
 import fetch from 'isomorphic-fetch'
 import UserProdItem from './userProductItem.js'
 
@@ -9,9 +9,7 @@ export default class Profile extends Component{
     this.state = {
     user: {},
     openEdit: false,
-    editAbout: "We would like to know you better. Write something about you!",
     userProducts: [],
-    openEdit: false,
     disabled: true,
     editAbout: '',
     }
@@ -19,17 +17,12 @@ export default class Profile extends Component{
 
   openEdit = ()=> {
     let changeAbout= !this.state.openEdit;
-    this.setState({openEdit: changeAbout, editAbout: this.props.user.about});
-    console.log(this.props.user)
-
+    this.setState({openEdit: changeAbout});
   }
   closeEdit = ()=> {
     let changeAbout= !this.state.openEdit;
-    this.setState({openEdit: changeAbout});
+    this.setState({openEdit: changeAbout})
   }
-
- componentDidMount(){
- }
 
   updateUserInfo = () => {
     let id = this.props.user._id;
@@ -74,10 +67,12 @@ export default class Profile extends Component{
                   userPicture={item.userPicture}
                   price={item.price}
                   category={item.category}/>
+
       })
     }
     return(
       <React.Fragment>
+      <div>
       <div className="ui raised card centered fluid" style={{backgroundColor:"F4F4F4"}}>
         <div className="content profile">
         <Image src={this.props.user.picture}
@@ -86,7 +81,7 @@ export default class Profile extends Component{
         <div className="divider"></div>
         <p>{this.props.user.email}</p>
         <p id="about me">About me:
-        </p>{  this.props.user.about  }
+        </p> State: {this.state.editAbout} Props:{this.props.user.about}
         <Button content="Edit" icon="edit" floated='right' style={{marginTop:"15px"}}
         disabled={this.state.openEdit}
         onClick={() => this.openEdit() }/>
@@ -96,9 +91,8 @@ export default class Profile extends Component{
             <TextArea style={{marginTop: "20px"}} placeholder="Tell us more about you"
               name='aboutMe'
               onChange={ (event) => {
-                if(event.target.value.length > 0){
-                  this.setState({disabled: false})
-                  this.setState({editAbout: event.target.value})
+                if(event.target.value.length >= 0){
+                  this.setState({disabled: false, editAbout: event.target.value})
                 }else{
                  this.setState({disabled: true})
                }
@@ -126,7 +120,10 @@ export default class Profile extends Component{
       <Icon name="plus"/> Create new item
     </Button>
     <h2>Your stuff to sell:</h2>
-    {userProductArray}
+    <Card.Group className="ui three stackable cards" style={{width: '70%', marginBottom: '40px'}}>
+      {userProductArray}
+    </Card.Group>
+    </div>
   </React.Fragment>
     )
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Icon, Image, Button, Header, Modal } from 'semantic-ui-react'
+import {Button,Modal, Icon } from 'semantic-ui-react'
 import CartItem from './cartItem.js'
 import fetch from 'isomorphic-fetch'
 
@@ -30,7 +30,10 @@ class cartPopup extends Component {
           <Modal.Content >
             {cartRender}
           </Modal.Content>
-          <button onClick={this.buyFromDB}> Finalize purchase </button>
+          <Button onClick={this.buyFromDB} primary floated="right">
+          <Icon disabled name='payment' />
+          Finalize purchase
+          </Button>
       </div>
     );
   }

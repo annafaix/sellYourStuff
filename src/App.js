@@ -51,7 +51,7 @@ class App extends Component {
   //här vill jag spara user data från databasen för att skicka till Profile.js
   setUserData = (recivedData) => {
     this.setState({ user: recivedData });
-    console.log(this.state.user);
+    // console.log(this.state.user);
   }
 
   emptyShoppingCart = () => {
@@ -120,7 +120,7 @@ class App extends Component {
   }
 
   filterMeBabyOhYeahFilterMePlease = (category, priceRange) => {
-    console.log("filterMeBabyCalled")
+    // console.log("filterMeBabyCalled")
     console.log(category, priceRange)
     console.log(priceRange.myMin)
     let q, min, max;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Menu.css';
-import { Menu, Segment, Button, Image, Icon, Modal } from 'semantic-ui-react'
+import { Menu, Segment, Image, Icon, Modal } from 'semantic-ui-react'
 import Login from '../components/Login'
 import CartPopup from './cartPopup.js'
 
