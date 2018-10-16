@@ -181,7 +181,6 @@ getInitialProducts = () => {
         <main className="mainView">
           <LandingPage/>
           {currentApp}
-          <button onClick={this.changeToShop}> Change to shop </button>
           <div id="productsPage" className={(this.state.currentTab === "products") ? "show" : "hide"}>
             products page
             </div>
