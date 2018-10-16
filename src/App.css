@@ -2,10 +2,18 @@
   /* text-align: center; */
 }
 html, body{
-  background-color: #F4F4F4;
+  /* background-color: #F4F4F4; */
   scroll-behavior: smooth;
 }
 .mainView{
   margin: 20px;
-  margin-top:100px;
+  margin-top:50px;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+
+  .landingPage{
+    margin-top: 200px;
+  }
+
 }

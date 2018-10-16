@@ -152,3 +152,8 @@ nav div:hover {
   text-align: center;
   justify-content: center;
 }
+.landingPage img{
+  padding-top: 0;
+  width: 40vw;
+  height: auto;
+}

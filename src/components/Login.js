@@ -6,7 +6,7 @@ import 'firebase/auth'
 import fetch from 'isomorphic-fetch'
 import './Login.css'
 import googleLogo from '../google.ico';
-import { Modal, Button } from 'semantic-ui-react'
+import { Modal } from 'semantic-ui-react'
 
 const config = {
   apiKey: "AIzaSyCJVOXUyP9bMysoDBpqN5nDbV9yQPLq3i4",
@@ -96,7 +96,7 @@ class Login extends Component {
       </div>
     ) : (
         <div className="logMe">
-          <button id="logout" onClick={() => { this.logoutWithGoogle() }} basic inverted >Log out</button>
+          <button id="logout" onClick={() => { this.logoutWithGoogle() }} >Log out</button>
         </div>
       )
     return (

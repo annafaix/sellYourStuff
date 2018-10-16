@@ -12,7 +12,7 @@ class App extends Component {
     super(props);
     this.state = {
       isLoggedIn: false,
-      currentTab: "login",
+      currentTab: "landing",
       products: [],
       searchResults: [],
       max: Number,
@@ -30,7 +30,7 @@ class App extends Component {
     this.setState({ user: user, credentials: credentials });
   }
   isLoggedIn = (bool) => {
-    this.setState({ isLoggedIn: bool })
+    this.setState({ isLoggedIn: bool, currentTab: "shop" })
     this.getUser()
   }
 
@@ -45,7 +45,7 @@ class App extends Component {
       .then(data => {  this.setUserData(data) } )
       .catch(err => { console.log("Error is" , err) })
   };
-  //här vill jag spara user data från databasen för att skiska till Profile.js
+  //här vill jag spara user data från databasen för att skicka till Profile.js
   setUserData = (recivedData) => {
     this.setState({user: recivedData});
     console.log(this.state.user);
@@ -101,7 +101,7 @@ getInitialProducts = () => {
       q = '?myMin='+min+'&myMax='+max;
     }
     console.log("q = " + q)
-    fetch('http://localhost:3000/api/filter/' + category + 
+    fetch('http://localhost:3000/api/filter/' + category +
     q, {
       method: 'GET',
       headers: {
@@ -119,7 +119,7 @@ getInitialProducts = () => {
   }
   // use function add filter, the filterMeBaby[...] is just a callback. It's called inside addFilter
   addCategory = (category) => {
-    this.setState({ category: category }, 
+    this.setState({ category: category },
       this.filterMeBabyOhYeahFilterMePlease(category, this.state.priceRange)
   )
   }
@@ -127,7 +127,7 @@ getInitialProducts = () => {
     this.setState({ priceRange: price })
     this.filterMeBabyOhYeahFilterMePlease(this.state.category, price)
   }
-  // filter funktion tar ett filter-objekt som parameter t.ex.: 
+  // filter funktion tar ett filter-objekt som parameter t.ex.:
   // {category: "furniture"}
 
 
@@ -139,11 +139,16 @@ getInitialProducts = () => {
     const loggedIn = !this.state.user ? (
         null
     ) : (
-        <Profile user={this.state.user}/>
+        <Profile user={this.state.user} getUser={this.getUser}/>
     )
+    const landingPage = (this.state.currentTab == "landing" && !this.state.isLoggedIn) ? (
+      <LandingPage/>
+    ) : null;
+
     let currentApp = null;
     if (this.state.currentTab === "shop") {
-      currentApp = <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category}/>
+      currentApp =
+          <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category}/>
     }
     return (
       <div className="App">
@@ -152,19 +157,20 @@ getInitialProducts = () => {
           clickEvent={this.tabClick}
           chosenTab={this.state.currentTab} />
         <main className="mainView">
-          <LandingPage/>
           {currentApp}
-          <button onClick={this.changeToShop}> Change to shop </button>
+          <div id="landingPage" className={((this.state.currentTab === "landing") && (this.state.isLoggedIn === false)) ? "show" : "hide"}>
+            {landingPage}
+          </div>
           <div id="productsPage" className={(this.state.currentTab === "products") ? "show" : "hide"}>
+            <button onClick={this.changeToShop}> Change to shop </button>
             products page
-            </div>
+          </div>
           <div id="profilePage" className={((this.state.currentTab === "profile") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
             {loggedIn}
-
           </div>
           <div id="cartPage" className={((this.state.currentTab === "cart") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
             shopping cart page
-            </div>
+          </div>
         </main>
       </div>
     );

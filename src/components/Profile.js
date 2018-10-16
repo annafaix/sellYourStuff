@@ -8,20 +8,22 @@ export default class Profile extends Component{
     this.state ={
     openEdit: false,
     disabled: true,
+    editAbout: '',
     }
   }
 
   openEdit = ()=> {
     let changeAbout= !this.state.openEdit;
-    this.setState({openEdit: changeAbout});
+    this.setState({openEdit: changeAbout, editAbout: this.props.user.about});
+    console.log(this.props.user)
+
   }
   closeEdit = ()=> {
     let changeAbout= !this.state.openEdit;
     this.setState({openEdit: changeAbout});
   }
-// TODO: att this.state.editAbout renderas, nu är det undefind? ...
- componentWillMount(){
-   console.log(this.props.user)
+
+ componentDidMount(){
  }
 
   updateUserInfo = () => {
@@ -40,7 +42,7 @@ export default class Profile extends Component{
   render(){
     return(
       <React.Fragment>
-      <div className="ui raised card centered fluid">
+      <div className="ui raised card centered fluid" style={{backgroundColor:"F4F4F4"}}>
         <div className="content profile">
         <Image src={this.props.user.picture}
         alt="profile picture" size="small" circular/>
@@ -49,13 +51,14 @@ export default class Profile extends Component{
         <p>{this.props.user.email}</p>
         <p id="about me">About me:
         </p>{  this.props.user.about  }
+        <Button content="Edit" icon="edit" floated='right' style={{marginTop:"15px"}}
+        disabled={this.state.openEdit}
+        onClick={() => this.openEdit() }/>
         {this.state.openEdit ? (
           <div>
-          <Form floated='right'
-            style={{marginTop: "20px", width:"70%"}}>
-            <TextArea
+          <Form fluid="true">
+            <TextArea style={{marginTop: "20px"}} placeholder="Tell us more about you"
               name='aboutMe'
-              placeholder={this.state.editAbout}
               onChange={ (event) => {
                 if(event.target.value.length > 0){
                   this.setState({disabled: false})
@@ -64,7 +67,7 @@ export default class Profile extends Component{
                  this.setState({disabled: true})
                }
              }}>
-              </TextArea>
+            </TextArea>
           </Form>
           <Button content="Save"
             icon="save"
@@ -73,11 +76,14 @@ export default class Profile extends Component{
             disabled={this.state.disabled}
             onClick={()=> this.updateUserInfo()}
            />
+         <Button content="Close"
+           icon="close"
+           floated='right'
+           style={{marginTop:"15px"}}
+           onClick={()=> this.closeEdit()}
+          />
           </div>
         ): null}
-        <Button content="Edit" icon="edit" floated='right' style={{marginTop:"15px"}}
-          disabled={this.state.openEdit}
-          onClick={() => this.openEdit() }/>
       </div>
     </div>
     <Button onClick={()=>console.log(this.props.user._id) }color='green' floated="right">

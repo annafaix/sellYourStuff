@@ -20,8 +20,8 @@ class productItem extends Component {
             </Card.Meta>
             <Card.Description>{this.props.info}</Card.Description>
           </Card.Content>
-          <Card.Content price>
-            <a>
+          <Card.Content >
+            <a href="/">
               <Icon name='user' />
               {this.props.price} Rupees
             </a>
