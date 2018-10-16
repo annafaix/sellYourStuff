@@ -86,7 +86,12 @@ class Login extends Component {
   render() {
     const isLoggedIn = !this.state.isLoggedIn ? (
       <div className="logMe">
-        <Modal size="mini" dimmer="blurring" trigger={<button id="triggerButton">Log In</button>} closeIcon>
+        <Modal size="mini" dimmer="blurring" trigger={<Button
+
+style={{ width: "150px", fontSize: "14px"}}
+animated='fade' color="olive"><Button.Content visible>Login</Button.Content>
+<Button.Content hidden>Sign-up for FREE</Button.Content>
+</Button>} closeIcon>
           <Modal.Header style={{ fontSize: "1.3em" }}>Select a Login Alternative</Modal.Header>
           <Modal.Content style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
             <button type="button" id="loginButton" onClick={() => { this.loginWithGoogle() }}>
