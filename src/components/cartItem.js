@@ -29,10 +29,10 @@ class cartItem extends Component {
               <Header>Listed by: {this.props.product.userName}</Header>
               <p>{this.props.product.info}</p>
               <p>{this.props.product.price} Rupees</p>
-              <button onClick={this.compRemoveFromCart}> Delete </button>
+              <Button onClick={this.compRemoveFromCart} color="red"> Delete </Button>
               </Modal.Description>
             </Modal.Content>
-      </div>
+        </div>
     );
   }
 }
