@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ProductItem from './productItem.js'
-import Search from './Search.js'
+import Search from './SearchComp.js'
 import FilterCat from './FilterCategories.js'
 import PriceSlider from './PriceSlider.js'
 // import { Card } from 'semantic-ui-react'
