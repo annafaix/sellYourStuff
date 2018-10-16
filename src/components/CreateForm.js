@@ -1,40 +1,8 @@
 import React from 'react'
-import { Form, Button, Header, Icon, Label } from 'semantic-ui-react'
+import { Form, Button, Header, Icon } from 'semantic-ui-react'
 import firebase from "firebase";
-// import firebase from 'firebase/app'
-// import config from './Login.js'
-// encType='multipart/form-data'
-// method='post'
-// action='http://localhost:3000/api/registerNewContact'
-// style={formStyle} >
-// <Head title="CreateContactForm"
-// const newContact = require('../postContact').newContact;
-// const write = require('../postContact').writeUser;
 
-// const path = require('path');
-// const defaultimg = path.join(__dirname, "./public/placeholder.png");
-const dafaultimg = 'https://firebasestorage.googleapis.com/v0/b/sellyourstuff-b27b2.appspot.com/o/productImages%2Fplaceholder.png?alt=media&token=230fbf95-36cf-4508-a1bb-985511142a86';
-// console.log(defaultimg)
-// var fileToUpload = defaultimg;
-
-// const config = {
-//   apiKey: "<API_KEY>",
-//   authDomain: "<PROJECT_ID>.firebaseapp.com",
-//   databaseURL: "https://<DATABASE_NAME>.firebaseio.com",
-//   storageBucket: "<BUCKET>.appspot.com",
-// };
-// firebase.initializeApp(config);
-//
-
-
-
-// const config = {
-//   apiKey: "AIzaSyCJVOXUyP9bMysoDBpqN5nDbV9yQPLq3i4",
-//   authDomain: "sellyourstuff-b27b2.firebaseapp.com",
-//   databaseURL: "https://sellyourstuff-b27b2.firebaseio.com",
-//   storageBucket: "sellyourstuff-b27b2.appspot.com",
-// };
-
+const defaultimg = 'https://firebasestorage.googleapis.com/v0/b/sellyourstuff-b27b2.appspot.com/o/productImages%2Fplaceholder.png?alt=media&token=230fbf95-36cf-4508-a1bb-985511142a86';
 
 const formStyle = {
   backgroundColor: "#f4f4f4",
@@ -73,27 +41,50 @@ class CreateForm extends React.Component {
       userName: 'namn',
       productCreatorId: this.props.userId,
       imageName: 'fich.jpg',
-      userPicture: 'https://firebasestorage.googleapis.com/v0/b/sellyourstuff-b27b2.appspot.com/o/productImages%2Fplaceholder.png?alt=media&token=230fbf95-36cf-4508-a1bb-985511142a86',
+      userPicture: defaultimg,
       info: ''
     }
   }
-  componentDidMount() {
-    // firebase.initializeApp(config);
+
+  sendFile = (productObject) =>{
+    console.log(productObject);
+    fetch('http://localhost:3000/api/createProduct', {
+      method: 'POST',
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: productObject
+    }).then(res => {
+      console.log('Lyckades skicka req till API:et och ladda upp ny produt i databasen:', res);
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
-  getFile = (e) =>{
-    let file = dafaultimg;
+  validateImageLink = (url, callback) => {
+    let imgData = new Image();
+    imgData.onload = () => {
+      callback(true);
+    };
 
-    if (file) {
-      let data = new FormData();
-      data.append('file', file);
+    imgData.onerror = () => {
+      callback(false);
+    };
+    imgData.src = url;
+  }
+
+  validatePrice = (num) =>{
+    let newNum;
+    if (isNaN(num)) {
+      newNum = 1;
+    }else {
+      newNum = Number(num);
     }
-    console.log('file ', file);
-    // fileToUpload = file.name;
+    this.setState({ price: newNum})
   }
 
   uploadFile = () => {
-    let link = dafaultimg;
+    let link = defaultimg;
     let file =  document.getElementById('photoUpload').files[0];
     if (file) {
       let storage = firebase.storage();
@@ -102,7 +93,6 @@ class CreateForm extends React.Component {
       let metadata = {
         contentType: 'image/jpeg'
       };
-
       // Upload file and metadata to the object 'images/mountains.jpg'
       var uploadTask = storageRef.child('/productImages/' + file.name).put(file, metadata);
 
@@ -121,12 +111,11 @@ class CreateForm extends React.Component {
               break;
           }
         }, (error) => {
-
         // A full list of error codes is available at
         // https://firebase.google.com/docs/storage/web/handle-errors
         switch (error.code) {
           case 'storage/unauthorized':
-            console.log('User doesn'+"'"+'t have permission to access the object');
+            console.log('User do not have permission to access the object');
             break;
 
           case 'storage/canceled':
@@ -141,23 +130,47 @@ class CreateForm extends React.Component {
         // Upload completed successfully, now we can get the download URL
         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
           console.log('File available at', downloadURL);
-          link = downloadURL;
-          this.setState({userPicture: link })
           console.log('image updated');
-          console.log(this.state);
+          link = downloadURL;
+          var jsonProductObject;
+
+          console.log('validating image link ');
+
+          this.validateImageLink(link, (existsImage) => {
+            if(existsImage == true) {
+              this.setState({userPicture: link })
+              console.log('new image exist ', link);
+              jsonProductObject= JSON.stringify(this.state)
+              this.sendFile(jsonProductObject);
+              return;
+              // image exist
+            }
+            else {
+              console.log('image do not exist on', link);
+              this.setState({userPicture: defaultimg })
+              jsonProductObject= JSON.stringify(this.state)
+              this.sendFile(jsonProductObject);
+              return;
+              // image not exist
+            }
+          });
+          // console.log(this.state);
         });
       });
     }else {
       console.log('you did not pick an image, you recived a default image');
-      link = dafaultimg;
+      link = defaultimg;
       this.setState({userPicture: link })
       console.log(this.state);
+      let productObject= JSON.stringify(this.state)
+      this.sendFile(productObject);
+      return;
     }
-
 
   }
 
   render() {
+    // console.log(typeof this.state.price);
     return (
       <div>
         <Form style={formStyle} >
@@ -201,8 +214,10 @@ class CreateForm extends React.Component {
             <label>Price</label>
             <input
               name="price"
+              type='number'
+              min="1"
               value={this.state.price}
-              onChange={(e) => this.setState({ name: e.target.value })} />
+              onChange={(e) => this.validatePrice(e.target.value)} />
           </Form.Field>
 
           <div style={{ margin: "2rem 0 0 0" }}>
@@ -215,7 +230,7 @@ class CreateForm extends React.Component {
               type="file"
               id="photoUpload"
               name="productPhoto"
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => console.log(e.target.value.name)}
               style={{ display: "none" }} />
           </div>
           <p style={{ margin: "2rem 0 0 0" }}> {this.state.imageName}</p>

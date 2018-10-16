@@ -282,11 +282,30 @@ server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
 })
 
 //Elin testar
-// server.post('/api/createProduct/:isLoggedIn',(req, res) => {
-//   console.log(req.body);
-//   console.log(req.params.isLoggedIn);
-// })
-//Anna testar update user by id
+server.post('/api/createProduct', jsonParser, (req, res) => {
+  console.log(req.params.isLoggedIn);
+  console.log('body: ', req.body);
+
+  let newProduct = JSON.parse(req.body);
+  // console.log('newProduct: ', newProduct);
+  console.log('product passed through: ', newProduct)
+  connectToMongo(true, newProduct, uploadNewProduct, res, productCollection);
+})
+
+const uploadNewProduct = (catalogue, options, res, client, closeClient) => {
+      let productObject = options;
+      catalogue.insertOne(productObject, (err, result)=> {
+        if (err) {
+          console.log('someting wnt wrong with uploding product: ', err);
+          client.close();
+        }else {
+          console.log('product was succesfully added: ', result);
+        }
+        res
+            .send(result)
+            .end();
+      }, closeClient)
+}
 
 server.get('/api/users/:id', (req, res) => {
     const id = req.params.id;
