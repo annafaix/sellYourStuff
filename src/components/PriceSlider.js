@@ -22,14 +22,14 @@ class PriceSlider extends Component {
     }
     onSliderChange = (value) => {
         this.props.addPrice({ myMin: value[0], myMax: value[1] })
-        this.setState({ myMin: value[0], myMax: value[1] })
+        this.setState({ priceRange: {myMin: value[0], myMax: value[1] }})
     }
     updateLoadState = () => {
         this.setState({loaded: true})
       }
     getSpots = () => {
         let callback = (object) =>{
-            this.setState({ marks: object, myMin: this.props.min, myMax: this.props.max}
+            this.setState({ marks: object, priceRange: {myMin: this.props.min, myMax: this.props.max}}
             ,this.updateLoadState)
         }
         let total = this.props.max - this.props.min;
@@ -56,19 +56,21 @@ class PriceSlider extends Component {
             textTransform: 'none',
           }
         return (
-            <div>
+            <div style={{height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center'}}>
                 {this.state.loaded ? (
                 <div>
                 <label style={labelStyle}>
                     Price range
                 </label>
-                {this.state.myMin}
-                <Range allowCross={false} step={1} min={this.state.myMin} max={this.state.myMax}
-                    defaultValue={[this.state.myMin, this.state.myMax]} style={{ minWidth: '200px', width: 'auto', marginLeft: 20, marginRight: 20 }}
-                    onChange={this.onSliderChange} trackStyle={[{ backgroundColor: 'white' }, { backgroundColor: 'white' }]}
-                    handleStyle={[{ backgroundColor: '#99ff99' }, { backgroundColor: '#ffcc00' }]}
-                    railStyle={{ backgroundColor: 'gray' }} />
-                {this.state.myMax}</div>) : null }
+                <div style={{marginTop: '10px', display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+                {this.state.priceRange.myMin}
+                <Range marks={this.state.marks} allowCross={false} step={1} min={this.props.min} max={this.props.max}
+                defaultValue={[this.props.min, this.props.max]} style={{minWidth:'300px', width: 'auto', marginLeft: 20, marginRight: 20}}
+                onChange={this.onSliderChange} trackStyle={[{ backgroundColor: 'white' }, { backgroundColor: 'white' }]}
+                handleStyle={[{ backgroundColor: '#99ff99' }, { backgroundColor: '#ffcc00' }]}
+                railStyle={{ backgroundColor: 'gray' }}/>
+                {this.state.priceRange.myMax}</div>
+            </div>) : null }
             </div>
         )
 
