@@ -14,6 +14,7 @@ class App extends Component {
       isLoggedIn: false,
       currentTab: "landing",
       products: [],
+      shoppingCart: [],
       searchResults: [],
       max: Number,
       min: Number,
@@ -67,6 +68,29 @@ aggregateMaxAndMin = () => {
     }).catch(err => {
       console.log(err);
     })
+  }
+
+  addToCart = (boughtItem) => {
+    console.log(boughtItem)
+    let newCart = this.state.shoppingCart;
+    let found = false;
+    newCart.forEach(x => {
+      if(x.id === boughtItem.id){
+        found = true;
+        console.log("Found duplicate", x, boughtItem)
+      }
+    })
+    if (found === false){
+      newCart.push(boughtItem);
+    }
+    this.setState({shoppingCart: newCart})
+  }
+  removeFromCart = (itemToDelete) => {
+    let oldCart = this.state.shoppingCart
+    let newCart = (this.state.shoppingCart).filter(x => x.id !== itemToDelete.id)
+    this.setState({shoppingCart: newCart})
+    console.log(itemToDelete)
+
   }
 
 
@@ -148,14 +172,18 @@ getInitialProducts = () => {
     let currentApp = null;
     if (this.state.currentTab === "shop") {
       currentApp =
-          <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category}/>
+          <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category} cartFunction={this.addToCart}/>
+
     }
     return (
       <div className="App">
         <Menu setUser={this.setUserState}
           isLoggedIn={this.isLoggedIn}
           clickEvent={this.tabClick}
-          chosenTab={this.state.currentTab} />
+          chosenTab={this.state.currentTab}
+          cart={this.state.shoppingCart}
+          deleteCart={this.removeFromCart} />
+
         <main className="mainView">
         {currentApp}
           <div id="landingPage" className={((this.state.currentTab === "landing") && (this.state.isLoggedIn === false)) ? "show" : "hide"}>

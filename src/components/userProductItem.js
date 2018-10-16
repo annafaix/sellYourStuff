@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Card, Icon, Image } from 'semantic-ui-react'
 import Popups from './productPopup.js'
 
-class productItem extends Component {
+class userProdItem extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -17,9 +17,6 @@ class productItem extends Component {
       }
     }
   }
-  addProductToCart = () => {
-    this.props.cartFunction(this.state.item)
-  }
   render() {
     return (
       <div>
@@ -31,17 +28,18 @@ class productItem extends Component {
               <span className='date'>Listed by {this.props.userName}</span>
             </Card.Meta>
             <Card.Description>
-              <Popups product={this.state.item} addToCart={this.props.cartFunction}/>
+              this.state.info
             </Card.Description>
           </Card.Content>
-          <Card.Content >
-            <a href="/">
+          <Card.Content>
+            <a>
               <Icon name='user' />
               {this.props.price} Rupees
             </a>
             <br/>
             <span> Category: {this.props.category}</span>
-            <button onClick={this.addProductToCart}> Buy </button>
+            <button> Edit </button>
+            <button> Delete </button>
           </Card.Content>
         </Card>
       </div>
@@ -49,4 +47,4 @@ class productItem extends Component {
   }
 }
 
-export default productItem;
+export default userProdItem;
