@@ -16,6 +16,7 @@ export default class SearchComp extends Component {
 
   componentWillMount() {
       //Retrieving all products from database
+
       fetch('http://localhost:3000/api/search/', {
       method: 'POST',
       body: "message from search",
@@ -36,7 +37,19 @@ export default class SearchComp extends Component {
           price: data[i].price
         })
       }
+        /*
+          let array = [
+            {id: 1,
+            title: "hi all",
+            description: "lorem ipsum lala",
+            price: '2'},
+            {id: 2,
+            title: "many products",
+            description: "furniture",
+            price: '3'}
+          ]*/
           this.setState({products: editedList});
+          //this.setState({products: array});
           //for (var i = 0; i < data.length; i++) {
           //  console.log("Search results " + data[i].name);
           //}
