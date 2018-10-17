@@ -22,11 +22,11 @@ class cartItem extends Component {
   render() {
     return (
       <Card>
-        <Image src={this.props.userPicture} style={{height: "250px"}}/>
+        <Image src={this.props.product.userPicture} style={{height: "250px"}}/>
         <Card.Content>
           <Card.Header>{this.props.product.name}</Card.Header>
           <Card.Meta>
-            <span className='date'>Listed by {this.props.userName}</span>
+            <span className='date'>Listed by {this.props.product.userName}</span>
           </Card.Meta>
           <Card.Description >
           <Header>Listed by: {this.props.product.userName}</Header>

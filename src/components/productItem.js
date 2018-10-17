@@ -18,7 +18,7 @@ class productItem extends Component {
     }
   }
   addProductToCart = () => {
-    this.props.cartFunction(this.state.item)
+    this.props.cartFunction(this.props.item)
   }
   render() {
     return (
@@ -33,7 +33,7 @@ class productItem extends Component {
               <span className='date'>Listed by {this.props.userName}</span>
             </Card.Meta>
             <Card.Description >
-              <Popups product={this.state.item} addToCart={this.props.cartFunction}/>
+              <Popups product={this.props.item} addToCart={this.props.cartFunction}/>
             </Card.Description>
           </Card.Content>
           <Card.Content >

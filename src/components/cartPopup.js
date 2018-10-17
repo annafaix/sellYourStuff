@@ -22,8 +22,8 @@ class cartPopup extends Component {
   }
   render() {
     let cart = this.props.cart
-    let cartRender = cart.map(item => {
-      return <CartItem key={item.id} product={item} deleteCart={this.props.deleteCart}/>
+    let cartRender = cart.map((item, i) => {
+      return <CartItem key={i} product={item} deleteCart={this.props.deleteCart}/>
     })
     return (
       <div style={{height:"40%"}}>
