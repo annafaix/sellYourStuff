@@ -47,6 +47,9 @@ class App extends Component {
     this.setState({ isLoggedIn: bool, currentTab: "shop" })
     this.getUser()
   }
+  updateState = (productList) => {
+    this.setState({products: productList})
+  }
 
   changeToShop = () => this.setState({ currentTab: "shop" })
 
@@ -178,7 +181,11 @@ class App extends Component {
     let currentApp = null;
     if (this.state.currentTab === "shop") {
       currentApp =
-        <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category} cartFunction={this.addToCart} filterBySearch={this.filterBySearch}/>
+        <ProductList productsProp={this.state.products}
+        minRange={this.state.min} maxRange={this.state.max}
+        addCategory={this.addCategory} addPrice={this.addPrice}
+        category={this.state.category} cartFunction={this.addToCart}
+        filterBySearch={this.filterBySearch} updateState={this.updateState}/>
 
     }
     return (
