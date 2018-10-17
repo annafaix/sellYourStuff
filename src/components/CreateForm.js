@@ -38,16 +38,18 @@ class CreateForm extends React.Component {
       name: '',
       price: 1,
       category: 'Other',
-      userName: 'namn',
-      productCreatorId: this.props.userId,
-      imageName: 'fich.jpg',
+      userName: this.props.userProps.name,
+      userEmail: this.props.userProps.email,
+      imageName: '',
       userPicture: defaultimg,
       info: ''
     }
   }
 
-  sendFile = (productObject) =>{
-    console.log(productObject);
+
+  sendProduct = (productObject) =>{
+    console.log('sendfile');
+    // console.log(productObject);
     fetch('http://localhost:3000/api/createProduct', {
       method: 'POST',
       headers: {
@@ -83,10 +85,19 @@ class CreateForm extends React.Component {
     this.setState({ price: newNum})
   }
 
+  showFileName = (fileInput) => {
+    let placeholderName;
+    if (fileInput) {
+      placeholderName = fileInput.name;
+    }else {
+      placeholderName = 'No product image was chosen';
+    }
+    this.setState({imageName: placeholderName});
+  }
   uploadFile = () => {
     let link = defaultimg;
-    let file =  document.getElementById('photoUpload').files[0];
-    if (file) {
+    let theFile =  document.getElementById('photoUpload').files[0];
+    if (theFile) {
       let storage = firebase.storage();
       let storageRef = storage.ref();
 
@@ -94,7 +105,7 @@ class CreateForm extends React.Component {
         contentType: 'image/jpeg'
       };
       // Upload file and metadata to the object 'images/mountains.jpg'
-      var uploadTask = storageRef.child('/productImages/' + file.name).put(file, metadata);
+      var uploadTask = storageRef.child('/productImages/' + theFile.name).put(theFile, metadata);
 
       // Listen for state changes, errors, and completion of the upload.
       // console.log(firebase.storage.TaskEvent.STATE_CHANGED);
@@ -132,38 +143,36 @@ class CreateForm extends React.Component {
           console.log('File available at', downloadURL);
           console.log('image updated');
           link = downloadURL;
-          var jsonProductObject;
 
           console.log('validating image link ');
-
           this.validateImageLink(link, (existsImage) => {
             if(existsImage == true) {
-              this.setState({userPicture: link })
-              console.log('new image exist ', link);
-              jsonProductObject= JSON.stringify(this.state)
-              this.sendFile(jsonProductObject);
-              return;
-              // image exist
+              this.setState({userPicture: link }, () => {
+                console.log('firebase update. ', this.state);
+                let firebaseObject= JSON.stringify(this.state);
+                this.sendProduct(firebaseObject);
+              });
             }
             else {
-              console.log('image do not exist on', link);
-              this.setState({userPicture: defaultimg })
-              jsonProductObject= JSON.stringify(this.state)
-              this.sendFile(jsonProductObject);
-              return;
-              // image not exist
+              this.setState({userPicture: defaultimg }, () => {
+                console.log('firebase update. ', this.state);
+                let firebaseObject= JSON.stringify(this.state);
+                this.sendProduct(firebaseObject);
+              });
             }
           });
-          // console.log(this.state);
+
         });
       });
-    }else {
+    }else if(!theFile) {
       console.log('you did not pick an image, you recived a default image');
       link = defaultimg;
-      this.setState({userPicture: link })
-      console.log(this.state);
-      let productObject= JSON.stringify(this.state)
-      this.sendFile(productObject);
+      this.setState({userPicture: link }, () => {
+        console.log('default update. ', this.state);
+        let defaultObject= JSON.stringify(this.state);
+        this.sendProduct(defaultObject);
+      });
+      // console.log(this.state);
       return;
     }
 
@@ -230,14 +239,14 @@ class CreateForm extends React.Component {
               type="file"
               id="photoUpload"
               name="productPhoto"
-              onChange={(e) => console.log(e.target.value.name)}
+              onChange={(e) => this.showFileName(document.getElementById('photoUpload').files[0] )}
               style={{ display: "none" }} />
           </div>
           <p style={{ margin: "2rem 0 0 0" }}> {this.state.imageName}</p>
 
           <br />
 
-          <Button onClick={()=> this.uploadFile()} type='submit' color='green'> Submit </Button>
+          <Button onClick={()=> this.uploadFile()} color='green'> Submit </Button>
           <Button basic color='red' onClick={()=>console.log('cancel')}> Cancel </Button>
         </Form>
        </div>

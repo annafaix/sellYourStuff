@@ -283,28 +283,32 @@ server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {
 
 //Elin testar
 server.post('/api/createProduct', jsonParser, (req, res) => {
-  console.log(req.params.isLoggedIn);
-  console.log('body: ', req.body);
+  // console.log(req.params.isLoggedIn);
+  // console.log('body: ', req.body);
 
   let newProduct = JSON.parse(req.body);
-  // console.log('newProduct: ', newProduct);
-  console.log('product passed through: ', newProduct)
-  connectToMongo(true, newProduct, uploadNewProduct, res, productCollection);
-})
 
-const uploadNewProduct = (catalogue, options, res, client, closeClient) => {
-      let productObject = options;
+  // console.log('newProduct type: ', typeof newProduct); // is an object
+  // console.log('product passed through: ', newProduct) // logs object
+  connectToMongo('true', newProduct, uploadNewProduct, res, productCollection);
+})
+// callback(catalogue, options, res, client, closeClient)
+const uploadNewProduct = (catalogue, productObject, res, client, closeClient) => {
+      console.log('before insert productObject type is: ', typeof productObject);
+      // console.log('and object is: ', productObject);
+      // console.log(cata);
       catalogue.insertOne(productObject, (err, result)=> {
         if (err) {
-          console.log('someting wnt wrong with uploding product: ', err);
+          console.log('someting went wrong with uploding product: ', err);
           client.close();
-        }else {
-          console.log('product was succesfully added: ', result);
+          return;
         }
-        res
-            .send(result)
-            .end();
-      }, closeClient)
+        console.log('product was succesfully added', productObject);
+        client.close();
+        res.send(result)
+        res.end();
+        return;
+      });
 }
 
 server.get('/api/users/:id', (req, res) => {

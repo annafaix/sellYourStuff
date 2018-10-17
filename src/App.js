@@ -102,7 +102,7 @@ getInitialProducts = () => {
       q = '?myMin='+min+'&myMax='+max;
     }
     console.log("q = " + q)
-    fetch('http://localhost:3000/api/filter/' + category + 
+    fetch('http://localhost:3000/api/filter/' + category +
     q, {
       method: 'GET',
       headers: {
@@ -120,7 +120,7 @@ getInitialProducts = () => {
   }
   // use function add filter, the filterMeBaby[...] is just a callback. It's called inside addFilter
   addCategory = (category) => {
-    this.setState({ category: category }, 
+    this.setState({ category: category },
       this.filterMeBabyOhYeahFilterMePlease(category, this.state.priceRange)
   )
   }
@@ -128,7 +128,7 @@ getInitialProducts = () => {
     this.setState({ priceRange: price })
     this.filterMeBabyOhYeahFilterMePlease(this.state.category, price)
   }
-  // filter funktion tar ett filter-objekt som parameter t.ex.: 
+  // filter funktion tar ett filter-objekt som parameter t.ex.:
   // {category: "furniture"}
 
 
@@ -147,7 +147,7 @@ getInitialProducts = () => {
       currentApp = <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice}/>
     }
     if (this.state.currentTab === "create") {
-      currentApp = <Create userId={123}/>
+      currentApp = <Create userProps={this.state.user}/>
     }
     return (
       <div className="App">
