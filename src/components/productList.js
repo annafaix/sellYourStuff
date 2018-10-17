@@ -23,7 +23,8 @@ class productList extends Component {
                 info={product.info}
                 userPicture={product.userPicture}
                 price={product.price}
-                category={product.category}/>
+                category={product.category}
+                item={product}/>
     })
     return (
       <div style={{marginLeft:"50px", marginRight:"50px"}} >

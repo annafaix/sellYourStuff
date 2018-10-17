@@ -21,7 +21,7 @@ class productItem extends Component {
   }
   addProductToCart = () => {
     this.setTimeoutForBuy();
-    this.props.cartFunction(this.state.item);
+    this.props.cartFunction(this.props.item);
   }
   changeBackBtnColor =()=> {
     setTimeout(()=>this.setState({color: "green", content: "Buy"}), 3000)
@@ -43,7 +43,7 @@ class productItem extends Component {
               <span className='date'>Listed by {this.props.userName}</span>
             </Card.Meta>
             <Card.Description >
-              <Popups product={this.state.item} addToCart={this.props.cartFunction}/>
+              <Popups product={this.props.item} addToCart={this.props.cartFunction}/>
             </Card.Description>
           </Card.Content>
           <Card.Content >

@@ -95,6 +95,7 @@ export default class SearchComp extends Component {
       const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
       const isMatch = result => re.test(result.title)
       let ogList = _.filter(this.state.products, isMatch).map(item => {
+        console.log(item)
         return {
           userName: item.username,
           name: item.title,
