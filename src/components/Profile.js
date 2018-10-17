@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Button, Icon, Form, TextArea, Card , Divider} from 'semantic-ui-react'
+import { Image, Button, Icon, Form, TextArea, Divider} from 'semantic-ui-react'
 import fetch from 'isomorphic-fetch'
 import UserProdItem from './userProductItem.js'
 
@@ -31,7 +31,7 @@ export default class Profile extends Component{
     fetch( urlFetch,
       { method: 'PUT',
       body: body })
-      .then(res => { console.log(res) })
+      .then(res => {  })
       .catch(error => console.error('Error:', error))
       this.closeEdit();
   }

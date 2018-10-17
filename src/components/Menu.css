@@ -106,14 +106,11 @@ nav div:hover {
   justify-content: center;
   align-items: center;
   padding: 3px 13px 3px 13px;
-  background-color: #00CD00;
-  background-color: #F9B233;
+  background-color: #F2711C;
   height: 30px;
   border-radius: 3px;
-  border: 2px solid #00CD00;
-  border: 1px solid #F9B233;
+  border: 2px solid #F2711C;
   cursor: pointer;
-  color:#000;
 }
 .menuBtn:hover {
   background-color: #505050;

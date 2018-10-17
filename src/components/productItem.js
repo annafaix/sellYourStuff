@@ -14,12 +14,22 @@ class productItem extends Component {
         id: this.props.id,
         price: this.props.price,
         category: this.props.category,
-      }
+      },
+      color: "green",
+      content: "Buy"
     }
   }
   addProductToCart = () => {
-    this.props.cartFunction(this.state.item)
+    this.setTimeoutForBuy();
+    this.props.cartFunction(this.state.item);
   }
+  changeBackBtnColor =()=> {
+    setTimeout(()=>this.setState({color: "green", content: "Buy"}), 3000)
+  }
+  setTimeoutForBuy=()=> {
+    this.setState({color: "orange", content: "Added"}, this.changeBackBtnColor())
+  }
+
   render() {
     return (
         <Card>
@@ -37,7 +47,7 @@ class productItem extends Component {
             </Card.Description>
           </Card.Content>
           <Card.Content >
-            <Button color="green"   floated='right' onClick={this.addProductToCart}> Buy </Button>
+            <Button color={this.state.color}   floated='right' onClick={this.addProductToCart}> {this.state.content} </Button>
             <br/>
             <div>
             <Header sub>Price</Header>
