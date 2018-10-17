@@ -118,7 +118,7 @@ export default class SearchComp extends Component {
   render() {
 
   const { isLoading, value, results } = this.state
-  console.log("Search value is " + this.state.value);
+  //console.log("Search value is " + this.state.value);
 
   const labelStyle = {
       display: 'block',
