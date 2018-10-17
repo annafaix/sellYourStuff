@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Button, Header, Modal } from 'semantic-ui-react'
+import {Image, Button, Header, Modal, Card } from 'semantic-ui-react'
 
 class cartItem extends Component {
   constructor(props){
@@ -21,18 +21,23 @@ class cartItem extends Component {
   }
   render() {
     return (
-      <div>
-        <Modal.Header>{this.props.product.name}</Modal.Header>
-        <Modal.Content image>
-        <Image wrapped size='medium' src={this.props.product.userPicture} />
-            <Modal.Description>
-              <Header>Listed by: {this.props.product.userName}</Header>
-              <p>{this.props.product.info}</p>
-              <p>{this.props.product.price} Rupees</p>
-              <Button onClick={this.compRemoveFromCart} color="red"> Delete </Button>
-              </Modal.Description>
-            </Modal.Content>
-        </div>
+      <Card>
+        <Image src={this.props.userPicture} style={{height: "250px"}}/>
+        <Card.Content>
+          <Card.Header>{this.props.product.name}</Card.Header>
+          <Card.Meta>
+            <span className='date'>Listed by {this.props.userName}</span>
+          </Card.Meta>
+          <Card.Description >
+          <Header>Listed by: {this.props.product.userName}</Header>
+          <p>{this.props.product.info}</p>
+          <p>{this.props.product.price} Rupees</p>
+          <Button onClick={this.compRemoveFromCart} color="red"> Delete </Button>
+
+          </Card.Description>
+        </Card.Content>
+      </Card>
+
     );
   }
 }

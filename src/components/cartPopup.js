@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Modal } from 'semantic-ui-react'
+import {Button,Modal, Icon } from 'semantic-ui-react'
 import CartItem from './cartItem.js'
 import fetch from 'isomorphic-fetch'
 
@@ -26,11 +26,14 @@ class cartPopup extends Component {
       return <CartItem key={item.id} product={item} deleteCart={this.props.deleteCart}/>
     })
     return (
-      <div>
+      <div style={{height:"40%"}}>
           <Modal.Content >
             {cartRender}
           </Modal.Content>
-          <button onClick={this.buyFromDB}> Finalize purchase </button>
+          <Button onClick={this.buyFromDB} primary floated="right">
+          <Icon disabled name='payment' />
+          Finalize purchase
+          </Button>
       </div>
     );
   }
