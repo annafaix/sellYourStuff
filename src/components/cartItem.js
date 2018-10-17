@@ -36,9 +36,8 @@ class cartItem extends Component {
 
           </Card.Description>
         </Card.Content>
-
       </Card>
-    
+
     );
   }
 }

@@ -25,17 +25,31 @@ class App extends Component {
       loaded2: false
     }
     this.tabClick = this.tabClick.bind(this);
+    //this.filterBySearch = this.filterBySearch.bind(this);
   }
   tabClick(ind) {
-    console.log('Tab clicked: ' + ind);
     this.setState({ currentTab: ind });
   }
+
+  //filterBySearch(result) {
+    //console.log('Searched product result: ' + result.name);
+    //this.setState({ products: result });
+  //}
+
+  filterBySearch = (result) => {
+      console.log("Result from search " + result[0].name);
+      this.setState({ products: result });
+  }
+
   setUserState = (user, credentials) => {
     this.setState({ user: user, credentials: credentials });
   }
   isLoggedIn = (bool) => {
     this.setState({ isLoggedIn: bool, currentTab: "shop" })
     this.getUser()
+  }
+  updateState = (productList) => {
+    this.setState({products: productList})
   }
 
   changeToShop = () => this.setState({ currentTab: "shop" })
@@ -52,7 +66,6 @@ class App extends Component {
   //här vill jag spara user data från databasen för att skicka till Profile.js
   setUserData = (recivedData) => {
     this.setState({ user: recivedData });
-    // console.log(this.state.user);
   }
 
   emptyShoppingCart = () => {
@@ -72,7 +85,6 @@ class App extends Component {
       return response.json()
     }).then(data => {
       this.setState({ max: data.max, min: data.min, priceRange: { myMin: data.min, myMax: data.max }, loaded: true }, () => {
-        console.log('state:', this.state);
       });
     }).catch(err => {
       console.log(err);
@@ -80,13 +92,11 @@ class App extends Component {
   }
 
   addToCart = (boughtItem) => {
-    console.log(boughtItem)
     let newCart = this.state.shoppingCart;
     let found = false;
     newCart.forEach(x => {
       if (x.id === boughtItem.id) {
         found = true;
-        console.log("Found duplicate", x, boughtItem)
       }
     })
     if (found === false) {
@@ -95,22 +105,18 @@ class App extends Component {
     this.setState({ shoppingCart: newCart })
   }
   removeFromCart = (itemToDelete) => {
-    let oldCart = this.state.shoppingCart
     let newCart = (this.state.shoppingCart).filter(x => x.id !== itemToDelete.id)
     this.setState({ shoppingCart: newCart })
-    console.log(itemToDelete)
 
   }
   updateLoadState = () => {
     this.setState({loaded2: true})
   }
   getInitialProducts = () => {
-    console.log("Inside component")
     let req = new XMLHttpRequest();
     req.onreadystatechange = (event) => {
-      if (req.readyState == 4) {
+      if (req.readyState === 4) {
         this.setState({ products: JSON.parse(req.response) }, this.updateLoadState);
-        // console.log(this.state.products)
       }
       else {
         // console.log(req.status)
@@ -121,20 +127,16 @@ class App extends Component {
   }
 
   filterMeBabyOhYeahFilterMePlease = (category, priceRange) => {
-    // console.log("filterMeBabyCalled")
-    console.log(category, priceRange)
-    console.log(priceRange.myMin)
     let q, min, max;
-    if ((priceRange.myMin == this.state.min && priceRange.myMax == this.state.max) ||
+    if ((priceRange.myMin === this.state.min && priceRange.myMax === this.state.max) ||
       typeof priceRange.myMin != 'number' || typeof priceRange.myMax != 'number') {
-      if (category == 'all') this.getInitialProducts();
+      if (category === 'all') this.getInitialProducts();
       else q = ''
     } else {
       min = priceRange.myMin;
       max = priceRange.myMax;
       q = '?myMin=' + min + '&myMax=' + max;
     }
-    console.log("q = " + q)
     fetch('http://localhost:3000/api/filter/' + category +
       q, {
         method: 'GET',
@@ -142,10 +144,8 @@ class App extends Component {
           "Access-Control-Allow-Origin": "*",
         }
       }).then(response => {
-        console.log(response)
         return response.json()
       }).then(data => {
-        console.log(data)
         this.setState({ products: data });
       }).catch(err => {
         console.log(err);
@@ -191,7 +191,11 @@ class App extends Component {
     let currentApp = null;
     if (this.state.currentTab === "shop") {
       currentApp =
-        <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category} cartFunction={this.addToCart} />
+        <ProductList productsProp={this.state.products}
+        minRange={this.state.min} maxRange={this.state.max}
+        addCategory={this.addCategory} addPrice={this.addPrice}
+        category={this.state.category} cartFunction={this.addToCart}
+        filterBySearch={this.filterBySearch} updateState={this.updateState}/>
 
     }
     return (
