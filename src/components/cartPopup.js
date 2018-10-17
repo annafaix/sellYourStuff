@@ -26,7 +26,7 @@ class cartPopup extends Component {
       return <CartItem key={item.id} product={item} deleteCart={this.props.deleteCart}/>
     })
     return (
-      <div>
+      <div style={{height:"40%"}}>
           <Modal.Content >
             {cartRender}
           </Modal.Content>

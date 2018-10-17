@@ -80,6 +80,8 @@ export default class Profile extends Component{
     }
     return(
       <div style={{marginLeft:"50px", marginRight:"50px"}}>
+      <h2>My profile</h2>
+      <Divider/>
       <div className="ui raised card centered fluid" style={{backgroundColor:"F4F4F4"}}>
         <div className="content profile">
         <Image src={this.props.user.picture}
@@ -128,9 +130,9 @@ export default class Profile extends Component{
     </Button>
     <h2>My adds to sell:</h2>
     <Divider/>
-    <Card.Group className="ui three stackable cards" style={{width: '70%', marginBottom: '40px'}}>
-      {userProductArray}
-    </Card.Group>
+      <div className="ui stackable cards centered" style={{width: '80%', marginBottom: '40px'}}>
+        {userProductArray}
+      </div>
     </div>
     )
   }

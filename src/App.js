@@ -179,8 +179,8 @@ class App extends Component {
       const sayWelcome = !this.state.isLoggedIn? (
         null
       ) : (
-        <div>
-          <h1 style={{textAlign:"center", marginBottom:"20px"}}> Welcome {this.state.user.given_name}! </h1>
+        <div style={{textAlign:"center", marginBottom:"20px", marginLeft:"50px", marginRight:"50px"}} >
+          <h1> Welcome {this.state.user.given_name}! </h1>
           <Divider/>
         </div>
         )
