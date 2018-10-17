@@ -28,13 +28,16 @@ export default class SearchComp extends Component {
         return response.json()
       }).then(data => {
         let editedList = [];
+
         for (var i = 0; i < data.length; i++) {
           editedList.push({
           id: data[i]["_id"],
           title: data[i].name,
           description: data[i].info,
           image: data[i].userPicture,
-          price: data[i].price
+          price: data[i].price.toString(),
+          category: data[i].category,
+          username: data[i].userName
         })
       }
           this.setState({products: editedList});
@@ -64,7 +67,41 @@ export default class SearchComp extends Component {
     })
   }
 
-  handleResultSelect = (e, { result }) => this.setState({ value: result.title })
+  //handleResultSelect = (e, { result }) => this.setState({ value: "" })
+
+    handleResultSelect = (e, { result }) => {
+       this.setState({ value: "" });
+       //console.log("Chosen product by search " + result.id);
+       //console.log("Chosen product by search " + result.title);
+       //console.log("Chosen product by search " + result.title);
+       //console.log("Chosen product by search " + result.description);
+       //console.log("Chosen product by search " + result.image);
+       //console.log("Chosen product by search " + result.price);
+       //console.log("Chosen product by search " + result.category);
+       //console.log("Chosen product by search " + result.userName);
+       /*
+       id: data[i]["_id"],
+       title: data[i].name,
+       description: data[i].info,
+       image: data[i].userPicture,
+       price: data[i].price.toString(),
+       category: data[i].category,
+       username: data[i].userName
+       */
+       let tempArray = [];
+       tempArray.push({
+            "_id": {
+                "$oid": result.id},
+            "name": result.title,
+            "price": result.price,
+            "category": result.category,
+            "userName": result.username,
+            "userPicture": result.image,
+            "info": result.description
+       });
+
+       this.props.filterBySearch(tempArray);
+    }
 
   handleSearchChange = (e, { value }) => {
     this.setState({ isLoading: true, value })
@@ -94,7 +131,7 @@ export default class SearchComp extends Component {
   //  console.log("Search results " + results[i].title);
   //}
   const { isLoading, value, results } = this.state
-  console.log("Result is " + this.state.results.title);
+  //console.log("Result is " + this.state.results);
     return (
       <div>
           <Input icon placeholder='Search...' style={{margin:"3px 20px 3px 20px"}}>
@@ -104,7 +141,7 @@ export default class SearchComp extends Component {
             onSearchChange={_.debounce(this.handleSearchChange, 30, { loading: true })}
             results={results} key={this.generateKey}
             value={value}
-            {...this.props}
+
           />
           </Input>
       </div>
