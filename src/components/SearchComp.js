@@ -14,7 +14,7 @@ export default class SearchComp extends Component {
     //this.handleResultSelect = this.resetComponent.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
       //Retrieving all products from database
 
       fetch('http://localhost:3000/api/search/', {
