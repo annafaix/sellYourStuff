@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Icon, Image, Button } from 'semantic-ui-react'
+import {Card, Icon, Image, Button, Label, Header } from 'semantic-ui-react'
 import Popups from './productPopup.js'
 
 class productItem extends Component {
@@ -25,20 +25,25 @@ class productItem extends Component {
         <Card>
           <Image src={this.props.userPicture} style={{height: "250px"}}/>
           <Card.Content>
+          <Label color="black" ribbon="right">
+          {this.props.category}
+          </Label>
             <Card.Header>{this.props.name}</Card.Header>
             <Card.Meta>
               <span className='date'>Listed by {this.props.userName}</span>
             </Card.Meta>
-            <Card.Description>
+            <Card.Description >
               <Popups product={this.state.item} addToCart={this.props.cartFunction}/>
             </Card.Description>
           </Card.Content>
           <Card.Content >
-            <span> Category: {this.props.category}</span>
             <Button color="green"   floated='right' onClick={this.addProductToCart}> Buy </Button>
             <br/>
+            <div>
+            <Header sub>Price</Header>
             <Icon name='rupee' />
-            {this.props.price} Rupees
+            <span>{this.props.price} Rupees</span>
+            </div>
           </Card.Content>
         </Card>
     );
