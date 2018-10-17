@@ -27,7 +27,7 @@ class productList extends Component {
     })
     return (
       <div style={{marginLeft:"50px", marginRight:"50px"}} >
-          <div className="searchFilter" style={{padding:'20px 30px 20px 30px', backgroundColor:'#e0e0d1', display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginBottom: '40px'}}>
+          <div className="searchFilter" style={{padding:'20px', backgroundColor:'#e0e0d1', display: 'flex', flexFlow: 'row nowrap', alignItems: 'center', justifyContent: 'space-around', marginBottom: '40px'}}>
               <SearchComp filterBySearch={this.props.filterBySearch} updateState={this.props.updateState}/>
               <FilterCat category={this.props.category} size="small" addCategory={this.props.addCategory}/>
               <PriceSlider addPrice={this.props.addPrice} min={this.props.minRange} max={this.props.maxRange}/>
