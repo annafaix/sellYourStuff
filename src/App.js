@@ -24,10 +24,22 @@ class App extends Component {
       loaded2: false
     }
     this.tabClick = this.tabClick.bind(this);
+    //this.filterBySearch = this.filterBySearch.bind(this);
   }
   tabClick(ind) {
     this.setState({ currentTab: ind });
   }
+
+  //filterBySearch(result) {
+    //console.log('Searched product result: ' + result.name);
+    //this.setState({ products: result });
+  //}
+
+  filterBySearch = (result) => {
+      console.log("Result from search " + result[0].name);
+      this.setState({ products: result });
+  }
+
   setUserState = (user, credentials) => {
     this.setState({ user: user, credentials: credentials });
   }
@@ -166,7 +178,7 @@ class App extends Component {
     let currentApp = null;
     if (this.state.currentTab === "shop") {
       currentApp =
-        <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category} cartFunction={this.addToCart} />
+        <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category} cartFunction={this.addToCart} filterBySearch={this.filterBySearch}/>
 
     }
     return (
