@@ -252,7 +252,7 @@ const updateUser = (catalogue, { detail, setDocument }, res, client, closeClient
 const searchFunc = (catalogue, searchWord, res, client, closeClient) => {
     let returnList = null;
     let db = client.db(databaseName)
-    console.log('Connected to mongo database.')
+    //console.log('Connected to mongo database.')
     catalogue.find().toArray((err, result) => {
         returnList = result;
         if (returnList !== null) {

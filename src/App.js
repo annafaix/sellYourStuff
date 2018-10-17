@@ -37,7 +37,7 @@ class App extends Component {
   //}
 
   filterBySearch = (result) => {
-      console.log("Result from search " + result[0].name);
+      //console.log("Result from search " + result[0].name);
       this.setState({ products: result });
   }
 
