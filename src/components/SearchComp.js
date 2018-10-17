@@ -118,9 +118,21 @@ export default class SearchComp extends Component {
   render() {
 
   const { isLoading, value, results } = this.state
-  //console.log("Result is " + this.state.results);
+  console.log("Search value is " + this.state.value);
+
+  const labelStyle = {
+      display: 'block',
+      margin: '0 0 .28571429rem 0',
+      color: 'rgba(0,0,0,.87)',
+      fontSize: ' .92857143em',
+      fontWeight: '700',
+      textTransform: 'none',
+    }
     return (
       <div>
+        <label style={labelStyle}>
+            Search
+        </label>
           <Input icon placeholder='Search...' style={{margin:"3px 20px 3px 20px"}}>
           <Search
             loading={isLoading}
