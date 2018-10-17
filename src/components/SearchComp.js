@@ -7,11 +7,10 @@ import './Search.css';
 export default class SearchComp extends Component {
   constructor(props) {
     super(props);
-    this.state = {value: "", products:[], isLoading: false, results:[], key: 0};
+    this.state = {value: "", products:[], isLoading: false, results:[]};
     //this.handleChange = this.handleChange.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.resetComponent = this.resetComponent.bind(this);
-    //this.handleResultSelect = this.resetComponent.bind(this);
   }
 
   componentDidMount() {
@@ -59,34 +58,18 @@ export default class SearchComp extends Component {
   resetComponent(){
     this.setState({ isLoading: false, results: [], value: '' })
   }
-
+/*
   generateKey(){
     this.setState({ key: this.state.key + 1 }, () => {
       return this.state.key
     })
-  }
+  }*/
 
   //handleResultSelect = (e, { result }) => this.setState({ value: "" })
 
     handleResultSelect = (e, { result }) => {
        this.setState({ value: "" });
-       //console.log("Chosen product by search " + result.id);
-       //console.log("Chosen product by search " + result.title);
-       //console.log("Chosen product by search " + result.title);
-       //console.log("Chosen product by search " + result.description);
-       //console.log("Chosen product by search " + result.image);
-       //console.log("Chosen product by search " + result.price);
-       //console.log("Chosen product by search " + result.category);
-       //console.log("Chosen product by search " + result.userName);
-       /*
-       id: data[i]["_id"],
-       title: data[i].name,
-       description: data[i].info,
-       image: data[i].userPicture,
-       price: data[i].price.toString(),
-       category: data[i].category,
-       username: data[i].userName
-       */
+
        let tempArray = [];
        tempArray.push({
             "_id": {
@@ -134,14 +117,9 @@ export default class SearchComp extends Component {
 
 
   render() {
-  let products = this.state.results;
-  if(products){
-  for (var i = 0; i < products.length; i++) {
-    console.log("Search results " + products[i].name);
-  }
-}
+
   const { isLoading, value, results } = this.state
-  console.log("Search value is " + this.state.value);
+  //console.log("Search value is " + this.state.value);
 
   const labelStyle = {
       display: 'block',
@@ -161,7 +139,7 @@ export default class SearchComp extends Component {
             loading={isLoading}
             onResultSelect={this.handleResultSelect}
             onSearchChange={_.debounce(this.handleSearchChange, 30, { loading: true })}
-            results={results} key={this.generateKey}
+            results={results}
             value={value}
 
           />

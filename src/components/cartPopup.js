@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button,Modal, Icon } from 'semantic-ui-react'
+import {Button, Icon, Card } from 'semantic-ui-react'
 import CartItem from './cartItem.js'
 import fetch from 'isomorphic-fetch'
 
@@ -21,18 +21,22 @@ class cartPopup extends Component {
     this.props.emptyCart()
   }
   render() {
-    let cart = this.props.cart
+    let cart = this.props.cart;
+    if(cart.length === 0 ){
+      return <h1>Your shopping basket is empty</h1>;
+    }
     let cartRender = cart.map((item, i) => {
-      return <CartItem key={i} product={item} deleteCart={this.props.deleteCart}/>
+      return <CartItem key={i} product={item}  deleteCart={this.props.deleteCart}/>
     })
     return (
-      <div style={{height:"40%"}}>
-          <Modal.Content >
-            {cartRender}
-          </Modal.Content>
-          <Button onClick={this.buyFromDB} primary floated="right">
-          <Icon disabled name='payment' />
-          Finalize purchase
+      <div style={{padding:"10px"}}>
+        <h1>My shopping basket</h1>
+        <Card.Group className="ui stackable cards">
+          {cartRender}
+          </Card.Group>
+          <Button onClick={this.buyFromDB} primary style={{marginTop:"20px"}}>
+            <Icon name='payment' />
+            Finalize purchase
           </Button>
       </div>
     );

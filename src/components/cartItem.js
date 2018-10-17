@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Image, Button, Header, Modal, Card } from 'semantic-ui-react'
+import {Image, Button, Card } from 'semantic-ui-react'
 
 class cartItem extends Component {
   constructor(props){
@@ -29,15 +29,12 @@ class cartItem extends Component {
             <span className='date'>Listed by {this.props.product.userName}</span>
           </Card.Meta>
           <Card.Description >
-          <Header>Listed by: {this.props.product.userName}</Header>
           <p>{this.props.product.info}</p>
           <p>{this.props.product.price} Rupees</p>
-          <Button onClick={this.compRemoveFromCart} color="red"> Delete </Button>
-
+          <Button onClick={this.compRemoveFromCart} basic fluid color="red"> Delete from shopping basket</Button>
           </Card.Description>
         </Card.Content>
       </Card>
-
     );
   }
 }

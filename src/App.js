@@ -6,7 +6,7 @@ import Menu from './components/MenuHeader'
 import Profile from './components/Profile'
 import LandingPage from './components/LandingPage'
 import fetch from 'isomorphic-fetch'
-import {Divider} from 'semantic-ui-react'
+import {Divider } from 'semantic-ui-react'
 
 class App extends Component {
   constructor(props) {
@@ -37,7 +37,7 @@ class App extends Component {
   //}
 
   filterBySearch = (result) => {
-      console.log("Result from search " + result[0].name);
+      //console.log("Result from search " + result[0].name);
       this.setState({ products: result });
   }
 
@@ -60,7 +60,7 @@ class App extends Component {
     fetch(urlFetch,
       { method: 'GET' })
       .then(res => { return res.json() })
-      .then(data => { this.setState({ user: data }) })
+      .then(data => { this.setUserData(data) })
       .catch(err => { console.log("Error is", err) })
   };
   //här vill jag spara user data från databasen för att skicka till Profile.js
@@ -173,10 +173,13 @@ class App extends Component {
     const loggedIn = !this.state.user ? (
       null
     ) : (
-        <Profile user={this.state.user} />
+        <Profile user={this.state.user} getUser={this.getUser} />
       )
+    const landingPage = (this.state.currentTab === "landing" && !this.state.isLoggedIn) ? (
+      <LandingPage changeToShop={this.changeToShop} />
+    ) : null;
 
-      const sayWelcome = !this.state.isLoggedIn? (
+    const sayWelcome = !this.state.isLoggedIn? (
         null
       ) : (
         <div style={{textAlign:"center", marginBottom:"20px", marginLeft:"50px", marginRight:"50px"}} >
@@ -184,10 +187,6 @@ class App extends Component {
           <Divider/>
         </div>
         )
-    const landingPage = (this.state.currentTab == "landing" && !this.state.isLoggedIn) ? (
-      <LandingPage changeToShop={this.changeToShop} />
-    ) : null;
-
     let currentApp = null;
     if (this.state.currentTab === "shop") {
       currentApp =
