@@ -46,7 +46,6 @@ class CreateForm extends React.Component {
     }
   }
 
-
   sendProduct = (productObject) =>{
     console.log('sendfile');
     // console.log(productObject);
@@ -84,6 +83,20 @@ class CreateForm extends React.Component {
       newNum = Number(num);
     }
     this.setState({ price: newNum})
+  }
+
+  onCancelCreate = () => {
+
+    this.setState({name: '',
+      price: 1,
+      category: 'Other',
+      userName: this.props.userProps.name,
+      userEmail: this.props.userProps.email,
+      imageName: '',
+      userPicture: defaultimg,
+      info: ''});
+    this.props.tabClick('profile');
+
   }
 
   showFileName = (fileInput) => {
@@ -147,7 +160,7 @@ class CreateForm extends React.Component {
 
           console.log('validating image link ');
           this.validateImageLink(link, (existsImage) => {
-            if(existsImage == true) {
+            if(existsImage === true) {
               this.setState({userPicture: link }, () => {
                 console.log('firebase update. ', this.state);
                 let firebaseObject= JSON.stringify(this.state);
@@ -180,6 +193,7 @@ class CreateForm extends React.Component {
   }
 
   render() {
+    // const initialCreate = this.state;
     // console.log(typeof this.state.price);
     return (
       <div>
@@ -191,7 +205,7 @@ class CreateForm extends React.Component {
           </Header.Content>
         </Header>
 
-          <Form.Field>
+          <Form.Field required>
             <label>Title</label>
             <input
               placeholder='What are you selling'
@@ -202,6 +216,7 @@ class CreateForm extends React.Component {
           </Form.Field>
 
           <Form.TextArea
+            required
             label='Product information'
             placeholder='Tell us more about youre product...'
             value={this.state.info}
@@ -247,8 +262,8 @@ class CreateForm extends React.Component {
 
           <br />
 
-          <Button onClick={()=> this.uploadFile()} color='green'> Submit </Button>
-          <Button basic color='red' onClick={()=> this.props.tabClick('profile')}> Cancel </Button>
+          {this.state.name.length > 0 && this.state.info.length > 0 ? <Button onClick={()=> this.uploadFile()} color='green'> Submit </Button> : <Button disabled color='green'> Submit </Button>}
+          <Button type="button" basic color='red' onClick={()=> this.onCancelCreate()}> Cancel </Button>
         </Form>
        </div>
     )

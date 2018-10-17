@@ -289,7 +289,7 @@ const getInitialProps = (catalogue, filter, res, client, closeClient) => {
 const findUserProducts = (catalogue, filter, res, client, closeClient) => {
   let returnList = null;
   console.log(filter)
-  catalogue.find({userName: filter}).toArray((err, result) => {
+  catalogue.find({userEmail: filter}).toArray((err, result) => {
     returnList = result;
     console.log("finduserprod: ", returnList[(Math.floor(Math.random()*5))])
     res.header("Access-Control-Allow-Origin", '*')
@@ -310,7 +310,7 @@ server.post('/api/search', jsonParser, (req,res) => {
     //let searchText = JSON.stringify(req.body);
     console.log('server get request from search comp ' + req.body);
     connectToMongo('false', {}, searchFunc, res, productCollection);
-    
+
 });
 
 server.post('/api/signUp/:isLoggedIn', jsonParser, (req, res) => {

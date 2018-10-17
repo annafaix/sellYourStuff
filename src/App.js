@@ -186,7 +186,7 @@ class App extends Component {
           <Divider/>
         </div>
         )
-    const landingPage = (this.state.currentTab == "landing" && !this.state.isLoggedIn) ? (
+    const landingPage = (this.state.currentTab === "landing" && !this.state.isLoggedIn) ? (
       <LandingPage changeToShop={this.changeToShop} />
     ) : null;
 
