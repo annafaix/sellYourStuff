@@ -13,7 +13,7 @@ export default class SearchComp extends Component {
     this.handleResultSelect = this.resetComponent.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
       //Retrieving all products from database
       fetch('http://localhost:3000/api/search/', {
       method: 'POST',
@@ -69,6 +69,7 @@ export default class SearchComp extends Component {
 }
   const { isLoading, value, results } = this.state
   console.log("Search value is " + this.state.value);
+
     return (
       <div>
           <Input icon placeholder='Search...' style={{margin:"3px 20px 3px 20px"}}>

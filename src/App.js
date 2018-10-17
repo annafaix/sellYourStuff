@@ -19,7 +19,9 @@ class App extends Component {
       max: Number,
       min: Number,
       category: 'all',
-      priceRange:{}
+      priceRange: {},
+      loaded: false,
+      loaded2: false
     }
     this.tabClick = this.tabClick.bind(this);
   }
@@ -27,7 +29,7 @@ class App extends Component {
     console.log('Tab clicked: ' + ind);
     this.setState({ currentTab: ind });
   }
-  setUserState = (user, credentials) =>{
+  setUserState = (user, credentials) => {
     this.setState({ user: user, credentials: credentials });
   }
   isLoggedIn = (bool) => {
@@ -39,16 +41,16 @@ class App extends Component {
 
   getUser = () => {
     let id = this.state.user.id;
-    let urlFetch = "http://localhost:3000/api/users/"+ id;
-    fetch( urlFetch,
-      {  method: 'GET' })
+    let urlFetch = "http://localhost:3000/api/users/" + id;
+    fetch(urlFetch,
+      { method: 'GET' })
       .then(res => { return res.json() })
-      .then(data => {  this.setUserData(data) } )
-      .catch(err => { console.log("Error is" , err) })
+      .then(data => { this.setUserData(data) })
+      .catch(err => { console.log("Error is", err) })
   };
   //här vill jag spara user data från databasen för att skicka till Profile.js
   setUserData = (recivedData) => {
-    this.setState({user: recivedData});
+    this.setState({ user: recivedData });
     console.log(this.state.user);
   }
 
@@ -59,7 +61,7 @@ class App extends Component {
   }
 
 
-aggregateMaxAndMin = () => {
+  aggregateMaxAndMin = () => {
     fetch('http://localhost:3000/api/getPriceRange', {
       method: 'GET',
       headers: {
@@ -68,7 +70,7 @@ aggregateMaxAndMin = () => {
     }).then(response => {
       return response.json()
     }).then(data => {
-      this.setState({ max: data.max, min: data.min, priceRange:{myMin: data.min, myMax: data.max} }, () => {
+      this.setState({ max: data.max, min: data.min, priceRange: { myMin: data.min, myMax: data.max }, loaded: true }, () => {
         console.log('state:', this.state);
       });
     }).catch(err => {
@@ -81,31 +83,32 @@ aggregateMaxAndMin = () => {
     let newCart = this.state.shoppingCart;
     let found = false;
     newCart.forEach(x => {
-      if(x.id === boughtItem.id){
+      if (x.id === boughtItem.id) {
         found = true;
         console.log("Found duplicate", x, boughtItem)
       }
     })
-    if (found === false){
+    if (found === false) {
       newCart.push(boughtItem);
     }
-    this.setState({shoppingCart: newCart})
+    this.setState({ shoppingCart: newCart })
   }
   removeFromCart = (itemToDelete) => {
     let oldCart = this.state.shoppingCart
     let newCart = (this.state.shoppingCart).filter(x => x.id !== itemToDelete.id)
-    this.setState({shoppingCart: newCart})
+    this.setState({ shoppingCart: newCart })
     console.log(itemToDelete)
 
   }
-
-
-getInitialProducts = () => {
-  console.log("Inside component")
+  updateLoadState = () => {
+    this.setState({loaded2: true})
+  }
+  getInitialProducts = () => {
+    console.log("Inside component")
     let req = new XMLHttpRequest();
     req.onreadystatechange = (event) => {
       if (req.readyState == 4) {
-        this.setState({ products: JSON.parse(req.response)});
+        this.setState({ products: JSON.parse(req.response) }, this.updateLoadState);
         // console.log(this.state.products)
       }
       else {
@@ -121,37 +124,37 @@ getInitialProducts = () => {
     console.log(category, priceRange)
     console.log(priceRange.myMin)
     let q, min, max;
-    if((priceRange.myMin == this.state.min && priceRange.myMax == this.state.max) ||
-    typeof priceRange.myMin != 'number' || typeof priceRange.myMax != 'number' ){
+    if ((priceRange.myMin == this.state.min && priceRange.myMax == this.state.max) ||
+      typeof priceRange.myMin != 'number' || typeof priceRange.myMax != 'number') {
       if (category == 'all') this.getInitialProducts();
       else q = ''
     } else {
       min = priceRange.myMin;
       max = priceRange.myMax;
-      q = '?myMin='+min+'&myMax='+max;
+      q = '?myMin=' + min + '&myMax=' + max;
     }
     console.log("q = " + q)
     fetch('http://localhost:3000/api/filter/' + category +
-    q, {
-      method: 'GET',
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      }
-    }).then(response => {
-      console.log(response)
-      return response.json()
-    }).then(data => {
-      console.log(data)
-      this.setState({ products: data });
-    }).catch(err => {
-      console.log(err);
-    })
+      q, {
+        method: 'GET',
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        }
+      }).then(response => {
+        console.log(response)
+        return response.json()
+      }).then(data => {
+        console.log(data)
+        this.setState({ products: data });
+      }).catch(err => {
+        console.log(err);
+      })
   }
   // use function add filter, the filterMeBaby[...] is just a callback. It's called inside addFilter
   addCategory = (category) => {
     this.setState({ category: category },
       this.filterMeBabyOhYeahFilterMePlease(category, this.state.priceRange)
-  )
+    )
   }
   addPrice = (price) => {
     this.setState({ priceRange: price })
@@ -161,47 +164,50 @@ getInitialProducts = () => {
   // {category: "furniture"}
 
 
-  componentDidMount() {
-    this.aggregateMaxAndMin();
-    this.getInitialProducts();
+  async componentDidMount() {
+    await this.aggregateMaxAndMin();
+    await this.getInitialProducts();
   }
   render() {
     const loggedIn = !this.state.user ? (
-        null
+      null
     ) : (
-        <Profile user={this.state.user} getUser={this.getUser}/>
-    )
+        <Profile user={this.state.user} getUser={this.getUser} />
+      )
     const landingPage = (this.state.currentTab == "landing" && !this.state.isLoggedIn) ? (
-      <LandingPage changeToShop={this.changeToShop}/>
+      <LandingPage changeToShop={this.changeToShop} />
     ) : null;
 
     let currentApp = null;
     if (this.state.currentTab === "shop") {
       currentApp =
-          <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category} cartFunction={this.addToCart}/>
+        <ProductList productsProp={this.state.products} minRange={this.state.min} maxRange={this.state.max} addCategory={this.addCategory} addPrice={this.addPrice} category={this.state.category} cartFunction={this.addToCart} />
 
     }
     return (
       <div className="App">
-        <Menu setUser={this.setUserState}
-          isLoggedIn={this.isLoggedIn}
-          clickEvent={this.tabClick}
-          chosenTab={this.state.currentTab}
-          cart={this.state.shoppingCart}
-          deleteCart={this.removeFromCart}
-          emptyCart={this.emptyShoppingCart}/>
+        {this.state.loaded && this.state.loaded2 ? (
+          <div>
+            <Menu setUser={this.setUserState}
+              isLoggedIn={this.isLoggedIn}
+              clickEvent={this.tabClick}
+              chosenTab={this.state.currentTab}
+              cart={this.state.shoppingCart}
+              deleteCart={this.removeFromCart}
+              emptyCart={this.emptyShoppingCart} />
 
-        <main className="mainView">
-          <div id="landingPage" className={((this.state.currentTab === "landing") && (this.state.isLoggedIn === false)) ? "show" : "hide"}>
-            {landingPage}
-          </div>
-          <div id="productsPage" className={(this.state.currentTab === "shop") ? "show" : "hide"}>
-            {currentApp}
-          </div>
-          <div id="profilePage" className={((this.state.currentTab === "profile") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
-            {loggedIn}
-          </div>
-        </main>
+            <main className="mainView">
+              <div id="landingPage" className={((this.state.currentTab === "landing") && (this.state.isLoggedIn === false)) ? "show" : "hide"}>
+                {landingPage}
+              </div>
+              <div id="productsPage" className={(this.state.currentTab === "shop") ? "show" : "hide"}>
+                {currentApp}
+              </div>
+              <div id="profilePage" className={((this.state.currentTab === "profile") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
+                {loggedIn}
+              </div>
+            </main>
+          </div>) : null}
       </div>
     );
   }
