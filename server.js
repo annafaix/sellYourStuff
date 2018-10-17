@@ -257,7 +257,7 @@ const getInitialProps = (catalogue, filter, res, client, closeClient) => {
 
 const findUserProducts = (catalogue, filter, res, client, closeClient) => {
   let returnList = null;
-  catalogue.find({email: filter}).toArray((err, result) => {
+  catalogue.find({userEmail: filter}).toArray((err, result) => {
     returnList = result;
     res.header("Access-Control-Allow-Origin", '*')
     res.send(returnList)
