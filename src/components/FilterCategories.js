@@ -49,12 +49,13 @@ class FilterCategories extends Component {
       <div>
         <label style={labelStyle}>
           Category
-            </label>
+        </label>
         <select
           className="ui dropdown"
           label='Category'
           placeholder="category"
           onChange={this.click}
+          style={{height: '60%'}}
         >
           {options.map(op => <option key={op.key} value={op.value}>{op.text}</option>)}
         </select>
