@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Card, Icon, Image } from 'semantic-ui-react'
-import Popups from './productPopup.js'
 
 class userProdItem extends Component {
   constructor(props){

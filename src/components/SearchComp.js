@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Input, Grid, Search, Header, Segment } from 'semantic-ui-react'
+import { Input, Search } from 'semantic-ui-react'
 import fetch from 'isomorphic-fetch'
 import _ from 'lodash'
 
@@ -27,7 +27,6 @@ export default class SearchComp extends Component {
       }).then(data => {
           this.setState({products: data});
           //for (var i = 0; i < data.length; i++) {
-          //  console.log("Search results " + data[i].name);
           //}
       }).catch(err => {
         console.log(err);
@@ -62,13 +61,7 @@ export default class SearchComp extends Component {
 
   render() {
   let products = this.state.results;
-  if(products){
-  for (var i = 0; i < products.length; i++) {
-    console.log("Search results " + products[i].name);
-  }
-}
   const { isLoading, value, results } = this.state
-  console.log("Search value is " + this.state.value);
 
     return (
       <div>
