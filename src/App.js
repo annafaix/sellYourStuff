@@ -6,7 +6,9 @@ import Menu from './components/MenuHeader'
 import Profile from './components/Profile'
 import LandingPage from './components/LandingPage'
 import fetch from 'isomorphic-fetch'
-import { Divider } from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
+import Create from './components/CreateForm'
+
 
 class App extends Component {
   constructor(props) {
@@ -60,7 +62,7 @@ class App extends Component {
     fetch(urlFetch,
       { method: 'GET' })
       .then(res => { return res.json() })
-      .then(data => { this.setUserData(data) })
+      .then(data => { this.setState({ user: data }) })
       .catch(err => { console.log("Error is", err) })
   };
   //här vill jag spara user data från databasen för att skicka till Profile.js
@@ -225,11 +227,8 @@ class App extends Component {
     const loggedIn = !this.state.user ? (
       null
     ) : (
-        <Profile user={this.state.user} getUser={this.getUser} />
+       <Profile tabClick={this.tabClick} user={this.state.user} />
       )
-    const landingPage = (this.state.currentTab === "landing" && !this.state.isLoggedIn) ? (
-      <LandingPage changeToShop={this.changeToShop} />
-    ) : null;
 
     const sayWelcome = !this.state.isLoggedIn ? (
       null
@@ -238,7 +237,11 @@ class App extends Component {
           <h1> Welcome {this.state.user.given_name}! </h1>
           <Divider />
         </div>
-      )
+        )
+    const landingPage = (this.state.currentTab === "landing" && !this.state.isLoggedIn) ? (
+      <LandingPage changeToShop={this.changeToShop} />
+    ) : (null);
+
     let currentApp = null;
     if (this.state.currentTab === "shop") {
       currentApp =
@@ -249,6 +252,9 @@ class App extends Component {
           filterBySearch={this.filterBySearch} updateState={this.updateState} />
 
     }
+
+    const createFormPage = !this.state.user ? (null) : (<Create tabClick={this.tabClick} userProps={this.state.user}/>);
+
     return (
       <div className="App">
         {this.state.loaded && this.state.loaded2 ? (
@@ -271,6 +277,9 @@ class App extends Component {
               </div>
               <div id="profilePage" className={((this.state.currentTab === "profile") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
                 {loggedIn}
+              </div>
+              <div id="createPage" className={((this.state.currentTab === "create") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
+                {createFormPage}
               </div>
             </main>
           </div>) : null}
