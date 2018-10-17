@@ -34,13 +34,13 @@ class App extends Component {
   }
 
   //filterBySearch(result) {
-    //console.log('Searched product result: ' + result.name);
-    //this.setState({ products: result });
+  //console.log('Searched product result: ' + result.name);
+  //this.setState({ products: result });
   //}
 
   filterBySearch = (result) => {
-      console.log("Result from search " + result[0].name);
-      this.setState({ products: result });
+    //console.log("Result from search " + result[0].name);
+    this.setState({ products: result });
   }
 
   setUserState = (user, credentials) => {
@@ -51,7 +51,7 @@ class App extends Component {
     this.getUser()
   }
   updateState = (productList) => {
-    this.setState({products: productList})
+    this.setState({ products: productList })
   }
 
   changeToShop = () => this.setState({ currentTab: "shop" })
@@ -112,7 +112,7 @@ class App extends Component {
 
   }
   updateLoadState = () => {
-    this.setState({loaded2: true})
+    this.setState({ loaded2: true })
   }
   getInitialProducts = () => {
     let req = new XMLHttpRequest();
@@ -129,39 +129,76 @@ class App extends Component {
   }
 
   filterMeBabyOhYeahFilterMePlease = (category, priceRange) => {
+    console.log(this.state)
     let q, min, max;
-    if ((priceRange.myMin === this.state.min && priceRange.myMax === this.state.max) ||
+    if ((priceRange.myMin == this.state.min && priceRange.myMax == this.state.max) ||
       typeof priceRange.myMin != 'number' || typeof priceRange.myMax != 'number') {
-      if (category === 'all') this.getInitialProducts();
-      else q = ''
+      if (category == 'all') {
+        fetch('http://localhost:3000/api/products/', {
+            method: 'GET',
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            }
+          }).then(response => {
+            return response.json()
+          }).then(data => {
+            this.setState({ products: data });
+          }).catch(err => {
+            console.log(err);
+          })
+       }
+      else {
+        q = '';
+        fetch('http://localhost:3000/api/filter/' + category +
+          q, {
+            method: 'GET',
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            }
+          }).then(response => {
+            return response.json()
+          }).then(data => {
+            this.setState({ products: data });
+          }).catch(err => {
+            console.log(err);
+          })
+      }
     } else {
       min = priceRange.myMin;
       max = priceRange.myMax;
       q = '?myMin=' + min + '&myMax=' + max;
+
+      fetch('http://localhost:3000/api/filter/' + category +
+        q, {
+          method: 'GET',
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          }
+        }).then(response => {
+          return response.json()
+        }).then(data => {
+          this.setState({ products: data });
+        }).catch(err => {
+          console.log(err);
+        })
     }
-    fetch('http://localhost:3000/api/filter/' + category +
-      q, {
-        method: 'GET',
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        }
-      }).then(response => {
-        return response.json()
-      }).then(data => {
-        this.setState({ products: data });
-      }).catch(err => {
-        console.log(err);
-      })
   }
   // use function add filter, the filterMeBaby[...] is just a callback. It's called inside addFilter
   addCategory = (category) => {
-    this.setState({ category: category },
+    let callback = () => {
       this.filterMeBabyOhYeahFilterMePlease(category, this.state.priceRange)
+    }
+    this.setState({ category: category },
+      callback
     )
   }
   addPrice = (price) => {
-    this.setState({ priceRange: price })
-    this.filterMeBabyOhYeahFilterMePlease(this.state.category, price)
+    let callback = () => {
+      this.filterMeBabyOhYeahFilterMePlease(this.state.category, price)
+    }
+    this.setState({ priceRange: price },
+      callback
+      )
   }
   // filter funktion tar ett filter-objekt som parameter t.ex.:
   // {category: "furniture"}
@@ -178,26 +215,27 @@ class App extends Component {
        <Profile tabClick={this.tabClick} user={this.state.user} />
       )
 
-      const sayWelcome = !this.state.isLoggedIn? (
-        null
-      ) : (
-        <div style={{textAlign:"center", marginBottom:"20px", marginLeft:"50px", marginRight:"50px"}} >
+    const sayWelcome = !this.state.isLoggedIn ? (
+      null
+    ) : (
+        <div style={{ textAlign: "center", marginBottom: "20px", marginLeft: "50px", marginRight: "50px" }} >
           <h1> Welcome {this.state.user.given_name}! </h1>
-          <Divider/>
+          <Divider />
         </div>
         )
     const landingPage = (this.state.currentTab === "landing" && !this.state.isLoggedIn) ? (
       <LandingPage changeToShop={this.changeToShop} />
-    ) : null;
+    ) : (null);
 
     let currentApp = null;
     if (this.state.currentTab === "shop") {
       currentApp =
         <ProductList productsProp={this.state.products}
-        minRange={this.state.min} maxRange={this.state.max}
-        addCategory={this.addCategory} addPrice={this.addPrice}
-        category={this.state.category} cartFunction={this.addToCart}
-        filterBySearch={this.filterBySearch} updateState={this.updateState}/>
+          minRange={this.state.min} maxRange={this.state.max}
+          addCategory={this.addCategory} addPrice={this.addPrice}
+          category={this.state.category} cartFunction={this.addToCart}
+          filterBySearch={this.filterBySearch} updateState={this.updateState} />
+
     }
 
     const createFormPage = !this.state.user ? (null) : (<Create tabClick={this.tabClick} userProps={this.state.user}/>);

@@ -120,8 +120,8 @@ const filterFunction = (catalogue, options, res, client, closeClient) => {
             $match: {
                 category: options.category,
                 price: {
-                    $gt: options.myMin,
-                    $lt: options.myMax
+                    $gte: options.myMin,
+                    $lte: options.myMax
                 }
             }
         }]);
@@ -141,8 +141,8 @@ const filterFunction = (catalogue, options, res, client, closeClient) => {
         let cursor = catalogue.aggregate([{
             $match: {
                 price: {
-                    $gt: options.myMin,
-                    $lt: options.myMax
+                    $gte: options.myMin,
+                    $lte: options.myMax
                 }/*, price: {
                     $lt: options.myMax
                 }*/
