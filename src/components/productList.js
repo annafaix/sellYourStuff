@@ -32,7 +32,7 @@ class productList extends Component {
               <FilterCat category={this.props.category} size="small" addCategory={this.props.addCategory}/>
               <PriceSlider addPrice={this.props.addPrice} min={this.props.minRange} max={this.props.maxRange}/>
           </div>
-        <div className="ui four stackable cards" style={{width: '80%', marginBottom: '40px'}}>
+        <div className="ui stackable cards" style={{width: '80%', marginBottom: '40px'}}>
           {display}
         </div>
       </div>

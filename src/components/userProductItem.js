@@ -39,7 +39,7 @@ class userProdItem extends Component {
              <Button basic color='green'>
                Edit
              </Button>
-             <Button basic color='red'>
+             <Button basic color='red' onClick={()=> console.log(this.props.id)}>
                Delete
              </Button>
            </div>

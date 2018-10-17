@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Button, Icon, Form, TextArea, Card } from 'semantic-ui-react'
+import { Image, Button, Icon, Form, TextArea, Card , Divider} from 'semantic-ui-react'
 import fetch from 'isomorphic-fetch'
 import UserProdItem from './userProductItem.js'
 
@@ -27,7 +27,7 @@ export default class Profile extends Component{
   updateUserInfo = () => {
     let id = this.props.user._id;
     let body = this.state.editAbout;
-    console.log(body);
+    // console.log(body);
     let urlFetch = "http://localhost:3000/api/user/"+ id;
     fetch( urlFetch,
       { method: 'PUT',
@@ -46,9 +46,17 @@ export default class Profile extends Component{
       this.setState({userProducts: json})
     })
   }
+  fetchAbout=()=> {
+    let id = this.props.user.id;
+    fetch('http://localhost:3000/api/users/'+ id)
+    .then(res => { return res.json() })
+    .then(data => {   this.setState({user:data, editAbout: data.about}) })
+    .catch(err => { console.log("Error is", err) })
+  }
 
   componentDidMount() {
     this.fetchUsersProd();
+    this.fetchAbout();
   }
 
   render(){
@@ -71,8 +79,7 @@ export default class Profile extends Component{
       })
     }
     return(
-      <React.Fragment>
-      <div>
+      <div style={{marginLeft:"50px", marginRight:"50px"}}>
       <div className="ui raised card centered fluid" style={{backgroundColor:"F4F4F4"}}>
         <div className="content profile">
         <Image src={this.props.user.picture}
@@ -81,7 +88,7 @@ export default class Profile extends Component{
         <div className="divider"></div>
         <p>{this.props.user.email}</p>
         <p id="about me">About me:
-        </p> State: {this.state.editAbout} Props:{this.props.user.about}
+        </p>{this.state.editAbout}
         <Button content="Edit" icon="edit" floated='right' style={{marginTop:"15px"}}
         disabled={this.state.openEdit}
         onClick={() => this.openEdit() }/>
@@ -119,12 +126,12 @@ export default class Profile extends Component{
     <Button onClick={()=>console.log(this.props.user._id) }color='green' floated="right">
       <Icon name="plus"/> Create new item
     </Button>
-    <h2>Your stuff to sell:</h2>
+    <h2>My adds to sell:</h2>
+    <Divider/>
     <Card.Group className="ui three stackable cards" style={{width: '70%', marginBottom: '40px'}}>
       {userProductArray}
     </Card.Group>
     </div>
-  </React.Fragment>
     )
   }
 }
