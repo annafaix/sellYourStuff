@@ -58,6 +58,7 @@ class CreateForm extends React.Component {
       body: productObject
     }).then(res => {
       console.log('Lyckades skicka req till API:et och ladda upp ny produt i databasen:', res);
+      this.props.tabClick('profile')
     }).catch(err => {
       console.log(err)
     })
@@ -247,7 +248,7 @@ class CreateForm extends React.Component {
           <br />
 
           <Button onClick={()=> this.uploadFile()} color='green'> Submit </Button>
-          <Button basic color='red' onClick={()=>console.log('cancel')}> Cancel </Button>
+          <Button basic color='red' onClick={()=> this.props.tabClick('profile')}> Cancel </Button>
         </Form>
        </div>
     )

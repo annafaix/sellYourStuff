@@ -1,35 +1,51 @@
 import React, { Component } from 'react';
-import {Card, Icon, Image } from 'semantic-ui-react'
+import {Card, Icon, Image, Button, Label, Header } from 'semantic-ui-react'
+import Popups from './productPopup.js'
 
 class productItem extends Component {
   constructor(props){
     super(props);
     this.state = {
-
+      item: {
+        userPicture: this.props.userPicture,
+        name: this.props.name,
+        userName: this.props.userName,
+        info: this.props.info,
+        id: this.props.id,
+        price: this.props.price,
+        category: this.props.category,
+      }
     }
+  }
+  addProductToCart = () => {
+    this.props.cartFunction(this.state.item)
   }
   render() {
     return (
-      <div>
         <Card>
-          <Image src={this.props.userPicture}/>
+          <Image src={this.props.userPicture} style={{height: "250px"}}/>
           <Card.Content>
+          <Label color="black" ribbon="right">
+          {this.props.category}
+          </Label>
             <Card.Header>{this.props.name}</Card.Header>
             <Card.Meta>
               <span className='date'>Listed by {this.props.userName}</span>
             </Card.Meta>
-            <Card.Description>{this.props.info}</Card.Description>
+            <Card.Description >
+              <Popups product={this.state.item} addToCart={this.props.cartFunction}/>
+            </Card.Description>
           </Card.Content>
-          <Card.Content price>
-            <a>
-              <Icon name='user' />
-              {this.props.price} Rupees
-            </a>
+          <Card.Content >
+            <Button color="green"   floated='right' onClick={this.addProductToCart}> Buy </Button>
             <br/>
-            <span> Category: {this.props.category}</span>
+            <div>
+            <Header sub>Price</Header>
+            <Icon name='rupee' />
+            <span>{this.props.price} Rupees</span>
+            </div>
           </Card.Content>
         </Card>
-      </div>
     );
   }
 }
