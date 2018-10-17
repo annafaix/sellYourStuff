@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Icon, Image, Button, Header, Modal } from 'semantic-ui-react'
+import {Modal } from 'semantic-ui-react'
 import CartItem from './cartItem.js'
 import fetch from 'isomorphic-fetch'
 

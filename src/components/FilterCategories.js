@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 // import { Header, Button, Popup, Grid } from 'semantic-ui-react'
 
-const activeStyle = { color: '#99ff66' }
-const emptyStyle = {}
+/*const activeStyle = { color: '#99ff66' }
+const emptyStyle = {}*/
 
 class FilterCategories extends Component {
   constructor(props) {
@@ -20,13 +20,13 @@ class FilterCategories extends Component {
       )
     }
   componentDidMount() {
-    this.setState({ activeItem: this.props.category }, console.log('activeItem: ' + this.state.activeItem))
+    this.setState({ activeItem: this.props.category })
   }
   render() {
-    const { activeItem } = this.state
+    /*const { activeItem } = this.state
     const style = {
       width: 'auto'
-    }
+    }*/
     const labelStyle = {
       display: 'block',
       margin: '0 0 .28571429rem 0',

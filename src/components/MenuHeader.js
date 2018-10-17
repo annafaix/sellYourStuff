@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Menu.css';
-import { Menu, Segment, Button, Image, Icon, Modal } from 'semantic-ui-react'
+import { Menu, Segment, Image, Icon, Modal } from 'semantic-ui-react'
 import Login from '../components/Login'
 import CartPopup from './cartPopup.js'
 
@@ -25,7 +25,6 @@ export default class MenuHeader extends Component {
     // const { activeItem } = this.state
     const funcClick = this.props.clickEvent;
     const chosenTab = this.props.chosenTab;
-    // console.log("chosenTab" + chosenTab);
 
     return (
       <Segment inverted style={{borderRadius:'0', position:'sticky', width: '100%', top:'0', padding:'0 4rem 0 2rem', zIndex:'5'}}>

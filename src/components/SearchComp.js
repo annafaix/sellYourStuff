@@ -42,7 +42,6 @@ export default class SearchComp extends Component {
           this.setState({products: editedList});
           //this.setState({products: array});
           //for (var i = 0; i < data.length; i++) {
-          //  console.log("Search results " + data[i].name);
           //}
       }).catch(err => {
         console.log(err);
@@ -95,11 +94,21 @@ export default class SearchComp extends Component {
       }
       const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
       const isMatch = result => re.test(result.title)
-
+      let ogList = _.filter(this.state.products, isMatch).map(item => {
+        return {
+          userName: item.username,
+          name: item.title,
+          info: item.description,
+          price: Number(item.price),
+          id: item.id,
+          category: item.category,
+          userPicture: item.image,
+        }
+      })
       this.setState({
         isLoading: false,
         results: _.filter(this.state.products, isMatch),
-      })
+      }, this.props.updateState(ogList))
     }, 300)
   }
 
