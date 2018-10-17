@@ -2,3 +2,10 @@
   max-height: 500px;
   overflow-y: scroll;
 }
+.searchLabel {
+  margin: 20px auto;
+  color: rgba(0,0,0,.87);
+  font-size: .92857143em;
+  font-weight: 700;
+  text-transform: none;
+}

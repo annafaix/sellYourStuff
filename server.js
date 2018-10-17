@@ -288,7 +288,6 @@ const getInitialProps = (catalogue, filter, res, client, closeClient) => {
 
 const findUserProducts = (catalogue, filter, res, client, closeClient) => {
   let returnList = null;
-  console.log(filter)
   catalogue.find({userEmail: filter}).toArray((err, result) => {
     returnList = result;
     console.log("finduserprod: ", returnList[(Math.floor(Math.random()*5))])

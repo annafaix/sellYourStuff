@@ -95,6 +95,7 @@ export default class SearchComp extends Component {
       const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
       const isMatch = result => re.test(result.title)
       let ogList = _.filter(this.state.products, isMatch).map(item => {
+        console.log(item)
         return {
           userName: item.username,
           name: item.title,
@@ -120,20 +121,12 @@ export default class SearchComp extends Component {
   const { isLoading, value, results } = this.state
   //console.log("Search value is " + this.state.value);
 
-  const labelStyle = {
-      display: 'block',
-      margin: '0 0 .28571429rem 0',
-      color: 'rgba(0,0,0,.87)',
-      fontSize: ' .92857143em',
-      fontWeight: '700',
-      textTransform: 'none',
-    }
     return (
-      <div>
-        <label style={labelStyle}>
-            Search
-        </label>
-          <Input icon placeholder='Search...' style={{margin:"3px 20px 3px 20px"}}>
+      <div style={{margin:"3px 20px 3px 20px"}}>
+
+          <label className="searchLabel">
+              Search
+          </label>
           <Search
             loading={isLoading}
             onResultSelect={this.handleResultSelect}
@@ -142,7 +135,6 @@ export default class SearchComp extends Component {
             value={value}
 
           />
-          </Input>
       </div>
     )
   }

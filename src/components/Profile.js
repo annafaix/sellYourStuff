@@ -130,7 +130,7 @@ export default class Profile extends Component{
     </Button>
     <h2>My adds to sell:</h2>
     <Divider/>
-      <div className="ui stackable cards centered" style={{width: '80%', marginBottom: '40px'}}>
+      <div className="ui stackable cards" style={{width: '80%', marginBottom: '40px'}}>
         {userProductArray}
       </div>
     </div>
