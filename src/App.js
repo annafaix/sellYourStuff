@@ -6,6 +6,7 @@ import Menu from './components/MenuHeader'
 import Profile from './components/Profile'
 import LandingPage from './components/LandingPage'
 import fetch from 'isomorphic-fetch'
+import {Divider } from 'semantic-ui-react'
 
 class App extends Component {
   constructor(props) {
@@ -178,6 +179,14 @@ class App extends Component {
       <LandingPage changeToShop={this.changeToShop} />
     ) : null;
 
+    const sayWelcome = !this.state.isLoggedIn? (
+        null
+      ) : (
+        <div style={{textAlign:"center", marginBottom:"20px", marginLeft:"50px", marginRight:"50px"}} >
+          <h1> Welcome {this.state.user.given_name}! </h1>
+          <Divider/>
+        </div>
+        )
     let currentApp = null;
     if (this.state.currentTab === "shop") {
       currentApp =
@@ -205,6 +214,7 @@ class App extends Component {
                 {landingPage}
               </div>
               <div id="productsPage" className={(this.state.currentTab === "shop") ? "show" : "hide"}>
+                {sayWelcome}
                 {currentApp}
               </div>
               <div id="profilePage" className={((this.state.currentTab === "profile") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>

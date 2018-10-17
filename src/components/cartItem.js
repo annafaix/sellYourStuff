@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Image, Button, Header, Card } from 'semantic-ui-react'
+import {Image, Button, Card } from 'semantic-ui-react'
 
 class cartItem extends Component {
   constructor(props){
