@@ -21,7 +21,7 @@ class productItem extends Component {
   }
   addProductToCart = () => {
     this.setTimeoutForBuy();
-    this.props.cartFunction(this.state.item);
+    this.props.cartFunction(this.props.item);
   }
   changeBackBtnColor =()=> {
     setTimeout(()=>this.setState({color: "green", content: "Buy"}), 3000)
