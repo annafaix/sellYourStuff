@@ -33,7 +33,6 @@ class Login extends Component {
   }
   loginWithGoogle() {
     firebase.auth().signInWithPopup(google).then(result => {
-      console.log(result);
       // This gives you a Google Access Token. You can use it to access the Google API.
       var token = result.credential.accessToken;
       // The signed-in user info.
@@ -42,7 +41,6 @@ class Login extends Component {
       this.setState({ token: token, user: myUser }, () => { this.props.setUser(myUser, token) })
     }).then((success) => {
       var user = JSON.stringify(this.state.user);
-      // console.log('this is the user parameter: ' + user)
       fetch('http://localhost:3000/api/signUp/true', {
         method: 'POST',
         headers: {
@@ -50,21 +48,12 @@ class Login extends Component {
         },
         body: user
       }).then(res => {
-        console.log('Lyckades skicka req till API:et och kontrollera att user redan finns eller signa upp ny user:', res);
         this.setState({ isLoggedIn: true }, () => { this.props.isLoggedIn(true) })
       }).catch(err => {
         console.log(err)
       })
       this.setState({ isLoggedIn: true }, () => { this.props.isLoggedIn(true) })
     }).catch(error => {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      // ...
 
       this.setState({ credential: error.credential, errorCode: error.code, errorMessage: error.message, isLoggedIn: false },
         () => { this.props.isLoggedIn(false) }

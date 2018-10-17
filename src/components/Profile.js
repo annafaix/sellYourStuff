@@ -9,9 +9,7 @@ export default class Profile extends Component{
     this.state = {
     user: {},
     openEdit: false,
-    editAbout: "We would like to know you better. Write something about you!",
     userProducts: [],
-    openEdit: false,
     disabled: true,
     editAbout: '',
     }
@@ -20,7 +18,6 @@ export default class Profile extends Component{
   openEdit = ()=> {
     let changeAbout= !this.state.openEdit;
     this.setState({openEdit: changeAbout, editAbout: this.props.user.about});
-    console.log(this.props.user)
 
   }
   closeEdit = ()=> {
@@ -28,13 +25,9 @@ export default class Profile extends Component{
     this.setState({openEdit: changeAbout});
   }
 
- componentDidMount(){
- }
-
   updateUserInfo = () => {
     let id = this.props.user._id;
     let body = this.state.editAbout;
-    console.log(body);
     let urlFetch = "http://localhost:3000/api/user/"+ id;
     fetch( urlFetch,
       { method: 'PUT',
@@ -45,7 +38,7 @@ export default class Profile extends Component{
   }
 
   fetchUsersProd = () => {
-    fetch('http://localhost:3000/api/userProducts/' + this.props.user.name)
+    fetch('http://localhost:3000/api/userProducts/' + this.props.user.email)
     .then(response => {
       return response.json()
     })
