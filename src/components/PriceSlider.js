@@ -45,6 +45,7 @@ class PriceSlider extends Component {
     }
     async componentDidMount() { 
         await this.getSpots();
+        this.props.addPrice({priceRange: {myMin: this.state.myMin, myMax: this.state.myMax}});
     }
     render() {
         const labelStyle = {
