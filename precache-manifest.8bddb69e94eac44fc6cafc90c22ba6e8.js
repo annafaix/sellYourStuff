@@ -12,15 +12,15 @@ self.__precacheManifest = [
     "url": "/sellYourStuff/static/js/runtime~main.33f25166.js"
   },
   {
-    "revision": "461896ee52b2805b4d7e",
-    "url": "/sellYourStuff/static/js/main.461896ee.chunk.js"
+    "revision": "023ff491b162e3bd0f6f",
+    "url": "/sellYourStuff/static/js/main.023ff491.chunk.js"
   },
   {
     "revision": "320284b018c624e4a6fe",
     "url": "/sellYourStuff/static/js/1.320284b0.chunk.js"
   },
   {
-    "revision": "461896ee52b2805b4d7e",
+    "revision": "023ff491b162e3bd0f6f",
     "url": "/sellYourStuff/static/css/main.d4199751.chunk.css"
   },
   {
@@ -28,7 +28,7 @@ self.__precacheManifest = [
     "url": "/sellYourStuff/static/css/1.c1dc17e9.chunk.css"
   },
   {
-    "revision": "9e38b941aac62eb6f89873e899ff35ec",
+    "revision": "5fb173ec48f716186b3d81fb10e0ad50",
     "url": "/sellYourStuff/index.html"
   }
 ];
