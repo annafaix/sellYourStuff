@@ -63,9 +63,6 @@ class EditForm extends React.Component {
   //   })
   // }
 
-  onCancelUpdate = () => {
-    this.props.tabClick('profile');
-  }
 
 
   render() {
@@ -127,7 +124,7 @@ class EditForm extends React.Component {
           <br />
 
           <Button onClick={()=> this.props.updateProductInfo()} color='green'><Icon name='save'/> Save </Button>
-          <Button type="button" basic color='red' onClick={()=> this.onCancelUpdate()}> Cancel </Button>
+          <Button type="button" basic color='red' onClick={()=> this.props.onCancelEditUpdate()}> Cancel </Button>
         </Form>
        </div>
     )

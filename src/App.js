@@ -52,7 +52,7 @@ class App extends Component {
   //}
 
   editInformation = (obj) => {
-    console.log(obj);
+    // console.log(obj);
     this.setState({
       name: obj.name,
       price: obj.price,
@@ -87,6 +87,12 @@ class App extends Component {
       newNum = Number(num);
     }
     this.setState({price: newNum})
+  }
+
+  onCancelEditUpdate = () => {
+    this.setState({CurrentProductId: 0},()=>{
+      this.tabClick('profile');
+    });
   }
 
   updateProductInfo = () =>{
@@ -325,6 +331,7 @@ class App extends Component {
     const createFormPage = !this.state.user ? (null) : (<Create tabClick={this.tabClick} userProps={this.state.user}/>);
     const editFormPage = !this.state.user ? (null) : (
       <EditProd
+          onCancelEditUpdate={this.onCancelEditUpdate}
           updateProductInfo={this.updateProductInfo}
           onChangeInfo={this.onChangeInfo}
           onChangeName={this.onChangeName}
