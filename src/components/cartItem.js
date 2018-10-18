@@ -17,7 +17,7 @@ class cartItem extends Component {
     }
   }
   compRemoveFromCart = () => {
-    this.props.deleteCart(this.state.item);
+    this.props.deleteCart(this.props.product);
   }
   render() {
     return (
