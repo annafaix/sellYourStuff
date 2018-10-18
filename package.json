@@ -7,6 +7,7 @@
     "express": "^4.16.3",
     "firebase": "^5.5.2",
     "firebase-app": "^0.0.1",
+    "firebase-tools": "^5.1.1",
     "mongodb": "^3.1.6",
     "nodemon": "^1.18.4",
     "rc-slider": "^8.6.3",

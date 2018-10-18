@@ -109,7 +109,6 @@ class App extends Component {
     this.setState({ shoppingCart: newCart })
   }
   removeFromCart = (itemToDelete) => {
-    console.log(itemToDelete)
     let newCart = (this.state.shoppingCart).filter(x => x.id !== itemToDelete.id)
     this.setState({ shoppingCart: newCart })
 
