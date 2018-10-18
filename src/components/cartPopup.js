@@ -26,7 +26,7 @@ class cartPopup extends Component {
       return <h1>Your shopping basket is empty</h1>;
     }
     let cartRender = cart.map((item, i) => {
-      return <CartItem key={i} product={item}  deleteCart={this.props.deleteCart}/>
+      return <CartItem key={i} id={item._id} product={item}  deleteCart={this.props.deleteCart}/>
     })
     return (
       <div style={{padding:"10px"}}>
