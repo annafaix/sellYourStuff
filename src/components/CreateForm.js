@@ -47,7 +47,7 @@ class CreateForm extends React.Component {
   }
 
   sendProduct = (productObject) =>{
-    console.log('sendfile');
+    // console.log('sendfile');
     // console.log(productObject);
     fetch('http://localhost:3000/api/createProduct', {
       method: 'POST',
@@ -56,7 +56,7 @@ class CreateForm extends React.Component {
       },
       body: productObject
     }).then(res => {
-      console.log('Lyckades skicka req till API:et och ladda upp ny produt i databasen:', res);
+      // console.log('Lyckades skicka req till API:et och ladda upp ny produt i databasen:', res);
       this.props.tabClick('profile')
       this.props.getProducts();
     }).catch(err => {
@@ -127,13 +127,13 @@ class CreateForm extends React.Component {
       uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
           // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
           var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
+          // console.log('Upload is ' + progress + '% done');
           switch (snapshot.state) {
             case firebase.storage.TaskState.PAUSED: // or 'paused'
-              console.log('Upload is paused');
+              // console.log('Upload is paused');
               break;
             case firebase.storage.TaskState.RUNNING: // or 'running'
-              console.log('Upload is running');
+              // console.log('Upload is running');
               break;
           }
         }, (error) => {
@@ -155,22 +155,22 @@ class CreateForm extends React.Component {
       }, () => {
         // Upload completed successfully, now we can get the download URL
         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-          console.log('File available at', downloadURL);
-          console.log('image updated');
+          // console.log('File available at', downloadURL);
+          // console.log('image updated');
           link = downloadURL;
 
-          console.log('validating image link ');
+          // console.log('validating image link ');
           this.validateImageLink(link, (existsImage) => {
             if(existsImage === true) {
               this.setState({userPicture: link }, () => {
-                console.log('firebase update. ', this.state);
+                // console.log('firebase update. ', this.state);
                 let firebaseObject= JSON.stringify(this.state);
                 this.sendProduct(firebaseObject);
               });
             }
             else {
               this.setState({userPicture: defaultimg }, () => {
-                console.log('firebase update. ', this.state);
+                // console.log('firebase update. ', this.state);
                 let firebaseObject= JSON.stringify(this.state);
                 this.sendProduct(firebaseObject);
               });
@@ -180,10 +180,10 @@ class CreateForm extends React.Component {
         });
       });
     }else if(!theFile) {
-      console.log('you did not pick an image, you recived a default image');
+      // console.log('you did not pick an image, you recived a default image');
       link = defaultimg;
       this.setState({userPicture: link }, () => {
-        console.log('default update. ', this.state);
+        // console.log('default update. ', this.state);
         let defaultObject= JSON.stringify(this.state);
         this.sendProduct(defaultObject);
       });
