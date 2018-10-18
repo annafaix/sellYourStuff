@@ -65,7 +65,6 @@ export default class Profile extends Component{
     }
     else {
       let allProducts = this.state.userProducts
-      console.log(allProducts);
       userProductArray = allProducts.map(item => {
         return <UserProdItem name={item.name}
                   key={item._id}
@@ -128,7 +127,7 @@ export default class Profile extends Component{
     <Button onClick={()=> this.props.tabClick('create')} color='green' floated="right">
       <Icon name="plus"/> Create new item
     </Button>
-    <h2>My adds to sell:</h2>
+    <h2 onClick={this.fetchUsersProd}>My ads to sell:</h2>
     <Divider/>
       <div className="ui stackable cards" style={{width: '80%', marginBottom: '40px'}}>
         {userProductArray}
