@@ -1,8 +1,5 @@
 import React from 'react'
 import { Form, Button, Header, Icon, Image } from 'semantic-ui-react'
-import firebase from "firebase";
-
-// const defaultimg = 'https://firebasestorage.googleapis.com/v0/b/sellyourstuff-b27b2.appspot.com/o/productImages%2Fplaceholder.png?alt=media&token=230fbf95-36cf-4508-a1bb-985511142a86';
 
 const formStyle = {
   backgroundColor: "#f4f4f4",
@@ -45,25 +42,6 @@ class EditForm extends React.Component {
       info: this.props.info
     }
   }
-
-  // updateProduct = (productObject) =>{
-  //   console.log('sendfile');
-  //   // console.log(productObject);
-  //   fetch('http://localhost:3000/api/createProduct', {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Access-Control-Allow-Origin': '*'
-  //     },
-  //     body: productObject
-  //   }).then(res => {
-  //     console.log('Lyckades skicka req till API:et och ladda upp ny produt i databasen:', res);
-  //     this.props.tabClick('profile')
-  //   }).catch(err => {
-  //     console.log(err)
-  //   })
-  // }
-
-
 
   render() {
     return (

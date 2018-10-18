@@ -30,7 +30,7 @@ class App extends Component {
 
       name: '',
       price: 1,
-      category: 'Other',
+      prodCategory: 'Other',
       userName: '',
       userEmail: '',
       imageName: '',
@@ -56,7 +56,7 @@ class App extends Component {
     this.setState({
       name: obj.name,
       price: obj.price,
-      category: obj.category,
+      prodCategory: obj.category,
       userName: obj.userName,
       userEmail: obj.userEmail,
       imageName: obj.imageName,
@@ -64,7 +64,7 @@ class App extends Component {
       info: obj.info,
       CurrentProductId: obj.id
       }, ()=>{
-      console.log(this.state.CurrentProductId);
+      // console.log(this.state.CurrentProductId);
       this.tabClick('editForm')
     });
   }
@@ -73,7 +73,7 @@ class App extends Component {
     this.setState({name: value})
   }
   onChangeCategory = (value) =>{
-    this.setState({category: value})
+    this.setState({prodCategory: value})
   }
   onChangeInfo = (value) =>{
     this.setState({info: value})
@@ -100,7 +100,7 @@ class App extends Component {
     let changeInfo = {
       name: this.state.name,
       price: this.state.price,
-      category: this.state.category,
+      category: this.state.prodCategory,
       info: this.state.info,
     };
     let body = JSON.stringify(changeInfo)
@@ -172,16 +172,19 @@ class App extends Component {
     let newCart = this.state.shoppingCart;
     let found = false;
     newCart.forEach(x => {
-      if (x.id === boughtItem.id) {
+      if (x.id === boughtItem.id || x.id === boughtItem._id) {
         found = true;
       }
     })
     if (found === false) {
-      newCart.push(boughtItem);
+      let newItem = boughtItem
+      newItem.id = boughtItem._id;
+      newCart.push(newItem);
     }
     this.setState({ shoppingCart: newCart })
   }
   removeFromCart = (itemToDelete) => {
+    // console.log(itemToDelete)
     let newCart = (this.state.shoppingCart).filter(x => x.id !== itemToDelete.id)
     this.setState({ shoppingCart: newCart })
 
@@ -219,11 +222,10 @@ class App extends Component {
   }
 
   filterMeBabyOhYeahFilterMePlease = (category, priceRange) => {
-    console.log(this.state)
     let q, min, max;
-    if ((priceRange.myMin == this.state.min && priceRange.myMax == this.state.max) ||
+    if ((priceRange.myMin === this.state.min && priceRange.myMax === this.state.max) ||
       typeof priceRange.myMin != 'number' || typeof priceRange.myMax != 'number') {
-      if (category == 'all') {
+      if (category === 'all') {
         fetch('http://localhost:3000/api/products/', {
             method: 'GET',
             headers: {
@@ -340,7 +342,7 @@ class App extends Component {
           tabClick={this.tabClick}
           name= {this.state.name}
           price= {this.state.price}
-          category= {this.state.category}
+          category= {this.state.prodCategory}
           userName= {this.state.userName}
           userEmail= {this.state.userEmail}
           imageName= {this.state.imageName}
@@ -357,7 +359,8 @@ class App extends Component {
               chosenTab={this.state.currentTab}
               cart={this.state.shoppingCart}
               deleteCart={this.removeFromCart}
-              emptyCart={this.emptyShoppingCart} />
+              emptyCart={this.emptyShoppingCart}
+              getInitialProducts={this.getInitialProducts} />
 
             <main className="mainView">
               <div id="landingPage" className={((this.state.currentTab === "landing") && (this.state.isLoggedIn === false)) ? "show" : "hide"}>

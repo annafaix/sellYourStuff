@@ -56,6 +56,9 @@ export default class Profile extends Component{
   componentDidMount() {
     this.fetchUsersProd();
     this.fetchAbout();
+    setInterval(
+      () => {this.fetchUsersProd()},
+      5000)
   }
 
   render(){
@@ -65,7 +68,7 @@ export default class Profile extends Component{
     }
     else {
       let allProducts = this.state.userProducts
-      console.log(allProducts);
+      // console.log(allProducts);
       userProductArray = allProducts.map(item => {
         return <UserProdItem
                   editInformation={this.props.editInformation}
@@ -103,13 +106,15 @@ export default class Profile extends Component{
           <Form fluid="true">
             <TextArea style={{marginTop: "20px"}} placeholder="Tell us more about you"
               name='aboutMe'
-              onChange={ (event) => {
-                if(event.target.value.length >= 0){
+              onChange={ (event) =>{
+                if(event.target.value.length === 0){
+                  this.setState({disabled: true, editAbout: this.props.user.about})
+                }if(event.target.value.length > 0){
                   this.setState({disabled: false, editAbout: event.target.value})
-                }else{
-                 this.setState({disabled: true})
-               }
-             }}>
+                }
+              }
+
+           }>
             </TextArea>
           </Form>
           <Button content="Save"
@@ -132,7 +137,7 @@ export default class Profile extends Component{
     <Button onClick={()=> this.props.tabClick('create')} color='green' floated="right">
       <Icon name="plus"/> Create new item
     </Button>
-    <h2>My adds to sell:</h2>
+    <h2 onClick={this.fetchUsersProd}>My ads to sell:</h2>
     <Divider/>
       <div className="ui stackable cards" style={{width: '80%', marginBottom: '40px'}}>
         {userProductArray}

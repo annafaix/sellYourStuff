@@ -17,6 +17,7 @@ class cartPopup extends Component {
     }).then(data => {
       return data.json()
     }).then(json => {
+      this.props.getProducts()
     })
     this.props.emptyCart()
   }
@@ -26,7 +27,7 @@ class cartPopup extends Component {
       return <h1>Your shopping basket is empty</h1>;
     }
     let cartRender = cart.map((item, i) => {
-      return <CartItem key={i} product={item}  deleteCart={this.props.deleteCart}/>
+      return <CartItem key={i} id={item._id} product={item}  deleteCart={this.props.deleteCart}/>
     })
     return (
       <div style={{padding:"10px"}}>
@@ -34,7 +35,7 @@ class cartPopup extends Component {
         <Card.Group className="ui stackable cards">
           {cartRender}
           </Card.Group>
-          <Button onClick={this.buyFromDB} primary style={{marginTop:"20px"}}>
+          <Button onClick={this.buyFromDB} primary floated="right" style={{marginTop:"20px", marginBottom:"30px"}}>
             <Icon name='payment' />
             Finalize purchase
           </Button>

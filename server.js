@@ -373,6 +373,7 @@ const updateProduct = (catalogue, { detail, setDocument }, res, client, closeCli
         res.set({
             "Access-Control-Allow-Origin": '*'
         })
+        console.log('sucsess with updateing product');
         res.send(result)
         res.end()
     }, () => { client.close() })
