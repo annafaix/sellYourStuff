@@ -115,6 +115,21 @@ class App extends Component {
     this.setState({ loaded2: true })
   }
   getInitialProducts = () => {
+    fetch('http://localhost:3000/api/products/', {
+            method: 'GET',
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            }
+          }).then(response => {
+            return response.json()
+          }).then(data => {
+            this.setState({ products: data }, this.updateLoadState);
+          }).catch(err => {
+            console.log(err);
+          })
+
+    // Problematic old-AJAX
+    /*
     let req = new XMLHttpRequest();
     req.onreadystatechange = (event) => {
       if (req.readyState === 4) {
@@ -125,7 +140,7 @@ class App extends Component {
       }
     }
     req.open('GET', 'http://localhost:3000/api/products');
-    req.send();
+    req.send();*/
   }
 
   filterMeBabyOhYeahFilterMePlease = (category, priceRange) => {
