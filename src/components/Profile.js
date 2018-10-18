@@ -67,8 +67,12 @@ export default class Profile extends Component{
       let allProducts = this.state.userProducts
       console.log(allProducts);
       userProductArray = allProducts.map(item => {
-        return <UserProdItem name={item.name}
+        return <UserProdItem
+                  editInformation={this.props.editInformation}
+                  name={item.name}
                   key={item._id}
+                  userEmail={item.userEmail}
+                  imageName={item.imageName}
                   id={item._id}
                   userName={item.userName}
                   info={item.info}

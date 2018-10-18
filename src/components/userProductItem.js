@@ -9,7 +9,9 @@ class userProdItem extends Component {
         userPicture: this.props.userPicture,
         name: this.props.name,
         userName: this.props.userName,
+        userEmail: this.props.userEmail,
         info: this.props.info,
+        imageName: this.props.imageName,
         id: this.props.id,
         price: this.props.price,
         category: this.props.category,
@@ -35,7 +37,7 @@ class userProdItem extends Component {
             <br/>
             <span> Category: {this.props.category}</span>
             <div className='ui two buttons' style={{marginTop:"20px"}} >
-             <Button basic color='green'>
+             <Button basic color='green' onClick={ () => this.props.editInformation(this.state.item)}>
                Edit
              </Button>
              <Button basic color='red' onClick={()=> console.log(this.props.id)}>

@@ -349,6 +349,35 @@ const uploadNewProduct = (catalogue, productObject, res, client, closeClient) =>
         return;
       });
 }
+//elin
+server.put('/api/updateProduct/:id', jsonParser, (req, res) => {
+    const id = req.params.id;
+    let body = JSON.parse(req.body);
+    console.log('recived body ',body);
+    const detail = { "_id": new ObjectID(id) };
+    let setDocument = { $set: body };
+    connectToMongo('true', { detail, setDocument }, updateProduct, res, productCollection)
+
+})
+
+const updateProduct = (catalogue, { detail, setDocument }, res, client, closeClient) => {
+    // let db = client.db(databaseName)
+    // let catalogue = db.collection(userCollection)
+    console.log('Connected to mongo database for real.')
+
+    catalogue.updateOne(detail, setDocument, (err, result) => {
+        if (err) {
+          console.log("something went wrong wn updating product: ", err);
+          client.close();
+        }
+        res.set({
+            "Access-Control-Allow-Origin": '*'
+        })
+        res.send(result)
+        res.end()
+    }, () => { client.close() })
+}
+
 
 server.get('/api/users/:id', (req, res) => {
     const id = req.params.id;

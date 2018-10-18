@@ -8,7 +8,9 @@ import LandingPage from './components/LandingPage'
 import fetch from 'isomorphic-fetch'
 import {Divider} from 'semantic-ui-react'
 import Create from './components/CreateForm'
+import EditProd from './components/EditForm'
 
+const defaultimg = 'https://firebasestorage.googleapis.com/v0/b/sellyourstuff-b27b2.appspot.com/o/productImages%2Fplaceholder.png?alt=media&token=230fbf95-36cf-4508-a1bb-985511142a86';
 
 class App extends Component {
   constructor(props) {
@@ -24,7 +26,18 @@ class App extends Component {
       category: 'all',
       priceRange: {},
       loaded: false,
-      loaded2: false
+      loaded2: false,
+
+      name: '',
+      price: 1,
+      category: 'Other',
+      userName: '',
+      userEmail: '',
+      imageName: '',
+      userPicture: defaultimg,
+      info: '',
+      CurrentProductId: 0
+
     }
     this.tabClick = this.tabClick.bind(this);
     //this.filterBySearch = this.filterBySearch.bind(this);
@@ -37,6 +50,62 @@ class App extends Component {
   //console.log('Searched product result: ' + result.name);
   //this.setState({ products: result });
   //}
+
+  editInformation = (obj) => {
+    console.log(obj);
+    this.setState({
+      name: obj.name,
+      price: obj.price,
+      category: obj.category,
+      userName: obj.userName,
+      userEmail: obj.userEmail,
+      imageName: obj.imageName,
+      userPicture: obj.userPicture,
+      info: obj.info,
+      CurrentProductId: obj.id
+      }, ()=>{
+      console.log(this.state.CurrentProductId);
+      this.tabClick('editForm')
+    });
+  }
+
+  onChangeName = (value) =>{
+    this.setState({name: value})
+  }
+  onChangeCategory = (value) =>{
+    this.setState({category: value})
+  }
+  onChangeInfo = (value) =>{
+    this.setState({info: value})
+  }
+
+  validateEditPrice = (num) =>{
+    let newNum;
+    if (isNaN(num)) {
+      newNum = 1;
+    }else {
+      newNum = Number(num);
+    }
+    this.setState({price: newNum})
+  }
+
+  updateProductInfo = () =>{
+    let id = this.state.CurrentProductId;
+    let changeInfo = {
+      name: this.state.name,
+      price: this.state.price,
+      category: this.state.category,
+      info: this.state.info,
+    };
+    let body = JSON.stringify(changeInfo)
+    let urlFetch = "http://localhost:3000/api/updateProduct/"+ id;
+    fetch( urlFetch,
+      { method: 'PUT',
+      body: body })
+      .then(res => {  })
+      .catch(error => console.error('Error:', error))
+      this.tabClick('profile')
+  }
 
   filterBySearch = (result) => {
     //console.log("Result from search " + result[0].name);
@@ -227,7 +296,7 @@ class App extends Component {
     const loggedIn = !this.state.user ? (
       null
     ) : (
-       <Profile tabClick={this.tabClick} user={this.state.user} />
+       <Profile editInformation={this.editInformation} tabClick={this.tabClick} user={this.state.user} />
       )
 
     const sayWelcome = !this.state.isLoggedIn ? (
@@ -254,6 +323,22 @@ class App extends Component {
     }
 
     const createFormPage = !this.state.user ? (null) : (<Create tabClick={this.tabClick} userProps={this.state.user}/>);
+    const editFormPage = !this.state.user ? (null) : (
+      <EditProd
+          updateProductInfo={this.updateProductInfo}
+          onChangeInfo={this.onChangeInfo}
+          onChangeName={this.onChangeName}
+          onChangeCategory={this.onChangeCategory}
+          validateEditPrice={this.validateEditPrice}
+          tabClick={this.tabClick}
+          name= {this.state.name}
+          price= {this.state.price}
+          category= {this.state.category}
+          userName= {this.state.userName}
+          userEmail= {this.state.userEmail}
+          imageName= {this.state.imageName}
+          userPicture= {this.state.userPicture}
+          info= {this.state.info}/>);
 
     return (
       <div className="App">
@@ -281,6 +366,10 @@ class App extends Component {
               <div id="createPage" className={((this.state.currentTab === "create") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
                 {createFormPage}
               </div>
+              <div id="createPage" className={((this.state.currentTab === "editForm") && (this.state.isLoggedIn === true)) ? "show" : "hide"}>
+                {editFormPage}
+              </div>
+
             </main>
           </div>) : null}
       </div>
