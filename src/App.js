@@ -97,12 +97,14 @@ class App extends Component {
     let newCart = this.state.shoppingCart;
     let found = false;
     newCart.forEach(x => {
-      if (x.id === boughtItem.id) {
+      if (x.id === boughtItem.id || x.id === boughtItem._id) {
         found = true;
       }
     })
     if (found === false) {
-      newCart.push(boughtItem);
+      let newItem = boughtItem
+      newItem.id = boughtItem._id;
+      newCart.push(newItem);
     }
     this.setState({ shoppingCart: newCart })
   }
@@ -144,11 +146,10 @@ class App extends Component {
   }
 
   filterMeBabyOhYeahFilterMePlease = (category, priceRange) => {
-    console.log(this.state)
     let q, min, max;
-    if ((priceRange.myMin == this.state.min && priceRange.myMax == this.state.max) ||
+    if ((priceRange.myMin === this.state.min && priceRange.myMax === this.state.max) ||
       typeof priceRange.myMin != 'number' || typeof priceRange.myMax != 'number') {
-      if (category == 'all') {
+      if (category === 'all') {
         fetch('http://localhost:3000/api/products/', {
             method: 'GET',
             headers: {

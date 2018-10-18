@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Search } from 'semantic-ui-react'
+import { Search } from 'semantic-ui-react'
 import fetch from 'isomorphic-fetch'
 import _ from 'lodash'
 import './Search.css';
