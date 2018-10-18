@@ -17,6 +17,7 @@ class cartPopup extends Component {
     }).then(data => {
       return data.json()
     }).then(json => {
+      this.props.getProducts()
     })
     this.props.emptyCart()
   }

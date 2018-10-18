@@ -58,6 +58,7 @@ class CreateForm extends React.Component {
     }).then(res => {
       console.log('Lyckades skicka req till API:et och ladda upp ny produt i databasen:', res);
       this.props.tabClick('profile')
+      this.props.getProducts();
     }).catch(err => {
       console.log(err)
     })

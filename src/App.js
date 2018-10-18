@@ -254,7 +254,7 @@ class App extends Component {
 
     }
 
-    const createFormPage = !this.state.user ? (null) : (<Create tabClick={this.tabClick} userProps={this.state.user}/>);
+    const createFormPage = !this.state.user ? (null) : (<Create tabClick={this.tabClick} userProps={this.state.user} getProducts={this.getInitialProducts}/>);
 
     return (
       <div className="App">
@@ -266,7 +266,8 @@ class App extends Component {
               chosenTab={this.state.currentTab}
               cart={this.state.shoppingCart}
               deleteCart={this.removeFromCart}
-              emptyCart={this.emptyShoppingCart} />
+              emptyCart={this.emptyShoppingCart}
+              getInitialProducts={this.getInitialProducts} />
 
             <main className="mainView">
               <div id="landingPage" className={((this.state.currentTab === "landing") && (this.state.isLoggedIn === false)) ? "show" : "hide"}>

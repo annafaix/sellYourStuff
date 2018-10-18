@@ -56,6 +56,9 @@ export default class Profile extends Component{
   componentDidMount() {
     this.fetchUsersProd();
     this.fetchAbout();
+    setInterval(
+      () => {this.fetchUsersProd()},
+      5000)
   }
 
   render(){

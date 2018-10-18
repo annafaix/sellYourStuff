@@ -50,7 +50,7 @@ export default class MenuHeader extends Component {
                   <Icon name="cart" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
                 </div>}>
                 <Modal.Content >
-                <CartPopup cart={this.props.cart} deleteCart={this.props.deleteCart} emptyCart={this.props.emptyCart}/>
+                <CartPopup cart={this.props.cart} deleteCart={this.props.deleteCart} emptyCart={this.props.emptyCart} getProducts={this.props.getInitialProducts}/>
                 </Modal.Content>
               </Modal>
           </div>
