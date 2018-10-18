@@ -95,7 +95,6 @@ export default class SearchComp extends Component {
       const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
       const isMatch = result => re.test(result.title)
       let ogList = _.filter(this.state.products, isMatch).map(item => {
-        console.log(item)
         return {
           userName: item.username,
           name: item.title,
@@ -123,7 +122,6 @@ export default class SearchComp extends Component {
 
     return (
       <div style={{margin:"3px 20px 3px 20px"}}>
-
           <label className="searchLabel">
               Search
           </label>
