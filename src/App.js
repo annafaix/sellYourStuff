@@ -95,12 +95,14 @@ class App extends Component {
     let newCart = this.state.shoppingCart;
     let found = false;
     newCart.forEach(x => {
-      if (x.id === boughtItem.id) {
+      if (x.id === boughtItem.id || x.id === boughtItem._id) {
         found = true;
       }
     })
     if (found === false) {
-      newCart.push(boughtItem);
+      let newItem = boughtItem
+      newItem.id = boughtItem._id;
+      newCart.push(newItem);
     }
     this.setState({ shoppingCart: newCart })
   }
