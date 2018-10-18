@@ -34,7 +34,7 @@ class cartPopup extends Component {
         <Card.Group className="ui stackable cards">
           {cartRender}
           </Card.Group>
-          <Button onClick={this.buyFromDB} primary style={{marginTop:"20px"}}>
+          <Button onClick={this.buyFromDB} primary floated="right" style={{marginTop:"20px", marginBottom:"30px"}}>
             <Icon name='payment' />
             Finalize purchase
           </Button>
