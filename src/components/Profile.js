@@ -22,6 +22,10 @@ export default class Profile extends Component{
   closeEdit = ()=> {
     let changeAbout= !this.state.openEdit;
     this.setState({openEdit: changeAbout})
+    // console.log(this.state.editAbout);
+    // if(this.state.editAbout===""){
+    //     this.setState({editAbout: this.props.user.about})
+    // }
   }
 
   updateUserInfo = () => {

@@ -5,12 +5,21 @@ class productItem extends Component {
   constructor(props){
     super(props);
     this.state = {
+      color: "green",
+      content: "Buy"
     }
   }
   close = () => this.setState({ open: false })
   addProductToCart = () => {
+      this.setTimeoutForBuy();
     this.props.addToCart(this.props.product)
   }
+  changeBackBtnColor =()=> {
+      setTimeout(()=>this.setState({color: "green", content: "Buy"}), 2000)
+    }
+  setTimeoutForBuy=()=> {
+      this.setState({color: "orange", content: "Added"}, this.changeBackBtnColor())
+    }
 
   render() {
     return (
@@ -23,7 +32,7 @@ class productItem extends Component {
                 <p>{this.props.product.info}</p>
                 <p>{this.props.product.price} Rupees</p>
                 <Modal.Actions>
-                <Button onClick={this.addProductToCart} size="large" color="green" floated="right"> Buy </Button>
+                <Button color={this.state.color} size="large"  floated='right' onClick={this.addProductToCart}> {this.state.content} </Button>
                 </Modal.Actions>
               </Modal.Description>
             </Modal.Content>
