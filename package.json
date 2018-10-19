@@ -1,4 +1,5 @@
 {
+  "homepage": "https://alex1604.github.io/sellYourStuff",
   "name": "sellyourstuff",
   "version": "0.1.0",
   "private": true,
@@ -7,11 +8,15 @@
     "express": "^4.16.3",
     "firebase": "^5.5.2",
     "firebase-app": "^0.0.1",
+    "firebase-tools": "^5.1.1",
+    "gh-pages": "^2.0.1",
+    "gh-pages-deploy": "^0.5.0",
     "mongodb": "^3.1.6",
     "nodemon": "^1.18.4",
     "rc-slider": "^8.6.3",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "2.0.4",
     "semantic-ui-react": "^0.82.5"
   },
@@ -20,7 +25,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
