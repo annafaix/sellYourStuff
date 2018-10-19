@@ -23,7 +23,7 @@ class productItem extends Component {
 
   render() {
     return (
-        <Modal trigger={<Button compact>Info</Button>}>
+        <Modal trigger={<Button compact>Info</Button>} closeIcon>
           <Modal.Header>{this.props.product.name}</Modal.Header>
           <Modal.Content image>
           <Image wrapped size='medium' src={this.props.product.userPicture} />

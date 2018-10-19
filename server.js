@@ -394,6 +394,32 @@ server.put('/api/user/:id', jsonParser, (req, res) => {
     connectToMongo('true', { detail, setDocument }, updateUser, res, userCollection)
 
 })
+
+server.get('/deleteItem/:id', (req, res) => {
+    MongoClient.connect(urlLoggedIn, {}, (err, client) => {
+      if(err){
+        console.log(err);
+        client.close(); // if unable to connect, close connection
+        return
+      }
+      const id = req.params.id;
+      const detail = { "_id": new ObjectID(id) };
+      let db = client.db(databaseName)
+      let catalogue = db.collection(productCollection);
+      catalogue.deleteOne(detail, (err, result) => {
+        if(err){
+          console.log(err);
+          client.close();
+        }
+          res.set({
+              "Access-Control-Allow-Origin": '*'
+          })
+          res.send(result)
+          res.end()
+      }, () => { client.close() })
+       })
+    // connectToMongo('true', { detail }, deleteItem, res, productCollection)
+})
 // Anna har testat färdigt
 
 server.get('/mock', (req, res) => {

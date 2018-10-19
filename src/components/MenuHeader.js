@@ -27,7 +27,7 @@ export default class MenuHeader extends Component {
     const chosenTab = this.props.chosenTab;
 
     return (
-      <Segment inverted style={{borderRadius:'0', position:'sticky', width: '100%', top:'0', padding:'0 4rem 0 2rem', zIndex:'5'}}>
+      <Segment inverted style={{borderRadius:'0',boxShadow: "0px 0px 104px -19px rgba(0,0,0,0.75)", position:'sticky', width: '100%', top:'0', padding:'0 4rem 0 2rem', zIndex:'5'}}>
         <Menu inverted secondary style={{position:'relative'}}>
           <Menu.Item style={{verticalAlign:"text-top", position:'relative', top:'0', paddingTop:'0'}}>
             <Image src='./Logo.png' style={{width:'130px', height:'auto'}}/>
@@ -48,7 +48,7 @@ export default class MenuHeader extends Component {
                 <div className={(chosenTab) === "cart" ? 'menuBtn inline chosenMenuItem' : 'menuBtn inline'}>
                   <p className="inline"  style={{alignSelf:'center', margin:'auto'}}>My basket</p>
                   <Icon name="cart" style={{alignSelf:'center', width:'2em', height:'2em', margin:'auto'}}/>
-                </div>}>
+                </div>} closeIcon>
                 <Modal.Content >
                 <CartPopup cart={this.props.cart} deleteCart={this.props.deleteCart} emptyCart={this.props.emptyCart} getProducts={this.props.getInitialProducts}/>
                 </Modal.Content>

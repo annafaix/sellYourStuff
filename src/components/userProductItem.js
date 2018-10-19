@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Icon, Image, Button } from 'semantic-ui-react'
+import {Card, Icon, Image, Button, Modal, Header } from 'semantic-ui-react'
 
 class userProdItem extends Component {
   constructor(props){
@@ -15,9 +15,18 @@ class userProdItem extends Component {
         id: this.props.id,
         price: this.props.price,
         category: this.props.category,
-      }
+      },
+      open: false,
     }
   }
+  deleteProduct =(id)=> {
+      fetch("http://localhost:3000/deleteItem/"+ id)
+        .then(res => {  })
+        .catch(error => console.error('Error:', error))
+   }
+  close = () => this.setState({ open: false })
+  closeConfigShow = () => {this.setState({ open: true }) }
+
   render() {
     let objectSendToEdit = {
       userPicture: this.props.userPicture,
@@ -48,12 +57,24 @@ class userProdItem extends Component {
             <br/>
             <span> Category: {this.props.category}</span>
             <div className='ui two buttons' style={{marginTop:"20px"}} >
-             <Button basic color='green' onClick={ () => this.props.editInformation(objectSendToEdit)}>
+             <Button inverted color='green' onClick={ () => this.props.editInformation(objectSendToEdit)}>
                Edit
              </Button>
-             <Button basic color='red' onClick={()=> console.log(this.props.id)}>
-               Delete
-             </Button>
+             <Modal
+              open={this.state.open}
+              onClose={this.close}
+              trigger={  <Button inverted color='red' onClick={()=> this.closeConfigShow()}> Delete </Button> } closeIcon>
+                <Header icon='trash' content='Do you really want to delete this product?' />
+                <Modal.Content>
+                <p> {this.props.name} will be deleted from database.</p>
+              </Modal.Content>
+              <Modal.Actions>
+              <Button color='red' onClick={()=> this.close()}> No </Button>
+              <Button color='green' onClick={()=> this.deleteProduct(this.props.id)}>
+                  <Icon name='trash' /> Yes
+              </Button>
+              </Modal.Actions>
+              </Modal>
            </div>
           </Card.Content>
         </Card>
